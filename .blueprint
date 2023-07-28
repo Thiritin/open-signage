@@ -1,0 +1,31 @@
+created:
+    - database/factories/ScreenFactory.php
+    - database/factories/PlaylistFactory.php
+    - database/factories/PlaylistItemFactory.php
+    - database/factories/LayoutFactory.php
+    - database/factories/PageFactory.php
+    - database/factories/AnnouncementFactory.php
+    - database/factories/ScheduleEntryFactory.php
+    - app/Models/Screen.php
+    - app/Models/Playlist.php
+    - app/Models/PlaylistItem.php
+    - app/Models/Layout.php
+    - app/Models/Page.php
+    - app/Models/Announcement.php
+    - app/Models/ScheduleEntry.php
+updated:
+    - database/migrations/2023_07_28_163535_create_screens_table.php
+    - database/migrations/2023_07_28_163536_create_playlists_table.php
+    - database/migrations/2023_07_28_163537_create_playlist_items_table.php
+    - database/migrations/2023_07_28_163538_create_layouts_table.php
+    - database/migrations/2023_07_28_163539_create_pages_table.php
+    - database/migrations/2023_07_28_163540_create_announcements_table.php
+    - database/migrations/2023_07_28_163541_create_schedule_entries_table.php
+models:
+    Screen: { playlist_id: id, name: string, last_ping_at: timestamp, relationships: { hasMany: Playlist } }
+    Playlist: { name: string, relationships: { hasMany: PlaylistItem } }
+    PlaylistItem: { playlist_id: id, page_id: id, layout_id: id, content: 'text nullable' }
+    Layout: { name: string, component: string, relationships: { hasMany: PlaylistItem } }
+    Page: { page_id: id, component: string, schema: json, relationships: { hasMany: PlaylistItem } }
+    Announcement: { title: string, content: text, starts_at: timestamp, ends_at: timestamp }
+    ScheduleEntry: { title: string, room: 'string nullable', starts_at: timestamp, ends_at: timestamp, is_moved: 'boolean default:false' }

@@ -1,0 +1,44 @@
+models:
+  Screen:
+    playlist_id: id
+    name: string
+    last_ping_at: timestamp
+    relationships:
+      hasMany: Playlist
+
+  Playlist:
+    name: string
+    relationships:
+      hasMany: PlaylistItem
+
+  PlaylistItem:
+    playlist_id: id
+    page_id: id
+    layout_id: id
+    content: text nullable
+
+  Layout:
+    name: string
+    component: string
+    relationships:
+      hasMany: PlaylistItem
+
+  Page:
+    page_id: id
+    component: string
+    schema: json
+    relationships:
+      hasMany: PlaylistItem
+
+  Announcement:
+    title: string
+    content: text
+    starts_at: timestamp
+    ends_at: timestamp
+
+  ScheduleEntry:
+    title: string
+    room: string nullable
+    starts_at: timestamp
+    ends_at: timestamp
+    is_moved: boolean default:false

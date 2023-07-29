@@ -90,14 +90,12 @@ watch(activePageIndex, (value) => {
     <Transition>
         <KeepAlive>
             <component
-                v-if="pages.length !== 0"
                 v-show="mappedPages[activePageIndex].index === activePageIndex"
                 :screen="screen"
                 :schedule="schedule"
                 :announcements="announcements"
                 :page="mappedPages[activePageIndex]"
                 :is="layouts.find(item => item.name === mappedPages[activePageIndex].layout).resolvedLayout"></component>
-            <Centered :page="{resolvedComponent: ScreenIdentification}" :screen="screen" v-else></Centered>
         </KeepAlive>
     </Transition>
 </template>
@@ -112,6 +110,7 @@ body {
 .v-enter-active {
     transition: opacity 1s ease-in;
 }
+
 .v-leave-active {
     transition: opacity 0.5s ease-out;
 }

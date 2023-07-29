@@ -16,7 +16,7 @@ class ScreenController extends Controller
         $screen = Screen::firstOrCreate(['slug' => $slug],[
             'name' => 'New Screen '.$slug,
             'slug' => $slug,
-            'playlist_id' => null,
+            'playlist_id' => 1,
             'provisioned' => false,
         ]);
 

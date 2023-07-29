@@ -10,6 +10,8 @@ class Screen extends Model
 {
     use HasFactory;
 
+    protected $with = ['playlist.playlistItems.layout', 'playlist.playlistItems.page', 'playlist.playlistItems'];
+
     /**
      * The attributes that aren't mass assignable.
      *

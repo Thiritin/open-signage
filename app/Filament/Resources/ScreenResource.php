@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScreenResource\Pages;
 use App\Models\Screen;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -11,8 +12,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,14 +38,20 @@ class ScreenResource extends Resource
             ->schema([
                 Select::make('playlist_id')
                     ->relationship('playlist', 'name')
-                    ->searchable()
-                    ->required(),
+                    ->searchable(),
 
                 TextInput::make('name')
                     ->required(),
 
-                DatePicker::make('last_ping_at')
-                    ->label('Last Ping Date'),
+                Checkbox::make('provisioned'),
+
+                TextInput::make('slug')
+                    ->hint('This is the URL that will be used to access this screen.')
+                    ->prefix(config('app.url').'/screens/')
+                    ->required(),
+
+                /*DatePicker::make('last_ping_at')
+                    ->label('Last Ping Date'),*/
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
@@ -61,13 +72,22 @@ class ScreenResource extends Resource
                     ->disablePlaceholderSelection()
                     ->options(\App\Models\Playlist::pluck('name', 'id')->toArray()),
 
-                TextColumn::make('name')
+                TextInputColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('last_ping_at')
+                TextColumn::make('slug')
+                    ->searchable()
+                    ->sortable(),
+
+                CheckboxColumn::make('provisioned'),
+
+                /*TextColumn::make('last_ping_at')
                     ->label('Last Ping Date')
-                    ->date(),
+                    ->date(),*/
+            ])->filters([
+                Filter::make('provisioned')->label('Show only provisioned screens')->query(fn(Builder $query
+                ) => $query->where('provisioned', true))->default(true),
             ]);
     }
 

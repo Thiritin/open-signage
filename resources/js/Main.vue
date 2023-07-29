@@ -1,10 +1,12 @@
 <script setup>
 import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent} from "vue";
+import ScreenIdentification from "@/Pages/ScreenIdentification.vue";
+import Centered from "@/Layouts/Centered.vue";
 
 const props = defineProps({
     initialPages: {
         type: Array,
-        required: true
+        default: () => []
     },
     initialSchedule: {
         type: Array,
@@ -76,6 +78,7 @@ const activePage = computed(() => {
 });
 
 watch(activePageIndex, (value) => {
+    if (pages.value.length === 0) return;
     setTimeout(() => {
         activePageIndex.value = (value + 1) % pages.value.length;
     }, (activePage.value.duration ?? pages.value[0].duration) * 1000);
@@ -87,12 +90,14 @@ watch(activePageIndex, (value) => {
     <Transition>
         <KeepAlive>
             <component
+                v-if="pages.length !== 0"
                 v-show="mappedPages[activePageIndex].index === activePageIndex"
                 :screen="screen"
                 :schedule="schedule"
                 :announcements="announcements"
                 :page="mappedPages[activePageIndex]"
                 :is="layouts.find(item => item.name === mappedPages[activePageIndex].layout).resolvedLayout"></component>
+            <Centered :page="{resolvedComponent: ScreenIdentification}" :screen="screen" v-else></Centered>
         </KeepAlive>
     </Transition>
 </template>

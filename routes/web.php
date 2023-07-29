@@ -16,4 +16,7 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/screens/{screen}',ScreenController::class)->name('screen');
+Route::get('/screens/{slug}',ScreenController::class)->name('screen');
+Route::get('/', function () {
+    return redirect('/admin');
+});

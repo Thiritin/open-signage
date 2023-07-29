@@ -9,12 +9,16 @@ class ScreenObserver
 {
     public function created(Screen $screen): void
     {
-
+        if ($screen->playlist_id !== null) {
+            broadcast(new UpdateScreenPlaylistEvent($screen));
+        }
     }
 
     public function updated(Screen $screen): void
     {
-        broadcast(new UpdateScreenPlaylistEvent($screen));
+        if ($screen->playlist_id !== null) {
+            broadcast(new UpdateScreenPlaylistEvent($screen));
+        }
     }
 
     public function deleted(Screen $screen): void

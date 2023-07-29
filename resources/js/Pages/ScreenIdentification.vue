@@ -8,7 +8,7 @@ defineProps(['screen'])
     <div class="text-white h-full flex justify-center items-center">
         <div class="text-center">
             <div class="text-9xl">#{{ screen.id }}</div>
-            <h1 class="text-7xl font-bold text-7xl">{{ screen.name }}</h1>
+            <h1 class="text-7xl font-bold">{{ screen.name }}</h1>
         </div>
     </div>
 </template>

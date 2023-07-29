@@ -2,20 +2,20 @@ models:
   Screen:
     playlist_id: id
     name: string
-    last_ping_at: timestamp
-    relationships:
-      hasMany: Playlist
+    last_ping_at: timestamp nullable
 
   Playlist:
     name: string
     relationships:
-      hasMany: PlaylistItem
+      hasMany: PlaylistItem, Screen
 
   PlaylistItem:
     playlist_id: id
     page_id: id
     layout_id: id
-    content: text nullable
+    title: string nullable
+    duration: integer default:10
+    content: json nullable
 
   Layout:
     name: string
@@ -24,9 +24,9 @@ models:
       hasMany: PlaylistItem
 
   Page:
-    page_id: id
+    name: string
     component: string
-    schema: json
+    schema: json nullable
     relationships:
       hasMany: PlaylistItem
 

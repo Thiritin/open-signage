@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Layout;
+use App\Models\Page;
 use App\Models\Playlist;
+use App\Models\PlaylistItem;
 use App\Models\Screen;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -17,11 +20,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Playlist::updateOrCreate([
+        Playlist::create([
             'name' => 'Default'
         ]);
 
-        if(App::isLocal() === false) {
+        Page::updateOrCreate([
+            'name' => 'Screen Identification',
+            'component' => 'ScreenIdentification'
+        ]);
+
+        Layout::updateOrCreate([
+            'name' => 'None',
+            'component' => 'None'
+        ]);
+
+        PlaylistItem::create([
+            'playlist_id' => 1,
+            'page_id' => 1,
+            'layout_id' => 1,
+            'duration' => 5,
+            'content' => [
+                'screen' => 'Test Message'
+            ]
+        ]);
+
+        if (App::isLocal() === false) {
             return;
         }
 
@@ -30,7 +53,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'me@thiritin.com',
             'password' => Hash::make('password')
         ]);
-        Screen::factory(10)->create();
+        Screen::create([
+            "name" => "Test Screen",
+            "playlist_id" => 1
+        ]);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

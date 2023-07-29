@@ -27,6 +27,7 @@ class PlaylistItem extends Model
         'playlist_id' => 'integer',
         'page_id' => 'integer',
         'layout_id' => 'integer',
+        'content' => 'array',
     ];
 
     public function playlist(): BelongsTo

@@ -23,7 +23,7 @@ class Announcement extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'starts_at' => 'timestamp',
-        'ends_at' => 'timestamp',
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
     ];
 }

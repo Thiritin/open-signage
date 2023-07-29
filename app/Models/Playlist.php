@@ -30,4 +30,9 @@ class Playlist extends Model
     {
         return $this->hasMany(PlaylistItem::class);
     }
+
+    public function screens(): HasMany
+    {
+        return $this->hasMany(Screen::class);
+    }
 }

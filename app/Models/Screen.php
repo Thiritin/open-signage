@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Screen extends Model
 {
@@ -28,11 +27,6 @@ class Screen extends Model
         'playlist_id' => 'integer',
         'last_ping_at' => 'timestamp',
     ];
-
-    public function playlists(): HasMany
-    {
-        return $this->hasMany(Playlist::class);
-    }
 
     public function playlist(): BelongsTo
     {

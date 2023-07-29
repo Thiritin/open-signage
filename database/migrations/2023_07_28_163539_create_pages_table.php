@@ -15,9 +15,9 @@ return new class extends Migration
 
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('page_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('name');
             $table->string('component');
-            $table->json('schema');
+            $table->json('schema')->nullable();
             $table->timestamps();
         });
 

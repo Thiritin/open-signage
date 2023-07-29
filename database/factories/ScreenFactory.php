@@ -22,9 +22,8 @@ class ScreenFactory extends Factory
     public function definition(): array
     {
         return [
-            'playlist_id' => 1,
+            'playlist_id' => Playlist::factory(),
             'name' => $this->faker->name,
-            'last_ping_at' => $this->faker->dateTime(),
         ];
     }
 }

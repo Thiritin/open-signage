@@ -27,6 +27,7 @@ class PlaylistItemFactory extends Factory
             'playlist_id' => Playlist::factory(),
             'page_id' => Page::factory(),
             'layout_id' => Layout::factory(),
+            'duration' => $this->faker->word,
         ];
     }
 }

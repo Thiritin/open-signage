@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('playlist_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->timestamp('last_ping_at');
+            $table->timestamp('last_ping_at')->nullable();
             $table->timestamps();
         });
 

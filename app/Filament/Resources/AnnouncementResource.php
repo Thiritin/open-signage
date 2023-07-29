@@ -4,27 +4,44 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AnnouncementResource\Pages;
 use App\Models\Announcement;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Columns\TextColumn;
 
 class AnnouncementResource extends Resource
 {
     protected static ?string $model = Announcement::class;
-
     protected static ?string $navigationGroup = "Content";
 
     protected static ?string $slug = 'announcements';
-
     protected static ?string $navigationIcon = "heroicon-o-newspaper";
 
-    protected static ?string $recordTitleAttribute = 'id';
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                TextInput::make('title')
+                    ->columnSpanFull()
+                    ->required(),
 
+                Textarea::make('content')
+                    ->columnSpanFull()
+                    ->required(),
+
+                DateTimePicker::make('starts_at')
+                    ->label('Starts Date'),
+
+                DateTimePicker::make('ends_at')
+                    ->label('Ends Date'),
             ]);
     }
 
@@ -32,7 +49,17 @@ class AnnouncementResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
 
+                TextColumn::make('starts_at')
+                    ->label('Starts Date')
+                    ->date(),
+
+                TextColumn::make('ends_at')
+                    ->label('Ends Date')
+                    ->date(),
             ]);
     }
 
@@ -47,6 +74,6 @@ class AnnouncementResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return [];
+        return ['title'];
     }
 }

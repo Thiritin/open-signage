@@ -21,9 +21,8 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'page_id' => Page::factory(),
+            'name' => $this->faker->name,
             'component' => $this->faker->word,
-            'schema' => '{}',
         ];
     }
 }

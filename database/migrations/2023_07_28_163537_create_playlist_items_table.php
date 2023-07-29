@@ -18,7 +18,9 @@ return new class extends Migration
             $table->foreignId('playlist_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('page_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('layout_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('content')->nullable();
+            $table->string('title')->nullable();
+            $table->string('duration')->default('10');
+            $table->json('content')->nullable();
             $table->timestamps();
         });
 

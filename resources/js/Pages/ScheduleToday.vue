@@ -1,114 +1,161 @@
 <script setup>
-defineProps(['schedule', 'announcements'])
+import ScheduleList from "@/Components/Schedule/ScheduleList.vue";
+
+const props = defineProps({
+    schedule: {
+        type: Array,
+        default: []
+    },
+    announcements: {
+        type: Array,
+        default: []
+    },
+    showAnnouncements: {
+        type: Boolean,
+        default: "true"
+    },
+    showSchedule: {
+        type: String,
+        default: "true"
+    }
+})
 import PageTitle from "@/Components/PageTitle.vue";
 import Card from "@/Components/Card.vue";
+import ScheduleEntry from "@/Components/Schedule/ScheduleEntry.vue";
+import AnnouncementCard from "@/Components/AnnouncementCard.vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 
-let options = {
-    hour: "2-digit", minute: "2-digit"
-};
+const scrollLeft = ref(null);
+const scrollRight = ref(null);
+
+onMounted(() => {
+    pageScroll(scrollLeft)
+    pageScroll(scrollRight)
+    const intervalId = setInterval(updateComputedProperties, 5000); // Update every 1 second
+    onUnmounted(() => clearInterval(intervalId));
+})
 
 let scrollingDown = true;
-pageScroll()
+const currentTime = ref(new Date());
 
-function pageScroll() {
-    const windowHeight = window.innerHeight;
-    const pageHeight = document.body.scrollHeight;
+function pageScroll(ref) {
+    if (ref.value === null) return;
 
+    const windowHeight = ref.value.clientHeight;
+    const pageHeight = ref.value.offsetHeight;
+    const scrollHeight = ref.value.scrollHeight;
+    const endScoll = scrollHeight - pageHeight;
+    if (scrollHeight === pageHeight) return;
+
+    let stop = false;
     // Check if we reached the bottom of the page
-    if (window.scrollY + windowHeight >= pageHeight) {
+    if (ref.value.scrollTop >= endScoll) {
         if (scrollingDown === true) {
             setTimeout(() => {
                 scrollingDown = false;
             }, 5000);
         }
-    } else if (window.scrollY <= 0) {
-        // Reached the top of the page, start scrolling down again
-        scrollingDown = true;
+    } else if (ref.value.scrollTop <= 0) {
+        if (scrollingDown === false) {
+            setTimeout(() => {
+                scrollingDown = true;
+            }, 5000);
+        }
     }
 
     // Scroll down or up depending on the scrollingDown flag
     if (scrollingDown) {
-        window.scrollBy(0, 1); // Scroll down by 1 pixel
+        ref.value.scrollTop++; // Scroll down by 1 pixel
     } else {
-        window.scrollBy(0, -1); // Scroll up by 1 pixel
+        ref.value.scrollTop--; // Scroll up by 1 pixel
     }
 
     // Repeat the scrolling process after a short delay (10ms in this case)
-    setTimeout(pageScroll, 50);
+    setTimeout(() => {
+        pageScroll(ref);
+    }, 15);
 }
+
+// Filter announcements, make sure they are today and ends at is not in the past
+const filteredAnnouncements = computed(() => {
+    return props.announcements.filter((announcement) => {
+        const now = currentTime.value;
+        const start = new Date(announcement.starts_at);
+        const end = new Date(announcement.ends_at);
+        return (end > now) && (start < now);
+    })
+})
+
+// Filtered Schedules
+const filteredSchedule = computed(() => {
+    return props.schedule.filter((entry) => {
+        const now = currentTime.value;
+        const start = new Date(entry.starts_at);
+        const end = new Date(entry.ends_at);
+        return (end > now) && (end.getDate() >= now.getDate() || start.getDate() <= now.getDate());
+    })
+})
+
+const updateComputedProperties = () => {
+    currentTime.value = new Date();
+};
+
+// hasFileredAnnouncements
+const hasFilteredAnnouncements = computed(() => {
+    return filteredAnnouncements.value.length > 0 && props.showAnnouncements === "true";
+})
+
+const hasFilteredSchedule = computed(() => {
+    return filteredSchedule.value.length > 0 && props.showSchedule === "true";
+})
 
 </script>
 
 <template>
-    <div class="gap-8 overflow-y-auto"
-         :class="{'flex flex-col f xl:flex-row': announcements.length > 0 && schedule.length > 0}">
-        <div :class="{'xl:w-1/2': announcements.length > 0}" v-if="schedule.length > 0">
-            <Card class="p-6 space-y-8">
-                <div class="text-white flex justify-between flex-row" v-for="entry in schedule">
-                    <div>
-                        <div class="text-4xl themeFont">{{ entry.title }}</div>
-                        <div class="text-3xl themeFont text-secondary">{{ entry.room }}</div>
-                    </div>
-                    <div class="flex gap-3">
-                        <div>
-                            <div
-                                class="inline-block bg-red-500 text-white font-bold shadow-2xl rounded-full py-2 px-4 text-sm">
-                                ONGOING <span class="animate-blink">●</span>
-                            </div>
-                        </div>
-                        <div class="text-2xl themeFont">
-                            {{ new Date(entry.starts_at).toLocaleTimeString('de-DE', options) }}
-                            - {{ new Date(entry.ends_at).toLocaleTimeString('de-DE', options) }}
-                        </div>
-                    </div>
-                </div>
-            </Card>
+    <div
+        class="gap-8 overflow-hidden flex flex-col"
+        :class="{'xl:flex-row': hasFilteredAnnouncements && hasFilteredSchedule}">
+        <div ref="scrollLeft" class="overflow-auto flex-grow pt-6" :class="{'xl:w-1/2': hasFilteredAnnouncements}"
+             v-if="hasFilteredSchedule">
+            <ScheduleList class="pb-6">
+                <TransitionGroup name="list">
+                    <ScheduleEntry :key="entry.id" :entry="entry" v-for="entry in filteredSchedule"></ScheduleEntry>
+                </TransitionGroup>
+            </ScheduleList>
         </div>
-        <div :class="{'xl:w-1/2': schedule.length > 0}" class="space-y-6" v-if="announcements.length > 0">
-            <Card class="p-6 bg-orange-700" v-for="entry in announcements">
-                <div class="text-white flex justify-between flex-row-reverse">
-                    <div class="text-2xl themeFont">{{ new Date(entry.starts_at).toLocaleTimeString('de-DE', options) }}
-                    </div>
-                    <div>
-                        <div class="text-4xl themeFont">{{ entry.title }}</div>
-                        <p class="text-3xl whitespace-pre-wrap">{{ entry.content }}</p>
-                    </div>
-                </div>
-            </Card>
+        <div ref="scrollRight" :class="{'xl:w-1/2': hasFilteredSchedule}" class="space-y-6 overflow-auto flex-grow pb-6 pt-6"
+             v-if="hasFilteredAnnouncements">
+            <TransitionGroup name="list">
+                <AnnouncementCard :key="entry.id" v-for="entry in filteredAnnouncements" :entry="entry"></AnnouncementCard>
+            </TransitionGroup>
         </div>
-        <div class="p-6 w-full h-full mt-32 flex justify-center items-center text-center"
-             v-if="schedule.length < 1 && announcements.length < 1">
+        <div class="mt-32 text-center"
+             v-if="!hasFilteredSchedule && !hasFilteredAnnouncements">
             <div class="themeFont text-white text-7xl">There are currently no entries</div>
         </div>
     </div>
 </template>
 
 <style scoped>
-/* Styles for the chip */
-.chip {
-    display: inline-block;
-    background-color: #e0e0e0;
-    color: #333;
-    border-radius: 16px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
 }
 
-/* Styles for the animated blinking effect */
-@keyframes blink {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 
-.animate-blink {
-    animation: blink 1s infinite;
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+    position: absolute;
+}
+
+.overflow-auto::-webkit-scrollbar {
+    display: none;
 }
 </style>

@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -31,13 +33,21 @@ class PageResource extends Resource
                 TextInput::make('component')
                     ->required(),
 
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Page $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Page $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                Repeater::make('schema')->columnSpanFull()->schema([
+                    TextInput::make('name')
+                        ->hint('Displayed in the field label')
+                        ->required(),
+                    TextInput::make('property')
+                        ->hint('Vue.js Property Name')
+                        ->required(),
+                    Select::make('type')
+                        ->options([
+                            'TextInput' => 'Text',
+                            'Textarea' => 'Textarea',
+                            'Checkbox' => 'Checkbox',
+                        ])
+                        ->required()
+                ]),
             ]);
     }
 
@@ -48,8 +58,6 @@ class PageResource extends Resource
                 TextColumn::make('name'),
 
                 TextColumn::make('component'),
-
-                TextColumn::make('schema'),
             ]);
     }
 

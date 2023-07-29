@@ -11,7 +11,7 @@ class PlaylistItemObserver
 {
     public function created(PlaylistItem $playlistItem): void
     {
-
+        $playlistItem->playlist->screens->each(fn(Screen $screen) => broadcast(new UpdateScreenPlaylistEvent($screen)));
     }
 
     public function updated(PlaylistItem $playlistItem): void
@@ -22,6 +22,7 @@ class PlaylistItemObserver
 
     public function deleted(PlaylistItem $playlistItem): void
     {
+        $playlistItem->playlist->screens->each(fn(Screen $screen) => broadcast(new UpdateScreenPlaylistEvent($screen)));
     }
 
     public function restored(PlaylistItem $playlistItem): void

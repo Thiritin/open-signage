@@ -1,42 +1,29 @@
 <script setup>
-defineProps(['page'])
+import {onMounted, useAttrs} from "vue";
+
+const props = defineProps(['page'])
 defineOptions({
     inheritAttrs: false
 })
 import HeaderLogo from "@/Layouts/HeaderLogo.vue";
+let attrs = useAttrs();
+attrs = {
+    ...attrs,
+    ...props.page.props
+}
+
 </script>
 
 <template>
-    <div class="p-8 xl:p-16 min-h-screen bg-primary">
+    <div class="h-screen overflow-auto bg-primary flex flex-col flex-grow">
         <!-- Header Menu -->
         <HeaderLogo :title="page.title"/>
         <!-- Main Content -->
-        <div class="pt-12">
-            <Transition name="bounce" mode="out-in">
-                <component :is="page.resolvedComponent" v-bind="$attrs"></component>
-            </Transition>
-        </div>
+        <component class="px-8" :is="page.resolvedComponent" v-bind="attrs"></component>
     </div>
 </template>
 
 <style>
-@font-face {
-    font-family: 'primaryThemeFont';
-    font-style: normal;
-    src: local('Hansief'), url(../../assets/fonts/Hansief.otf) format('truetype');
-}
-
-.themeColor {
-    color: #1c253c;
-}
-
-.themeColorSecondary {
-    color: #6dd2d1;
-}
-
-.themeColorCompsite {
-    color: #feff99;
-}
 
 .bounce-enter-active {
     animation: bounce-in 0.5s;

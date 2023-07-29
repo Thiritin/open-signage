@@ -35,11 +35,9 @@ Echo.channel('ScreenAll')
 
 Echo.channel('Screen.' + props.screen.id)
     .listen('.page.update', (e) => {
-        if(e.pages.length !== pages.value.length) {
-            activePageIndex.value = 0;
-        }
         pages.value = e.pages;
         layouts = mapLayouts(mappedPages);
+        activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;
     });
 
 
@@ -71,7 +69,6 @@ function mapLayouts(mappedPages) {
 
 let layouts = mapLayouts(mappedPages);
 
-
 const activePageIndex = ref(0);
 
 const activePage = computed(() => {
@@ -87,26 +84,31 @@ watch(activePageIndex, (value) => {
 </script>
 
 <template>
-    <KeepAlive>
-        <component
-            v-show="mappedPages[activePageIndex].index === activePageIndex"
-            :screen="screen"
-            :schedule="schedule"
-            :announcements="announcements"
-            :page="mappedPages[activePageIndex]"
-            :is="layouts.find(item => item.name === mappedPages[activePageIndex].layout).resolvedLayout"></component>
-    </KeepAlive>
+    <Transition>
+        <KeepAlive>
+            <component
+                v-show="mappedPages[activePageIndex].index === activePageIndex"
+                :screen="screen"
+                :schedule="schedule"
+                :announcements="announcements"
+                :page="mappedPages[activePageIndex]"
+                :is="layouts.find(item => item.name === mappedPages[activePageIndex].layout).resolvedLayout"></component>
+        </KeepAlive>
+    </Transition>
 </template>
 
 <style>
 
 body {
     overflow: hidden;
+    @apply bg-primary-800
 }
 
-.v-enter-active,
+.v-enter-active {
+    transition: opacity 1s ease-in;
+}
 .v-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease-out;
 }
 
 .v-enter-from,

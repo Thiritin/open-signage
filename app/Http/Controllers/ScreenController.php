@@ -12,7 +12,7 @@ class ScreenController extends Controller
 {
     public function __invoke(Screen $screen)
     {
-        return Inertia::render('../Main', [
+        return Inertia::render('Main', [
             'initialPages' => $screen->playlist->playlistItems->map(fn(PlaylistItem $playlistItem) => [
                 'layout' => $playlistItem->layout->component,
                 'component' => $playlistItem->page->component,

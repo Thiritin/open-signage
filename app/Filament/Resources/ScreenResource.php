@@ -76,6 +76,7 @@ class ScreenResource extends Resource
     {
         return $table
             ->columns([
+
                 SelectColumn::make('playlist_id')
                     ->label('Playlist')
                     ->disablePlaceholderSelection()

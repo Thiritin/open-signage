@@ -1,16 +1,20 @@
 <script setup>
-import {onMounted, useAttrs} from "vue";
+import {computed, onMounted, onUpdated, reactive, useAttrs, watch} from "vue";
 
 const props = defineProps(['page'])
 defineOptions({
     inheritAttrs: false
 })
 import HeaderLogo from "@/Layouts/HeaderLogo.vue";
-let attrs = useAttrs();
-attrs = {
-    ...attrs,
-    ...props.page.props
-}
+
+let attrs = reactive(useAttrs());
+
+const usableAttributes = computed(() => {
+   return {
+         ...attrs,
+         ...props.page
+   }
+})
 
 </script>
 
@@ -19,7 +23,7 @@ attrs = {
         <!-- Header Menu -->
         <HeaderLogo :title="page.title"/>
         <!-- Main Content -->
-        <component class="px-8" :is="page.resolvedComponent" v-bind="attrs"></component>
+        <component class="px-8" :is="page.resolvedComponent" v-bind="usableAttributes"></component>
     </div>
 </template>
 

@@ -1,9 +1,14 @@
 <script setup>
-
+defineProps({
+    color: {
+        type: String,
+        default: 'bg-primary-300'
+    }
+})
 </script>
 
 <template>
-    <div class="bg-primary-300 rounded-lg shadow-2xl">
+    <div :class="color" class="rounded-lg shadow-2xl">
         <slot></slot>
     </div>
 </template>

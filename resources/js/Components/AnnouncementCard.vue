@@ -6,7 +6,7 @@ import Card from "@/Components/Card.vue";
 </script>
 
 <template>
-    <Card class="p-6 bg-orange-700">
+    <Card class="p-6" color="bg-orange-700">
         <div class="text-white flex justify-between flex-row-reverse">
             <div class="text-2xl themeFont"><HourTime :time="entry.starts_at"/></div>
             <div>

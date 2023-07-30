@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\RoomResource\RelationManagers\ScreensRelationManager;
 use App\Filament\Resources\ScreenResource\Pages;
+use App\Filament\Resources\ScreenResource\RelationManagers\RoomsRelationManager;
 use App\Models\Screen;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
@@ -61,6 +63,13 @@ class ScreenResource extends Resource
                     ->label('Last Modified Date')
                     ->content(fn(?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RoomsRelationManager::class,
+        ];
     }
 
     public static function table(Table $table): Table

@@ -34,4 +34,9 @@ class Screen extends Model
     {
         return $this->belongsTo(Playlist::class);
     }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class)->withPivot('direction', 'primary');
+    }
 }

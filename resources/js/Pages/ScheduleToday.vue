@@ -12,11 +12,11 @@ const props = defineProps({
     },
     showAnnouncements: {
         type: Boolean,
-        default: "true"
+        default: true
     },
     showSchedule: {
-        type: String,
-        default: "true"
+        type: Boolean,
+        default: true
     }
 })
 import PageTitle from "@/Components/PageTitle.vue";
@@ -102,11 +102,11 @@ const updateComputedProperties = () => {
 
 // hasFileredAnnouncements
 const hasFilteredAnnouncements = computed(() => {
-    return filteredAnnouncements.value.length > 0 && props.showAnnouncements === "true";
+    return filteredAnnouncements.value.length > 0 && props.showAnnouncements === true;
 })
 
 const hasFilteredSchedule = computed(() => {
-    return filteredSchedule.value.length > 0 && props.showSchedule === "true";
+    return filteredSchedule.value.length > 0 && props.showSchedule === true;
 })
 
 </script>

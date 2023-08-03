@@ -7,15 +7,19 @@ use App\Models\Playlist;
 use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
 use App\Models\Screen;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ScreenController extends Controller
 {
-    public function __invoke($slug)
+    public function __invoke(Request $request, $slug = null)
     {
-        $screen = Screen::firstOrCreate(['slug' => $slug],[
-            'name' => 'New Screen '.$slug,
-            'slug' => $slug,
+        $finalSlug = $slug ?? $request->get('kiosk') ?? null;
+        abort_if(is_null($slug), 400, "No slug provided");
+
+        $screen = Screen::firstOrCreate(['slug' => $finalSlug],[
+            'name' => 'New Screen '.$finalSlug,
+            'slug' => $finalSlug,
             'playlist_id' => Playlist::first()->id,
             'provisioned' => false,
         ]);

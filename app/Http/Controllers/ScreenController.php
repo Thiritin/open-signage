@@ -15,7 +15,7 @@ class ScreenController extends Controller
     public function __invoke(Request $request, $slug = null)
     {
         $finalSlug = $slug ?? $request->get('kiosk') ?? null;
-        abort_if(is_null($slug), 400, "No slug provided");
+        abort_if(is_null($finalSlug), 400, "No slug provided");
 
         $screen = Screen::firstOrCreate(['slug' => $finalSlug],[
             'name' => 'New Screen '.$finalSlug,

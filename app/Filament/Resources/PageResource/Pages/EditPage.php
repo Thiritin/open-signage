@@ -10,7 +10,7 @@ class EditPage extends EditRecord
 {
     protected static string $resource = PageResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             DeleteAction::make(),

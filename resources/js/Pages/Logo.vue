@@ -1,6 +1,6 @@
 <script setup>
 
-import HeaderLogo from "@/Layouts/HeaderLogo.vue";
+import HeaderLogo from "@/Components/HeaderLogo.vue";
 </script>
 
 <template>

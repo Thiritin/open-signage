@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ResourceOwnership;
+use App\Models\Scopes\HideEmergencyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,10 +27,17 @@ class Page extends Model
     protected $casts = [
         'id' => 'integer',
         'schema' => 'array',
+        'type' => ResourceOwnership::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new HideEmergencyScope);
+    }
 
     public function playlistItems(): HasMany
     {
         return $this->hasMany(PlaylistItem::class);
     }
+
 }

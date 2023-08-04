@@ -2,15 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PlaylistResource\Pages;
 use App\Filament\Resources\PlaylistResource\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Query\Builder;
 
 class PlaylistResource extends Resource
 {
@@ -45,6 +52,18 @@ class PlaylistResource extends Resource
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+
+                TextColumn::make('type')->badge()
+                    ->formatStateUsing(fn($record) => ucfirst($record->type->value))
+                    ->color(fn(ResourceOwnership $state) => match ($state->value) {
+                        'emergency' => 'info',
+                        'system' => 'gray',
+                        'user' => 'success',
+                    })
+
+            ])->actions([
+                EditAction::make(),
+                DeleteAction::make(),
             ]);
     }
 

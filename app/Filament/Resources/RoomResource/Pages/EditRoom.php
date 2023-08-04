@@ -10,7 +10,7 @@ class EditRoom extends EditRecord
 {
     protected static string $resource = RoomResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             DeleteAction::make(),

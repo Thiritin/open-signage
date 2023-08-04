@@ -25,6 +25,11 @@ class ScheduleEntry extends Model
         'id' => 'integer',
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
-        'is_moved' => 'boolean',
+        'flags' => 'json',
     ];
+
+    public function room()
+    {
+        return $this->belongsTo(\App\Models\Room::class);
+    }
 }

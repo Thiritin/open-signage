@@ -20,48 +20,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Playlist::create([
-            'name' => 'Default'
+        $this->call(EmergencySeeder::class);
+        $this->call([
+            LayoutSeeder::class,
+            PageSeeder::class,
+            PlaylistSeeder::class
         ]);
 
-        Page::updateOrCreate([
-            'name' => 'Screen Identification',
-            'component' => 'ScreenIdentification'
-        ]);
-
-        Layout::updateOrCreate([
-            'name' => 'None',
-            'component' => 'None'
-        ]);
-
-        PlaylistItem::create([
-            'playlist_id' => 1,
-            'page_id' => 1,
-            'layout_id' => 1,
-            'duration' => 5,
-            'content' => [
-                'screen' => 'Test Message'
-            ]
-        ]);
-
-        if (App::isLocal() === false) {
-            return;
+        if (App::isLocal()) {
+            User::updateOrCreate([
+                'name' => 'Admin',
+            ], [
+                'name' => 'Admin',
+                'email' => 'me@thiritin.com',
+                'password' => Hash::make('password')
+            ]);
         }
-
-        User::updateOrCreate([
-            'name' => 'Admin',
-            'email' => 'me@thiritin.com',
-            'password' => Hash::make('password')
-        ]);
-        Screen::create([
-            "name" => "Test Screen",
-            "playlist_id" => 1
-        ]);
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }

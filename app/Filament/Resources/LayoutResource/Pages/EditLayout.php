@@ -10,7 +10,7 @@ class EditLayout extends EditRecord
 {
     protected static string $resource = LayoutResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             DeleteAction::make(),

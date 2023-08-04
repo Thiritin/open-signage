@@ -7,6 +7,7 @@ use App\Models\Playlist;
 use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
 use App\Models\Screen;
+use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -20,7 +21,7 @@ class ScreenController extends Controller
         $screen = Screen::firstOrCreate(['slug' => $finalSlug],[
             'name' => 'New Screen '.$finalSlug,
             'slug' => $finalSlug,
-            'playlist_id' => Playlist::first()->id,
+            'playlist_id' => app(GeneralSettings::class)->playlist_id,
             'provisioned' => false,
         ]);
 

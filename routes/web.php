@@ -19,6 +19,7 @@ use Inertia\Inertia;
 Route::get('/screens/{slug}',ScreenController::class)->name('screen');
 Route::get('/screens',ScreenController::class)->name('kiosk');
 Route::get('/cch/{slug}',ScreenController::class)->name('cch');
+Route::get('/config',\App\Http\Controllers\ConfigController::class)->name('config');
 Route::get('/', function () {
     return redirect('/admin');
 });

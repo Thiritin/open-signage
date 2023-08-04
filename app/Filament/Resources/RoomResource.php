@@ -7,9 +7,9 @@ use App\Filament\Resources\RoomResource\RelationManagers\ScreensRelationManager;
 use App\Models\Room;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 
 class RoomResource extends Resource

@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ResourceOwnership;
 use App\Filament\Resources\LayoutResource\Pages;
 use App\Models\Layout;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 
 class LayoutResource extends Resource
@@ -49,6 +52,18 @@ class LayoutResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('component'),
+
+                TextColumn::make('type')->badge()
+                    ->formatStateUsing(fn($record) => ucfirst($record->type->value))
+                    ->color(fn (ResourceOwnership $state) => match ($state->value) {
+                        'emergency' => 'info',
+                        'system' => 'gray',
+                        'user' => 'success',
+                    })
+
+            ])->actions([
+                EditAction::make(),
+                DeleteAction::make(),
             ]);
     }
 

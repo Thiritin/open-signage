@@ -30,6 +30,11 @@ class Screen extends Model
         'last_ping_at' => 'timestamp',
     ];
 
+    public function screenGroup()
+    {
+        return $this->belongsTo(ScreenGroup::class);
+    }
+
     public function playlist(): BelongsTo
     {
         return $this->belongsTo(Playlist::class);

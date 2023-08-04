@@ -5,7 +5,7 @@ const props = defineProps(['page'])
 defineOptions({
     inheritAttrs: false
 })
-import HeaderLogo from "@/Layouts/HeaderLogo.vue";
+import HeaderLogo from "@/Components/HeaderLogo.vue";
 let attrs = useAttrs();
 attrs = {
     ...attrs,

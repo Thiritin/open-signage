@@ -5,14 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ScheduleEntryResource\Pages;
 use App\Models\ScheduleEntry;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Console\Scheduling\Schedule;
 
 class ScheduleEntryResource extends Resource
 {
@@ -20,7 +26,7 @@ class ScheduleEntryResource extends Resource
 
     protected static ?string $navigationGroup = "Content";
 
-    protected static ?string $navigationIcon = 'heroicon-s-table';
+    protected static ?string $navigationIcon = 'heroicon-m-table-cells';
     protected static ?string $slug = 'schedule-entries';
 
     protected static ?string $recordTitleAttribute = 'title';
@@ -29,27 +35,53 @@ class ScheduleEntryResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')
-                    ->required(),
+                Group::make()->columnSpan(2)->columns()->schema([
+                    Section::make('Meta')->schema([
+                        TextInput::make('title')
+                            ->required(),
 
-                TextInput::make('room'),
+                        Select::make('room_id')->relationship('room', 'name'),
+                    ])->columnSpan(1),
+                    Section::make('Event Time')->schema([
+                        DateTimePicker::make('starts_at')
+                            ->label('Starts Date'),
 
-                DateTimePicker::make('starts_at')
-                    ->label('Starts Date'),
+                        DateTimePicker::make('ends_at')
+                            ->label('Ends Date'),
+                    ])->columnSpan(1),
+                ]),
+                Group::make()->columnSpan(1)->columns(1)->schema([
+                    Section::make('Flags')->schema([
+                        CheckboxList::make('flags')
+                            ->options([
+                                "moved" => "Moved",
+                                "cancelled" => "Cancelled",
+                                "after_dark" => "After Dark",
+                            ]),
 
-                DateTimePicker::make('ends_at')
-                    ->label('Ends Date'),
+                        TextInput::make('delay')
+                            ->default(0)
+                            ->numeric()
+                            ->suffix('minutes')
+                            ->hint('Use in combination with delay'),
 
-                Checkbox::make('is_moved'),
+                        Textarea::make('message')
+                            ->helperText('Use in combination with delay (will be displayed as delay reason) or cancelled (as cancel reason).'),
 
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?ScheduleEntry $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?ScheduleEntry $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-            ]);
+                    ])->columnSpan(1),
+
+                    Placeholder::make('created_at')
+                        ->label('Created Date')
+                        ->content(fn(?ScheduleEntry $record
+                        ): string => $record?->created_at?->diffForHumans() ?? '-'),
+
+                    Placeholder::make('updated_at')
+                        ->label('Last Modified Date')
+                        ->content(fn(?ScheduleEntry $record
+                        ): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                ]),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -60,17 +92,17 @@ class ScheduleEntryResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('room'),
+                TextColumn::make('room.name'),
 
                 TextColumn::make('starts_at')
-                    ->label('Starts Date')
-                    ->date(),
+                    ->label('Starts')
+                    ->dateTime(),
 
                 TextColumn::make('ends_at')
-                    ->label('Ends Date')
-                    ->date(),
+                    ->label('Ends')
+                    ->dateTime(),
 
-                TextColumn::make('is_moved'),
+
             ]);
     }
 

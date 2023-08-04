@@ -10,7 +10,7 @@ class EditScreen extends EditRecord
 {
     protected static string $resource = ScreenResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             DeleteAction::make(),

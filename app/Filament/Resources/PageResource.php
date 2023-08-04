@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
+use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 
 class PageResource extends Resource
@@ -58,6 +61,17 @@ class PageResource extends Resource
                 TextColumn::make('name'),
 
                 TextColumn::make('component'),
+
+                TextColumn::make('type')->badge()
+                    ->formatStateUsing(fn($record) => ucfirst($record->type->value))
+                    ->color(fn (ResourceOwnership $state) => match ($state->value) {
+                        'emergency' => 'info',
+                        'system' => 'gray',
+                        'user' => 'success',
+                    })
+            ])->actions([
+                EditAction::make(),
+                \Filament\Tables\Actions\DeleteAction::make(),
             ]);
     }
 

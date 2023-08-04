@@ -6,14 +6,20 @@ use App\Filament\Resources\RoomResource\RelationManagers\ScreensRelationManager;
 use App\Filament\Resources\ScreenResource\Pages;
 use App\Filament\Resources\ScreenResource\RelationManagers\RoomsRelationManager;
 use App\Models\Screen;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
@@ -22,6 +28,7 @@ use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ScreenResource extends Resource
 {
@@ -29,7 +36,7 @@ class ScreenResource extends Resource
 
     protected static ?string $navigationGroup = "Programming";
 
-    protected static ?string $navigationIcon = 'heroicon-o-desktop-computer';
+    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
     protected static ?string $slug = 'screens';
 
     protected static ?string $recordTitleAttribute = 'name';
@@ -43,17 +50,34 @@ class ScreenResource extends Resource
                     ->searchable(),
 
                 TextInput::make('name')
+                    ->hint('Only visible to admins and during screen identification.')
                     ->required(),
 
-                Checkbox::make('provisioned'),
+                Select::make('screen_group_id')
+                    ->relationship('screenGroup', 'name'),
 
                 TextInput::make('slug')
                     ->hint('This is the URL that will be used to access this screen.')
                     ->prefix(config('app.url').'/screens/')
                     ->required(),
 
-                /*DatePicker::make('last_ping_at')
-                    ->label('Last Ping Date'),*/
+                Select::make('orientation')->required()->selectablePlaceholder(false)->options([
+                    'normal' => 'Normal',
+                    'left' => 'Left',
+                    'right' => 'Right',
+                    'inverted' => 'Inverted',
+                ]),
+
+                Checkbox::make('provisioned')->helperText('If checked, this screen will be shown in the filter, this serves no function other than exluding possible randomly autoregistered screens.')->required(),
+
+                Section::make('Network Settings')->columns(3)->description('Used for auto provisioning of thin clients.')->label('Network Settings')->schema([
+                    TextInput::make('ip_address')
+                        ->label('IP Address'),
+                    TextInput::make('hostname')
+                        ->label('Hostname'),
+                    TextInput::make('mac_address')
+                        ->label('MAC Address'),
+                ]),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
@@ -76,6 +100,7 @@ class ScreenResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('screenGroup.name')->label('Screen Group'),
 
                 SelectColumn::make('playlist_id')
                     ->label('Playlist')
@@ -90,6 +115,10 @@ class ScreenResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('hostname')
+                    ->searchable()
+                    ->sortable(),
+
                 CheckboxColumn::make('provisioned'),
 
                 /*TextColumn::make('last_ping_at')
@@ -98,6 +127,55 @@ class ScreenResource extends Resource
             ])->filters([
                 Filter::make('provisioned')->label('Show only provisioned screens')->query(fn(Builder $query
                 ) => $query->where('provisioned', true))->default(true),
+            ])->actions([
+                \Filament\Tables\Actions\EditAction::make('Edit')
+            ])->bulkActions([
+                BulkActionGroup::make([
+                    BulkAction::make('FireEmergencyAlert')
+                        ->label('Fire Evacuation')
+                        ->requiresConfirmation()
+                        ->modalHeading('STOP! You are about to send a fire evacuation alert!')
+                        ->modalDescription("You are about to send a fire evacuation alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.")
+                        ->color('danger')
+                        ->icon('heroicon-m-fire')
+                        ->form([
+                            Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
+                        ])
+                        ->action(fn (Collection $records) => $records->each->delete()),
+                    BulkAction::make('GeneralEmergencyAlert')
+                        ->label('General Evacuation')
+                        ->requiresConfirmation()
+                        ->modalHeading('STOP! You are about to send an evacuation alert!')
+                        ->modalDescription("You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.")
+                        ->form([
+                            Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
+                        ])
+                        ->color('danger')
+                        ->icon('heroicon-s-arrow-right-on-rectangle')
+                        ->action(fn (Collection $records) => $records->each->delete()),
+                    BulkAction::make('CustomEmergencyAlert')
+                        ->label('Custom Emergency Alert')
+                        ->requiresConfirmation()
+                        ->modalHeading('STOP! You are about to send an emergency alert!')
+                        ->modalDescription("You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.")
+                        ->modalSubmitActionLabel('Confirm Send Alert')
+                        ->form([
+                            TextInput::make('title')
+                                ->label('Title')
+                                ->required(),
+                            Textarea::make('message')
+                                ->label('Message')
+                                ->required(),
+                            Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
+                        ])
+                        ->color('danger')
+                        ->icon('heroicon-o-document-text')
+                        ->action(fn (Collection $records) => $records->each->delete()),
+                ])
+                    ->icon('heroicon-s-arrow-right-on-rectangle')
+                    ->tooltip('Public Health and Safety Announcements, these are reserved only for emergencies.')
+                    ->color('danger')
+                    ->label('Emergency Alerts'),
             ]);
     }
 
@@ -110,7 +188,7 @@ class ScreenResource extends Resource
         ];
     }
 
-    protected static function getGlobalSearchEloquentQuery(): Builder
+    public static function getGlobalSearchEloquentQuery(): Builder
     {
         return parent::getGlobalSearchEloquentQuery()->with(['playlist']);
     }

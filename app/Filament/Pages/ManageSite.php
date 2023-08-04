@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\ResourceOwnership;
 use App\Services\ScreenTabResource;
 use App\Settings\GeneralSettings;
 use Closure;
@@ -44,9 +45,12 @@ class ManageSite extends SettingsPage
                     ->options(
                         \App\Models\Playlist::all()->pluck('name', 'id')->toArray()
                     ),
+                Forms\Components\Select::make('project_id')
+                    ->label('Project')
+                    ->options(
+                        \App\Models\Project::where('type','=',ResourceOwnership::USER)->pluck('name', 'id')->toArray()
+                    ),
                 Forms\Components\Placeholder::make('notice')->columnSpanFull()->label('These are defaults that can be overriden per case basis.'),
-
-                ScreenTabResource::getForm(),
             ]);
     }
 }

@@ -12,6 +12,7 @@ class GeneralSettings extends Settings
     public string $ends_at;
 
     public string $playlist_id;
+    public int|null $project_id;
     /**
      * Thinclient Default Configuration
      */

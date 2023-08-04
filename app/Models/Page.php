@@ -19,6 +19,8 @@ class Page extends Model
      */
     protected $guarded = [];
 
+    protected $with = ['project'];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -27,8 +29,12 @@ class Page extends Model
     protected $casts = [
         'id' => 'integer',
         'schema' => 'array',
-        'type' => ResourceOwnership::class,
     ];
+
+    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
 
     protected static function booted(): void
     {

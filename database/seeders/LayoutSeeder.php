@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Layout;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
 
 class LayoutSeeder extends Seeder
@@ -13,6 +14,7 @@ class LayoutSeeder extends Seeder
             [
                 "name" => "None",
                 "component" => "None",
+                "project_id" => Project::firstWhere('type','system')->id,
             ],
             [
                 "name" => "Full Screen",

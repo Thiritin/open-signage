@@ -21,11 +21,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(EmergencySeeder::class);
+        $this->call(SystemSeeder::class);
+/*
         $this->call([
+            ProjectSeeder::class,
             LayoutSeeder::class,
             PageSeeder::class,
             PlaylistSeeder::class
-        ]);
+        ]);*/
 
         if (App::isLocal()) {
             User::updateOrCreate([

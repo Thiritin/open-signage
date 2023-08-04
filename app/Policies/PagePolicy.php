@@ -28,12 +28,18 @@ class PagePolicy
 
     public function update(User $user, Page $page): bool
     {
-        return $page->type !== ResourceOwnership::EMERGENCY;
+        if ($page->project === null) {
+            return true;
+        }
+        return $page->project->type === ResourceOwnership::USER;
     }
 
     public function delete(User $user, Page $page): bool
     {
-        return $page->type !== ResourceOwnership::EMERGENCY;
+        if ($page->project === null) {
+            return true;
+        }
+        return $page->project->type === ResourceOwnership::USER;
     }
 
     public function restore(User $user, Page $page): bool

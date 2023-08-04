@@ -11,6 +11,8 @@ class HideEmergencyScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('type', '!=', ResourceOwnership::EMERGENCY);
+        $builder->whereDoesntHave('project', function (Builder $query) {
+            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        });
     }
 }

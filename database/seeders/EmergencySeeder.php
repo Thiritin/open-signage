@@ -5,22 +5,38 @@ namespace Database\Seeders;
 use App\Enums\ResourceOwnership;
 use App\Models\Layout;
 use App\Models\Page;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
 
 class EmergencySeeder extends Seeder
 {
     public function run(): void
     {
+        $project = Project::updateOrCreate(
+            [
+                'path' => 'emergency',
+                'type' => ResourceOwnership::EMERGENCY,
+            ],
+            [
+                'name' => 'Emergency',
+                'type' => ResourceOwnership::EMERGENCY,
+                'path' => 'emergency' // DO NOT CHANGE PATH
+            ]);
+
         $alertPage = Page::updateOrCreate([
+            'component' => 'EmergencyAlert',
+        ],[
             'name' => 'EmergencyAlert',
-            'type' => ResourceOwnership::EMERGENCY,
-            'component' => 'EmergencyAlert'
+            'component' => 'EmergencyAlert',
+            'project_id' => $project->id
         ]);
 
         $alertLayout = Layout::updateOrCreate([
+            'component' => 'EmergencyLayout',
+        ],[
+            'component' => 'EmergencyLayout',
             'name' => 'EmergencyLayout',
-            'type' => ResourceOwnership::EMERGENCY,
-            'component' => 'EmergencyLayout'
+            'project_id' => $project->id
         ]);
     }
 }

@@ -24,13 +24,17 @@ class Playlist extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'type' => ResourceOwnership::class,
+        'id' => 'integer'
     ];
 
     public function playlistItems(): HasMany
     {
         return $this->hasMany(PlaylistItem::class);
+    }
+
+    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function screens(): HasMany

@@ -28,21 +28,33 @@ class LayoutPolicy
 
     public function update(User $user, Layout $layout): bool
     {
-        return $layout->type !== ResourceOwnership::EMERGENCY;
+        if($layout->project === null) {
+            return true;
+        }
+        return $layout->project->type === ResourceOwnership::USER;
     }
 
     public function delete(User $user, Layout $layout): bool
     {
-        return $layout->type !== ResourceOwnership::EMERGENCY;
+        if($layout->project === null) {
+            return true;
+        }
+        return $layout->project->type === ResourceOwnership::USER;
     }
 
     public function restore(User $user, Layout $layout): bool
     {
-        return $layout->type !== ResourceOwnership::EMERGENCY;
+        if($layout->project === null) {
+            return true;
+        }
+        return $layout->project->type === ResourceOwnership::USER;
     }
 
     public function forceDelete(User $user, Layout $layout): bool
     {
-        return $layout->type !== ResourceOwnership::EMERGENCY;
+        if($layout->project === null) {
+            return true;
+        }
+        return $layout->project->type === ResourceOwnership::USER;
     }
 }

@@ -19,6 +19,8 @@ class Layout extends Model
      */
     protected $guarded = [];
 
+    protected $with = ['project'];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -26,12 +28,16 @@ class Layout extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'type' => ResourceOwnership::class,
     ];
 
     protected static function booted(): void
     {
         static::addGlobalScope(new HideEmergencyScope);
+    }
+
+    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function playlistItems(): HasMany

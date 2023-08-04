@@ -65,6 +65,7 @@ return new class extends SettingsMigration {
             "volume_level" => "0",
             "shutdown_menu" => false,
             "hardware_video_decode" => false,
+            "project_id" => null,
         ];
         foreach ($thinClientConfig as $key => $value) {
             $this->migrator->add('general.'.$key, $value);

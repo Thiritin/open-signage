@@ -6,6 +6,7 @@ use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PlaylistResource\Pages;
 use App\Filament\Resources\PlaylistResource\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
+use App\Settings\GeneralSettings;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Tabs\Tab;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Query\Builder;
@@ -61,6 +63,10 @@ class PlaylistResource extends Resource
                         'user' => 'success',
                     })
 
+            ])->filters([
+                SelectFilter::make('project')
+                    ->relationship('project', 'name',fn($query) => $query->where('type','!=', ResourceOwnership::EMERGENCY))
+                    ->default(app(GeneralSettings::class)->project_id)
             ])->actions([
                 EditAction::make(),
                 DeleteAction::make(),

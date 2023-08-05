@@ -51,6 +51,7 @@ class ManageSite extends SettingsPage
                         \App\Models\Project::where('type','=',ResourceOwnership::USER)->pluck('name', 'id')->toArray()
                     ),
                 Forms\Components\Placeholder::make('notice')->columnSpanFull()->label('These are defaults that can be overriden per case basis.'),
+                ScreenTabResource::getForm(),
             ]);
     }
 }

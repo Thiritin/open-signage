@@ -5,14 +5,14 @@
 @font-face {
     font-family: 'primaryThemeFont';
     font-style: normal;
-    src: local('Hansief'), url(../assets/fonts/Hansief.otf) format('truetype');
+    src: local('Hansief'), url(./Assets/fonts/Hansief.otf) format('truetype');
 }
 
 
 @font-face {
     font-family: 'secondaryThemeFont';
     font-style: normal;
-    src: local('Poppins'), url(../assets/fonts/Poppins-Regular.ttf) format('truetype');
+    src: local('Poppins'), url(./Assets/fonts/Poppins-Regular.ttf) format('truetype');
 }
 
 .themeFont {
@@ -21,16 +21,4 @@
 
 .themeFontSecondary {
     font-family: 'secondaryThemeFont', sans-serif;
-}
-
-.themeColor {
-    color: #1c253c;
-}
-
-.themeColorSecondary {
-    color: #6dd2d1;
-}
-
-.themeColorCompsite {
-    color: #feff99;
 }

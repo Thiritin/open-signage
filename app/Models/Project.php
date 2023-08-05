@@ -20,4 +20,9 @@ class Project extends Model {
     {
         return $this->hasMany(Layout::class);
     }
+
+    public function playlists()
+    {
+        return $this->hasMany(Playlist::class);
+    }
 }

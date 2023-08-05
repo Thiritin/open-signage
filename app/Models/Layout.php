@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ResourceOwnership;
 use App\Models\Scopes\HideEmergencyScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,9 +31,11 @@ class Layout extends Model
         'id' => 'integer',
     ];
 
-    protected static function booted(): void
+    protected static function normalScope(Builder $query): void
     {
-        static::addGlobalScope(new HideEmergencyScope);
+        $query->whereDoesntHave('project', function (Builder $query) {
+            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        });
     }
 
     public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo

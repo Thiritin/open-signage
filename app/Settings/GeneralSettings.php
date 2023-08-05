@@ -70,6 +70,8 @@ class GeneralSettings extends Settings
     public string $volume_level;
     public bool $shutdown_menu;
     public bool $hardware_video_decode;
+    public bool $debug;
+    public string|null $default_sound_card;
 
     public static function group(): string
     {

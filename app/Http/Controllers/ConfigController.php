@@ -27,7 +27,7 @@ class ConfigController extends Controller
             ]);
         }
         $settings = app(GeneralSettings::class)->toArray();
-        $settings = array_merge($settings,($this->screen?->screenGroup?->settings ?? []));
+        $settings = array_merge($settings, ($this->screen?->screenGroup?->settings ?? []));
 
         $settings['kiosk_config'] = route('config');
         if (!empty($kiosk)) {
@@ -39,8 +39,10 @@ class ConfigController extends Controller
             $settings['run_command'] = "( sleep 30; reboot; ) &";
         }
 
+        $settings['browser_preferences'] = route('browser.preferences',['browser' => $settings['browser'] ?? 'chrome']);
+
         // Make sure to exclude general settings
-        $entries = collect($settings)->except(['name', 'starts_at', 'ends_at', 'playlist_id'])
+        $entries = collect($settings)->except(['name', 'starts_at', 'ends_at', 'playlist_id', 'project_id'])
             ->reject(fn($value) => empty($value) && !is_bool($value))
             ->map(fn($value, $key) => $key.'='.$this->convertValue($key, $value))
             ->toArray();
@@ -68,6 +70,10 @@ class ConfigController extends Controller
 
         if ($key === 'screen_rotate') {
             return $this->screen?->orientation ?? 'normal';
+        }
+
+        if ($key === 'volume_level') {
+            return $value."%";
         }
 
         return $value;

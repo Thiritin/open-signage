@@ -11,6 +11,7 @@
         "@vitejs/plugin-vue": "^4.0.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.1.2",
+        "dotenv": "^16.3.1",
         "laravel-echo": "^1.15.2",
         "laravel-vite-plugin": "^0.7.5",
         "postcss": "^8.4.18",

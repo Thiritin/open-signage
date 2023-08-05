@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ResourceOwnership;
 use App\Models\Scopes\HideEmergencyScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -36,14 +37,17 @@ class Page extends Model
         return $this->belongsTo(Project::class);
     }
 
-    protected static function booted(): void
-    {
-        static::addGlobalScope(new HideEmergencyScope);
-    }
-
     public function playlistItems(): HasMany
     {
         return $this->hasMany(PlaylistItem::class);
+    }
+
+
+    protected static function normalScope(Builder $query): void
+    {
+        $query->whereDoesntHave('project', function (Builder $query) {
+            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        });
     }
 
 }

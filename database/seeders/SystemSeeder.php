@@ -46,7 +46,8 @@ class SystemSeeder extends Seeder
         $playlist->playlistItems()->updateOrCreate([
             'page_id' => $page->id,
             'layout_id' => $layout->id,
-            'duration' => 10,
+        ],[
+            'duration' => 0,
         ]);
     }
 }

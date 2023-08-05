@@ -36,10 +36,10 @@ class ScreenTabResource
                         Checkbox::make($prefix.'dhcp')->required()->label('DHCP')->reactive()->default($settings->dhcp),
                         TextInput::make($prefix.'network_interface')->default($settings->network_interface)->label('Network Interface'),
                         TextInput::make($prefix.'default_gateway')->default($settings->default_gateway)
-                            ->hidden(fn(Get $get): bool => $get('dhcp') ?? true)
+                            ->hidden(fn(Get $get): bool => $get($prefix.'dhcp') ?? true)
                             ->label('Default Gateway')->columnSpanFull(),
                         TextInput::make($prefix.'netmask')->default($settings->netmask)->hidden(fn(Get $get
-                        ): bool => $get('dhcp') ?? true)->label('Netmask')->columnSpanFull(),
+                        ): bool => $get($prefix.'dhcp') ?? true)->label('Netmask')->columnSpanFull(),
                         TextInput::make($prefix.'dns_server')->default($settings->dns_server)->label('DNS Server'),
                     ]),
 
@@ -55,20 +55,20 @@ class ScreenTabResource
                         ])->default('none')->columnSpanFull(),
                         TextInput::make($prefix.'wep_key')->default($settings->wep_key)->label('WEP Key')->columnSpanFull(),
                         TextInput::make($prefix.'wpa_password')->default($settings->wpa_password)->label('WPA Password')->columnSpanFull(),
-                    ])->hidden(fn(Get $get): bool => $get('connection') !== 'wireless'),
+                    ])->hidden(fn(Get $get): bool => $get($prefix.'connection') !== 'wireless'),
 
                     Section::make("EAPOL")->compact()->columnSpan(1)->schema([
                         Select::make($prefix.'wired_authentication')->default($settings->wired_authentication)->hidden()->required()->reactive()->label('Wired Authentication')->options([
                             'none' => 'None',
                             'eapol' => 'EAPOL',
-                        ])->default('none')->hidden(fn(Get $get): bool => $get('connection') !== 'wired'),
+                        ])->default('none')->hidden(fn(Get $get): bool => $get($prefix.'connection') !== 'wired'),
                         TextInput::make($prefix.'eapol_username')->default($settings->eapol_username)->label('EAPOL Username')->hidden(fn(
                             Get $get
-                        ) => $get('wired_authentication') !== 'eapol')->columnSpanFull(),
+                        ) => $get($prefix.'wired_authentication') !== 'eapol')->columnSpanFull(),
                         TextInput::make($prefix.'eapol_password')->default($settings->eapol_password)->label('EAPOL Password')->hidden(fn(
                             Get $get
-                        ) => $get('wired_authentication') !== 'eapol')->columnSpanFull(),
-                    ])->hidden(fn(Get $get): bool => $get('connection') !== 'wired'),
+                        ) => $get($prefix.'wired_authentication') !== 'eapol')->columnSpanFull(),
+                    ])->hidden(fn(Get $get): bool => $get($prefix.'connection') !== 'wired'),
                     Section::make("Proxy")->columnSpan(1)->schema([
                         TextInput::make($prefix.'proxy_config')->default($settings->proxy_config)->placeholder('proxy_config=http://192.168.1.10/files/proxy.pac')->label('Proxy Config')->columnSpanFull(),
                         TextInput::make($prefix.'proxy')->default($settings->proxy)->placeholder('proxy=192.168.1.20:3128')->label('Proxy')->columnSpanFull(),
@@ -83,7 +83,7 @@ class ScreenTabResource
                     Section::make('Firewall')->columns()->schema([
                         Checkbox::make($prefix.'disable_firewall')->default($settings->disable_firewall)->required()->reactive()->label('Disable Firewall'),
                         Checkbox::make($prefix.'allow_icmp_protocol')->default($settings->allow_icmp_protocol)->required()
-                            ->hidden(fn(Get $get): bool => $get('disable_firewall') ?? false)
+                            ->hidden(fn(Get $get): bool => $get($prefix.'disable_firewall') ?? false)
                             ->label('Allow ICMP Protocol'),
                     ])->compact(),
                 ]),
@@ -123,10 +123,10 @@ class ScreenTabResource
 
                     Checkbox::make($prefix.'disable_address_bar')->default($settings->disable_address_bar)->label('Disable Address Bar')
                         ->reactive()
-                        ->hidden(fn(Get $get) => $get('disable_navigation_bar') === true)
+                        ->hidden(fn(Get $get) => $get($prefix.'disable_navigation_bar') === true)
                         ->helperText('Disable address bar in the browser.'),
                     Checkbox::make($prefix.'autohide_navigation_bar')->default($settings->autohide_navigation_bar)
-                        ->hidden(fn(Get $get) => $get('disable_navigation_bar') === true)
+                        ->hidden(fn(Get $get) => $get($prefix.'disable_navigation_bar') === true)
                         ->label('Autohide Navigation Bar')->helperText('Hide the Firefox navigation bar when not in use. When bumping the mouse into the top of the window the navigation reappears again.'),
                     Section::make('Onscreen Buttons')->schema([
                         Select::make($prefix.'onscreen_buttons')->default($settings->onscreen_buttons)
@@ -149,13 +149,13 @@ class ScreenTabResource
                         ]),
                     ])->columns(2)
                         ->hidden(fn(Get $get
-                        ): bool => (!$get('disable_address_bar') && !$get('disable_navigation_bar')) || $get('browser') !== 'firefox'),
+                        ): bool => (!$get($prefix.'disable_address_bar') && !$get($prefix.'disable_navigation_bar')) || $get($prefix.'browser') !== 'firefox'),
 
                     TextInput::make($prefix.'refresh_webpage')->default($settings->refresh_webpage)->numeric()->suffix('seconds')->nullable()->label('Refresh Webpage')->hint('Leave empty to disable.')->helperText('This parameter tells the system to emulate "F5" key press every "X" seconds which breaks screensaver and session idle functions. This is useful for the cases when the system is configured to lock the screen after a certain period of inactivity.')->columnSpanFull(),
                     Checkbox::make($prefix.'virtual_keyboard')->default($settings->virtual_keyboard)->label('Virtual Keyboard')->helperText('Enable virtual keyboard extension for the Chrome and the Firefox browsers. Virtual keyboard will popup automatically when an input field is clicked on the webpage.')->columnSpanFull(),
                 ]),
                 Tab::make('System')->columns()->schema([
-                    FileUpload::make($prefix.'wallpaper')->default($settings->wallpaper)->image()->columnSpanFull(),
+                    FileUpload::make($prefix.'wallpaper')->image()->columnSpanFull(),
                     Select::make($prefix.'persistence')->default($settings->persistence)->helperText('Custom persistence level for the guest\'s home folder. Set the parameter value to \'session\' in order to keep user data persistent when browser or session are restarted. Set it to \'full\' to keep user data persistent all the time - even when system is rebooted or powered down. Useful mostly with private mode disabled for the browser.')->label('Persistence')->options([
                         'none' => 'None',
                         'full' => 'Full',
@@ -180,8 +180,11 @@ class ScreenTabResource
                         'inverted' => 'Inverted',
                     ])->columnSpanFull(),
                     TextInput::make($prefix.'volume_level')->default($settings->volume_level)->label('Volume Level')->hint('Leave empty to use default.')->suffix('%')->minValue(0)->maxValue(100)->helperText('Set custom volume level.'),
+                    TextInput::make($prefix.'default_sound_card')->default($settings->default_sound_card)->label('Default Sound Card')->placeholder("0.0"),
                     Checkbox::make($prefix.'shutdown_menu')->default($settings->shutdown_menu)->label('Shutdown Menu')->helperText('Enable shutdown menu.')->columnSpanFull(),
                     Checkbox::make($prefix.'hardware_video_decode')->default($settings->hardware_video_decode)->label('Hardware Video Decode')->helperText('Use GPU card for processing video data. Hardware video decode is faster and more efficient than software video decode. Video files must be encoded with codecs which are supported by ceratin GPU models. Check this link for reference: link. You can also run \'vainfo\' command over SSH on the target PC to find which video codecs are supported by your GPU. This function is especially useful for digital signage deployments.')->columnSpanFull(),
+                    Checkbox::make($prefix.'debug')->default($settings->debug)->label('Debug')->helperText('Enable debug mode.')->columnSpanFull(),
+
                 ])
 
             ])->columnSpanFull();

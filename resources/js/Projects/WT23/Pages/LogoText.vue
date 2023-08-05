@@ -7,7 +7,7 @@ const props = defineProps({
         default: "true"
     },
 })
-import Logo from "@/Pages/Logo.vue";
+import Logo from "@/Projects/WT23/Pages/Logo.vue";
 </script>
 
 <template>

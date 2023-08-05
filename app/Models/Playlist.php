@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ResourceOwnership;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,5 +41,12 @@ class Playlist extends Model
     public function screens(): HasMany
     {
         return $this->hasMany(Screen::class);
+    }
+
+    protected static function normalScope(Builder $query): void
+    {
+        $query->whereDoesntHave('project', function (Builder $query) {
+            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        });
     }
 }

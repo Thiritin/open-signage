@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\EmergencyTypeEnum;
 use App\Filament\Resources\RoomResource\RelationManagers\ScreensRelationManager;
 use App\Filament\Resources\ScreenResource\Pages;
 use App\Filament\Resources\ScreenResource\RelationManagers\RoomsRelationManager;
+use App\Jobs\SetEmergencyPlaylistJob;
 use App\Models\Screen;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
@@ -28,6 +30,7 @@ use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Queue\Jobs\Job;
 use Illuminate\Support\Collection;
 
 class ScreenResource extends Resource
@@ -138,10 +141,10 @@ class ScreenResource extends Resource
                         ->modalDescription("You are about to send a fire evacuation alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.")
                         ->color('danger')
                         ->icon('heroicon-m-fire')
+                        ->action(fn (Collection $records) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::FIRE, $records))
                         ->form([
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ])
-                        ->action(fn (Collection $records) => $records->each->delete()),
+                        ]),
                     BulkAction::make('GeneralEmergencyAlert')
                         ->label('General Evacuation')
                         ->requiresConfirmation()
@@ -152,13 +155,14 @@ class ScreenResource extends Resource
                         ])
                         ->color('danger')
                         ->icon('heroicon-s-arrow-right-on-rectangle')
-                        ->action(fn (Collection $records) => $records->each->delete()),
+                        ->action(fn (Collection $records) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::EVACUATION, $records)),
                     BulkAction::make('CustomEmergencyAlert')
                         ->label('Custom Emergency Alert')
                         ->requiresConfirmation()
                         ->modalHeading('STOP! You are about to send an emergency alert!')
                         ->modalDescription("You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.")
                         ->modalSubmitActionLabel('Confirm Send Alert')
+                        ->action(fn (Collection $records, array $data) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::CUSTOM, $records, $data['message'], $data['title']))
                         ->form([
                             TextInput::make('title')
                                 ->label('Title')
@@ -169,8 +173,43 @@ class ScreenResource extends Resource
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
                         ])
                         ->color('danger')
-                        ->icon('heroicon-o-document-text')
-                        ->action(fn (Collection $records) => $records->each->delete()),
+                        ->icon('heroicon-o-document-text'),
+                    BulkAction::make('TestEmergencyAlert')
+                        ->label('Test Emergency System')
+                        ->requiresConfirmation()
+                        ->modalHeading('STOP! You are about to send an emergency alert!')
+                        ->modalDescription("You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.")
+                        ->modalSubmitActionLabel('Confirm Send Alert')
+                        ->action(fn (Collection $records) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::TEST, $records))
+                        ->form([
+                            Checkbox::make('sensecheck')->required()->label('I am about to send an TEST ALERT. ONLY USE THIS FOR TESTING, SCREENS WILL STILL JUMP INTO EMERGENCY MODE!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
+                        ])
+                        ->color('warning')
+                        ->icon('heroicon-o-document-text'),
+                    BulkAction::make('LiftEmergencyAlert')
+                        ->label('Emergency Over Alert')
+                        ->requiresConfirmation()
+                        ->modalHeading('You are about to send an emergency over alert.')
+                        ->modalDescription("This will display a message on the screens that the emergency is over.")
+                        ->modalSubmitActionLabel('Danger is over, lift alert')
+                        ->action(fn (Collection $records) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::LIFTED, $records))
+                        ->form([
+                            Checkbox::make('sensecheck')->required()->label('There is no more danger, shows a lifted message on the screens.')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
+                        ])
+                        ->color('warning')
+                        ->icon('heroicon-o-document-text'),
+                    BulkAction::make('ReturnRegularOperation')
+                        ->label('Disable Emergency Mode')
+                        ->requiresConfirmation()
+                        ->modalHeading('You are about to disable the emergency mode.')
+                        ->modalDescription("This will disable the emergency mode on the screens you selected and return them to normal operation.")
+                        ->modalSubmitActionLabel('Confirm')
+                        ->action(fn (Collection $records) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::NONE, $records))
+                        ->form([
+                            Checkbox::make('sensecheck')->required()->label('Return screens to normal operation.')->hintColor('success')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
+                        ])
+                        ->color('success')
+                        ->icon('heroicon-o-document-text'),
                 ])
                     ->icon('heroicon-s-arrow-right-on-rectangle')
                     ->tooltip('Public Health and Safety Announcements, these are reserved only for emergencies.')

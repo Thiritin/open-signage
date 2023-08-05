@@ -2,7 +2,7 @@
 import HourTime from "@/Components/HourTime.vue";
 
 defineProps(['entry'])
-import Card from "@/Components/Card.vue";
+import Card from "@/Projects/WT23/Components/Card.vue";
 </script>
 
 <template>

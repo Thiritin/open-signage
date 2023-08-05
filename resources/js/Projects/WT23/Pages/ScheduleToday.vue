@@ -1,5 +1,5 @@
 <script setup>
-import ScheduleList from "@/Components/Schedule/ScheduleList.vue";
+import ScheduleList from "@/Projects/WT23/Components/Schedule/ScheduleList.vue";
 
 const props = defineProps({
     schedule: {
@@ -19,10 +19,8 @@ const props = defineProps({
         default: true
     }
 })
-import PageTitle from "@/Components/PageTitle.vue";
-import Card from "@/Components/Card.vue";
-import ScheduleEntry from "@/Components/Schedule/ScheduleEntry.vue";
-import AnnouncementCard from "@/Components/AnnouncementCard.vue";
+import ScheduleEntry from "@/Projects/WT23/Components/Schedule/ScheduleEntry.vue";
+import AnnouncementCard from "@/Projects/WT23/Components/AnnouncementCard.vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 
 const scrollLeft = ref(null);

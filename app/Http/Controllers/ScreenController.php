@@ -6,6 +6,7 @@ use App\Models\Announcement;
 use App\Models\Playlist;
 use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
+use App\Models\Scopes\HideEmergencyScope;
 use App\Models\Screen;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class ScreenController extends Controller
         $finalSlug = $slug ?? $request->get('kiosk') ?? null;
         abort_if(is_null($finalSlug), 400, "No slug provided");
 
-        $screen = Screen::firstOrCreate(['slug' => $finalSlug],[
+        $screen = Screen::firstOrCreate(['slug' => $finalSlug], [
             'name' => 'New Screen '.$finalSlug,
             'slug' => $finalSlug,
             'playlist_id' => app(GeneralSettings::class)->playlist_id,
@@ -26,14 +27,18 @@ class ScreenController extends Controller
         ]);
 
         return Inertia::render('Main', [
-            'initialPages' => $screen->playlist?->playlistItems->map(fn(PlaylistItem $playlistItem) => [
-                'layout' => $playlistItem->layout->component,
+            'initialPages' => $screen->playlist->playlistItems->map(fn(PlaylistItem $playlistItem) => [
+                'layout' => [
+                    'component' => $playlistItem->layout->component,
+                    'path' => $playlistItem->layout->project->path,
+                ],
+                'path' => $playlistItem->page->project->path,
                 'component' => $playlistItem->page->component,
                 'props' => $playlistItem->content,
                 'duration' => $playlistItem->duration,
                 'title' => $playlistItem->title ?? '',
-            ]) ?? [],
-            'screen' => $screen,
+            ]),
+            'initialScreen' => $screen,
             'initialAnnouncements' => Announcement::all()->toArray(),
             'initialSchedule' => ScheduleEntry::all()->toArray(),
         ]);

@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\PlaylistItem;
+use App\Models\Scopes\HideEmergencyScope;
 use App\Models\Screen;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -35,12 +36,17 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
     {
         return [
             'pages' => $this->screen->playlist->playlistItems->map(fn(PlaylistItem $playlistItem) => [
-                'layout' => $playlistItem->layout->component,
+                'layout' => [
+                    'component' => $playlistItem->layout->component,
+                    'path' => $playlistItem->layout->project->path,
+                ],
+                'path' => $playlistItem->page->project->path,
                 'component' => $playlistItem->page->component,
                 'props' => $playlistItem->content,
                 'duration' => $playlistItem->duration,
                 'title' => $playlistItem->title ?? '',
             ]),
+            'screen' => $this->screen,
         ];
     }
 }

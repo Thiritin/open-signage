@@ -8,7 +8,9 @@ use App\Filament\Resources\PlaylistResource\RelationManagers\PlaylistItemsRelati
 use App\Models\Playlist;
 use App\Settings\GeneralSettings;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -34,6 +36,25 @@ class PlaylistResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('project_id')
+                    ->relationship('project', 'name', fn($query) => $query->where('type', ResourceOwnership::USER))
+                    ->default(app(GeneralSettings::class)->project_id)
+                    ->hint('Autofilled by default, but you can change it if you want.')
+                    ->createOptionForm(function () {
+                        return [
+                            Grid::make()->columns()->schema([
+                                TextInput::make('name')
+                                    ->placeholder('Wild Times 2023')
+                                    ->required(),
+                                TextInput::make('path')
+                                    ->placeholder('wt23')
+                                    ->unique('projects','path')
+                                    ->required(),
+                            ]),
+                        ];
+                    })->columnSpanFull()
+                    ->required(),
+
                 TextInput::make('name')
                     ->required(),
 
@@ -55,10 +76,10 @@ class PlaylistResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('type')->badge()
-                    ->formatStateUsing(fn($record) => ucfirst($record->type->value))
-                    ->color(fn(ResourceOwnership $state) => match ($state->value) {
-                        'emergency' => 'info',
+                TextColumn::make('project.type')->badge()
+                    ->formatStateUsing(fn($record) => $record->project->name)
+                    ->color(fn ($state) => match ($state->value) {
+                        'emergency' => 'danger',
                         'system' => 'gray',
                         'user' => 'success',
                     })

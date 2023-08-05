@@ -28,12 +28,18 @@ class PlaylistPolicy
 
     public function update(User $user, Playlist $playlist): bool
     {
-        return $playlist->type === ResourceOwnership::USER;
+        if ($playlist->project === null) {
+            return true;
+        }
+        return $playlist->project->type === ResourceOwnership::USER;
     }
 
     public function delete(User $user, Playlist $playlist): bool
     {
-        return $playlist->type === ResourceOwnership::USER;
+        if ($playlist->project === null) {
+            return true;
+        }
+        return $playlist->project->type === ResourceOwnership::USER;
     }
 
     public function restore(User $user, Playlist $playlist): bool

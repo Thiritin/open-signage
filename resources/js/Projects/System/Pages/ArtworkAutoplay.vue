@@ -23,7 +23,8 @@ const props = defineProps({
 });
 
 const screenType = computed(() => {
-    if (screen.orientation === "normal" || screen.orientation === "inverted") {
+    console.log(screen.orientation);
+    if (props.screen.orientation === "normal" || props.screen.orientation === "inverted") {
         return "horizontal"
     } else {
         return "vertical"

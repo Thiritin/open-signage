@@ -66,7 +66,6 @@ class ScheduleEntryResource extends Resource
                                     ->required(),
                             ]))->helperText('Color is used for the background in the timetable.'),
 
-
                     ])->columnSpan(1),
                     Section::make('Event Time')->schema([
                         DateTimePicker::make('starts_at')

@@ -5,8 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ScheduleEntryResource\Pages;
 use App\Models\ScheduleEntry;
 use App\Settings\GeneralSettings;
-use Filament\Actions\DeleteAction;
-use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
@@ -21,7 +19,6 @@ use Filament\Resources\Resource;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -48,24 +45,24 @@ class ScheduleEntryResource extends Resource
 
                         Select::make('room_id')
                             ->relationship('room', 'name')
-                            ->createOptionForm(fn(Form $form) => $form->schema([
+                            ->createOptionForm(fn (Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn(Form $form) => $form->schema([
+                            ->editOptionForm(fn (Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                             ])),
 
                         Select::make('schedule_type_id')
                             ->relationship('scheduleType', 'name')
-                            ->createOptionForm(fn(Form $form) => $form->schema([
+                            ->createOptionForm(fn (Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                                 ColorPicker::make('color')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn(Form $form) => $form->schema([
+                            ->editOptionForm(fn (Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                                 ColorPicker::make('color')
@@ -113,13 +110,13 @@ class ScheduleEntryResource extends Resource
 
                     Placeholder::make('created_at')
                         ->label('Created Date')
-                        ->content(fn(
+                        ->content(fn (
                             ?ScheduleEntry $record
                         ): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                     Placeholder::make('updated_at')
                         ->label('Last Modified Date')
-                        ->content(fn(
+                        ->content(fn (
                             ?ScheduleEntry $record
                         ): string => $record?->updated_at?->diffForHumans() ?? '-'),
                 ]),

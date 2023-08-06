@@ -7,29 +7,28 @@ use App\Filament\Resources\PlaylistResource\Pages;
 use App\Filament\Resources\PlaylistResource\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
 use App\Settings\GeneralSettings;
-use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Filters\Filter;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Query\Builder;
 
 class PlaylistResource extends Resource
 {
     protected static ?string $model = Playlist::class;
-    protected static ?string $navigationGroup = "Programming";
+
+    protected static ?string $navigationGroup = 'Programming';
+
     protected static ?string $slug = 'playlists';
 
     protected static ?string $navigationIcon = 'heroicon-o-play';
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
@@ -37,7 +36,7 @@ class PlaylistResource extends Resource
         return $form
             ->schema([
                 Select::make('project_id')
-                    ->relationship('project', 'name', fn($query) => $query->where('type', ResourceOwnership::USER))
+                    ->relationship('project', 'name', fn ($query) => $query->where('type', ResourceOwnership::USER))
                     ->default(app(GeneralSettings::class)->project_id)
                     ->hint('Autofilled by default, but you can change it if you want.')
                     ->createOptionForm(function () {
@@ -48,7 +47,7 @@ class PlaylistResource extends Resource
                                     ->required(),
                                 TextInput::make('path')
                                     ->placeholder('wt23')
-                                    ->unique('projects','path')
+                                    ->unique('projects', 'path')
                                     ->required(),
                             ]),
                         ];
@@ -60,11 +59,11 @@ class PlaylistResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Playlist $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Playlist $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Playlist $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Playlist $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -77,17 +76,17 @@ class PlaylistResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('project.type')->badge()
-                    ->formatStateUsing(fn($record) => $record->project->name)
+                    ->formatStateUsing(fn ($record) => $record->project->name)
                     ->color(fn ($state) => match ($state->value) {
                         'emergency' => 'danger',
                         'system' => 'gray',
                         'user' => 'success',
-                    })
+                    }),
 
             ])->filters([
                 SelectFilter::make('project')
-                    ->relationship('project', 'name',fn($query) => $query->where('type','!=', ResourceOwnership::EMERGENCY))
-                    ->default(app(GeneralSettings::class)->project_id)
+                    ->relationship('project', 'name', fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
+                    ->default(app(GeneralSettings::class)->project_id),
             ])->actions([
                 EditAction::make(),
                 DeleteAction::make(),

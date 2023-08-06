@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Playlist;
 use App\Models\Screen;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ScreenFactory extends Factory
 {

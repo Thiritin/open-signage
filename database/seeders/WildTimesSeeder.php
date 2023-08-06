@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Layout;
-use App\Models\Page;
 use App\Models\Project;
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Seeder;
@@ -53,22 +51,22 @@ class WildTimesSeeder extends Seeder
          * Playlists
          */
         $playlists = [[
-            "name" => "Splash Screen (Logo and Time)",
-            "pages" => [
+            'name' => 'Splash Screen (Logo and Time)',
+            'pages' => [
                 [
-                    "title" => "Logo with Time",
-                    "layout_id" => $centeredLayout->id,
-                    "page_id" => $splashPage->id,
-                ]
-            ]
+                    'title' => 'Logo with Time',
+                    'layout_id' => $centeredLayout->id,
+                    'page_id' => $splashPage->id,
+                ],
+            ],
         ]];
         collect($playlists)->each(function ($data) use ($project) {
             $playlist = $project->playlists()->firstOrCreate([
                 'name' => $data['name'],
             ]);
-            collect($data['pages'])->each(fn($page) => $playlist->playlistItems()->firstOrCreate([
+            collect($data['pages'])->each(fn ($page) => $playlist->playlistItems()->firstOrCreate([
                 'title' => $page['title'],
-            ],[
+            ], [
                 'layout_id' => $page['layout_id'],
                 'page_id' => $page['page_id'],
                 'duration' => $page['duration'] ?? 0,

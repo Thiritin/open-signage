@@ -2,19 +2,18 @@
 
 namespace App\Events;
 
-use App\Models\Announcement;
 use App\Models\ScheduleEntry;
-use App\Models\Screen;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class UpdateScheduleEvent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public function __construct()
     {
@@ -23,7 +22,7 @@ class UpdateScheduleEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('ScreenAll')
+            new Channel('ScreenAll'),
         ];
     }
 

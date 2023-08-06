@@ -31,6 +31,7 @@ class PlaylistPolicy
         if ($playlist->project === null) {
             return true;
         }
+
         return $playlist->project->type === ResourceOwnership::USER;
     }
 
@@ -39,6 +40,7 @@ class PlaylistPolicy
         if ($playlist->project === null) {
             return true;
         }
+
         return $playlist->project->type === ResourceOwnership::USER;
     }
 

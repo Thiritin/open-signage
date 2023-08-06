@@ -3,28 +3,18 @@
 namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 
 use App\Models\PlaylistItem;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Actions\CreateAction;
-use Filament\Pages\Actions\EditAction;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\SelectColumn;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Route;
 
 class PlaylistItemsRelationManager extends RelationManager
 {
@@ -44,12 +34,12 @@ class PlaylistItemsRelationManager extends RelationManager
                     ->required(),
 
                 Select::make('page_id')
-                    ->relationship('page', 'name', fn(Builder $query) => $query->normal())
+                    ->relationship('page', 'name', fn (Builder $query) => $query->normal())
                     ->columnSpan(5)
                     ->required(),
 
                 Select::make('layout_id')
-                    ->relationship('layout', 'name', fn(Builder $query) => $query->normal())
+                    ->relationship('layout', 'name', fn (Builder $query) => $query->normal())
                     ->columnSpan(5)
                     ->required(),
             ])->columns(12)->columnSpanFull(),
@@ -72,6 +62,7 @@ class PlaylistItemsRelationManager extends RelationManager
                     ->columnSpanFull();
             }
         }
+
         return $form
             ->schema($formSchema);
     }
@@ -104,14 +95,14 @@ class PlaylistItemsRelationManager extends RelationManager
             ->reorderable('sort')
             ->paginated(false)
             ->headerActions([
-                \Filament\Tables\Actions\CreateAction::make()->modalWidth('7xl')
+                \Filament\Tables\Actions\CreateAction::make()->modalWidth('7xl'),
             ])
             ->actions([
                 \Filament\Tables\Actions\EditAction::make()->modalWidth('7xl'),
-                DeleteAction::make()
+                DeleteAction::make(),
             ])
             ->bulkActions([
-                DeleteBulkAction::make()
+                DeleteBulkAction::make(),
             ]);
     }
 }

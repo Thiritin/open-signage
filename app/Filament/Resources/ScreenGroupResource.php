@@ -3,19 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScreenGroupResource\Pages;
-use App\Filament\Resources\ScreenGroupResource\RelationManagers;
-use App\Services\ScreenTabResource;
-use DateTimeZone;
 use App\Models\ScreenGroup;
+use App\Services\ScreenTabResource;
 use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ScreenGroupResource extends Resource
 {
@@ -24,7 +18,8 @@ class ScreenGroupResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $recordTitleAttribute = 'name';
-    protected static ?string $navigationGroup = "Programming";
+
+    protected static ?string $navigationGroup = 'Programming';
 
     public static function form(Form $form): Form
     {
@@ -34,7 +29,7 @@ class ScreenGroupResource extends Resource
                     ->required()
                     ->maxValue(255)
                     ->columnSpanFull(),
-                ScreenTabResource::getForm("settings."),
+                ScreenTabResource::getForm('settings.'),
             ]);
     }
 

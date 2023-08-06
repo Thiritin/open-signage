@@ -9,8 +9,8 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class RoomResource extends Resource
 {
@@ -19,6 +19,7 @@ class RoomResource extends Resource
     protected static ?string $slug = 'rooms';
 
     protected static ?string $navigationGroup = 'Programming';
+
     protected static ?string $navigationIcon = 'heroicon-o-home';
 
     protected static ?string $recordTitleAttribute = 'name';
@@ -32,11 +33,11 @@ class RoomResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Room $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Room $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Room $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Room $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

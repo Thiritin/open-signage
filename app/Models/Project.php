@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Enums\ResourceOwnership;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model {
+class Project extends Model
+{
     protected $guarded = [];
+
     protected $casts = [
         'type' => ResourceOwnership::class,
     ];

@@ -20,23 +20,24 @@ class EmergencySeeder extends Seeder
             [
                 'name' => 'Emergency',
                 'type' => ResourceOwnership::EMERGENCY,
-                'path' => 'Emergency' // DO NOT CHANGE PATH
-            ]);
+                'path' => 'Emergency', // DO NOT CHANGE PATH
+            ]
+        );
 
         $alertPage = Page::updateOrCreate([
             'component' => 'EmergencyAlert',
-        ],[
+        ], [
             'name' => 'EmergencyAlert',
             'component' => 'EmergencyAlert',
-            'project_id' => $project->id
+            'project_id' => $project->id,
         ]);
 
         $alertLayout = Layout::updateOrCreate([
             'component' => 'EmergencyLayout',
-        ],[
+        ], [
             'component' => 'EmergencyLayout',
             'name' => 'EmergencyLayout',
-            'project_id' => $project->id
+            'project_id' => $project->id,
         ]);
     }
 }

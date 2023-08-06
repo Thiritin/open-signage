@@ -3,11 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Layout;
-use App\Models\Page;
-use App\Models\Playlist;
-use App\Models\PlaylistItem;
-use App\Models\Screen;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -32,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ], [
                 'name' => 'Admin',
                 'email' => 'me@thiritin.com',
-                'password' => Hash::make('password')
+                'password' => Hash::make('password'),
             ]);
         }
     }

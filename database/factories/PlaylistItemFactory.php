@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Layout;
 use App\Models\Page;
 use App\Models\Playlist;
 use App\Models\PlaylistItem;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PlaylistItemFactory extends Factory
 {

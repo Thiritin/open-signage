@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     public function up(): void
     {
         Schema::create('room_screen', function (Blueprint $table) {
@@ -18,7 +18,7 @@ return new class extends Migration {
 
             $table->string('direction')->nullable();
             $table->boolean('primary')->default(false);
-            $table->unique(['room_id','screen_id']);
+            $table->unique(['room_id', 'screen_id']);
         });
     }
 

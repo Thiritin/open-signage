@@ -18,13 +18,16 @@ use Illuminate\Support\Collection;
 
 class SetEmergencyPlaylistJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(
         private readonly EmergencyTypeEnum $type,
         private readonly Collection $screens,
-        private readonly string|null $message = null,
-        private readonly string|null $title = null
+        private readonly ?string $message = null,
+        private readonly ?string $title = null
     ) {
 
     }
@@ -38,12 +41,13 @@ class SetEmergencyPlaylistJob implements ShouldQueue
 
         if ($this->type === EmergencyTypeEnum::NONE) {
             // Set Screen to default Playlist
-            $this->screens->each(fn(Screen $screen) => $screen->update([
+            $this->screens->each(fn (Screen $screen) => $screen->update([
                 'playlist_id' => $screen->default_playlist_id ?? app(GeneralSettings::class)->playlist_id,
             ]));
             // Cleanup Emergency Playlist
-            Playlist::whereHas('project', fn($q) => $q->where('type',ResourceOwnership::EMERGENCY))
-                ->whereDoesntHave('screens', fn($query) => $query->withoutGlobalScope(HideEmergencyScope::class))->delete();
+            Playlist::whereHas('project', fn ($q) => $q->where('type', ResourceOwnership::EMERGENCY))
+                ->whereDoesntHave('screens', fn ($query) => $query->withoutGlobalScope(HideEmergencyScope::class))->delete();
+
             return;
         }
 
@@ -86,7 +90,7 @@ class SetEmergencyPlaylistJob implements ShouldQueue
             ]);
         }
 
-        $this->screens->each(fn(Screen $screen) => $screen->update([
+        $this->screens->each(fn (Screen $screen) => $screen->update([
             'default_playlist_id' => $screen->default_playlist_id ?? $screen->playlist_id,
             'playlist_id' => $playList->id,
         ]));

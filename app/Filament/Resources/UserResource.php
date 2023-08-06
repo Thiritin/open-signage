@@ -4,13 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
@@ -42,11 +41,11 @@ class UserResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?User $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?User $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?User $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?User $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

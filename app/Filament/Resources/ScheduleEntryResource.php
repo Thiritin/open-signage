@@ -4,9 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScheduleEntryResource\Pages;
 use App\Models\ScheduleEntry;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
@@ -16,17 +14,17 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Console\Scheduling\Schedule;
+use Filament\Tables\Table;
 
 class ScheduleEntryResource extends Resource
 {
     protected static ?string $model = ScheduleEntry::class;
 
-    protected static ?string $navigationGroup = "Content";
+    protected static ?string $navigationGroup = 'Content';
 
     protected static ?string $navigationIcon = 'heroicon-m-table-cells';
+
     protected static ?string $slug = 'schedule-entries';
 
     protected static ?string $recordTitleAttribute = 'title';
@@ -54,9 +52,9 @@ class ScheduleEntryResource extends Resource
                     Section::make('Flags')->schema([
                         CheckboxList::make('flags')
                             ->options([
-                                "moved" => "Moved",
-                                "cancelled" => "Cancelled",
-                                "after_dark" => "After Dark",
+                                'moved' => 'Moved',
+                                'cancelled' => 'Cancelled',
+                                'after_dark' => 'After Dark',
                             ]),
 
                         TextInput::make('delay')
@@ -68,17 +66,18 @@ class ScheduleEntryResource extends Resource
                         Textarea::make('message')
                             ->helperText('Use in combination with delay (will be displayed as delay reason) or cancelled (as cancel reason).'),
 
-
                     ])->columnSpan(1),
 
                     Placeholder::make('created_at')
                         ->label('Created Date')
-                        ->content(fn(?ScheduleEntry $record
+                        ->content(fn (
+                            ?ScheduleEntry $record
                         ): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                     Placeholder::make('updated_at')
                         ->label('Last Modified Date')
-                        ->content(fn(?ScheduleEntry $record
+                        ->content(fn (
+                            ?ScheduleEntry $record
                         ): string => $record?->updated_at?->diffForHumans() ?? '-'),
                 ]),
             ])->columns(3);
@@ -101,7 +100,6 @@ class ScheduleEntryResource extends Resource
                 TextColumn::make('ends_at')
                     ->label('Ends')
                     ->dateTime(),
-
 
             ]);
     }

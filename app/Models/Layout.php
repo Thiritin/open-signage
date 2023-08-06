@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\ResourceOwnership;
-use App\Models\Scopes\HideEmergencyScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

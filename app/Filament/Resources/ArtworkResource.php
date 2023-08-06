@@ -3,23 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArtworkResource\Pages;
-use App\Filament\Resources\ArtworkResource\RelationManagers;
 use App\Models\Artwork;
 use Filament\Forms;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ArtworkResource extends Resource
 {
     protected static ?string $model = Artwork::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
-    protected static ?string $navigationGroup = "Content";
+
+    protected static ?string $navigationGroup = 'Content';
 
     public static function form(Form $form): Form
     {
@@ -30,17 +27,17 @@ class ArtworkResource extends Resource
                 Forms\Components\FileUpload::make('file_horizontal')
                     ->image()
                     ->imageEditor()
-                    ->imageEditorAspectRatios(["16:9",null])
+                    ->imageEditorAspectRatios(['16:9', null])
                     ->imageEditorMode(2),
                 Forms\Components\FileUpload::make('file_vertical')
                     ->image()
                     ->imageEditor()
-                    ->imageEditorAspectRatios(["9:16",null])
+                    ->imageEditorAspectRatios(['9:16', null])
                     ->imageEditorMode(2),
                 Forms\Components\FileUpload::make('file_banner')
                     ->image()
                     ->imageEditor()
-                    ->imageEditorAspectRatios(["5:2",null])
+                    ->imageEditorAspectRatios(['5:2', null])
                     ->imageEditorMode(2)
                     ->columnSpanFull(),
             ]);

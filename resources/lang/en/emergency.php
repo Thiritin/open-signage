@@ -1,4 +1,5 @@
 <?php
+
 return [
     \App\Enums\EmergencyTypeEnum::FIRE->name => [
         'title' => 'Fire alarm',
@@ -10,7 +11,7 @@ return [
     ],
     \App\Enums\EmergencyTypeEnum::TEST->name => [
         'title' => 'Alarm Systemtest',
-        'message' => "This is a test alarm, no action is required.",
+        'message' => 'This is a test alarm, no action is required.',
     ],
     \App\Enums\EmergencyTypeEnum::LIFTED->name => [
         'title' => 'All clear',

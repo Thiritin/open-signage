@@ -31,6 +31,7 @@ class PagePolicy
         if ($page->project === null) {
             return true;
         }
+
         return $page->project->type === ResourceOwnership::USER;
     }
 
@@ -39,6 +40,7 @@ class PagePolicy
         if ($page->project === null) {
             return true;
         }
+
         return $page->project->type === ResourceOwnership::USER;
     }
 

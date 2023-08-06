@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\ResourceOwnership;
-use App\Models\Layout;
 use App\Models\Page;
-use App\Models\Playlist;
 use App\Models\Project;
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Seeder;
@@ -23,17 +21,17 @@ class SystemSeeder extends Seeder
         ]);
 
         $pageScreenIdent = $project->pages()->updateOrCreate([
-            "component" => "ScreenIdentification",
+            'component' => 'ScreenIdentification',
         ], [
-            "name" => "Screen Identification",
-            "component" => "ScreenIdentification",
+            'name' => 'Screen Identification',
+            'component' => 'ScreenIdentification',
         ]);
 
         $layoutScreenIdent = $project->layouts()->updateOrCreate([
-            "component" => "None",
+            'component' => 'None',
         ], [
-            "name" => "None",
-            "component" => "None",
+            'name' => 'None',
+            'component' => 'None',
         ]);
 
         $playlist = $project->playlists()->firstOrCreate([
@@ -56,22 +54,22 @@ class SystemSeeder extends Seeder
          * Artwork Autoplay System Page
          */
         $artworkPage = $project->pages()->updateOrCreate([
-            "component" => "ArtworkAutoplay",
+            'component' => 'ArtworkAutoplay',
         ], [
-            "name" => "Artwork Autoplay",
-            "component" => "ArtworkAutoplay",
-            "schema" => [
+            'name' => 'Artwork Autoplay',
+            'component' => 'ArtworkAutoplay',
+            'schema' => [
                 [
-                    "name" => "Show Duration (ms)",
-                    "property" => "playSpeed",
-                    "type" => "TextInput",
+                    'name' => 'Show Duration (ms)',
+                    'property' => 'playSpeed',
+                    'type' => 'TextInput',
                 ],
                 [
-                    "name" => "Transition Duration (ms)",
-                    "property" => "transition",
-                    "type" => "TextInput",
-                ]
-            ]
+                    'name' => 'Transition Duration (ms)',
+                    'property' => 'transition',
+                    'type' => 'TextInput',
+                ],
+            ],
         ]);
     }
 }

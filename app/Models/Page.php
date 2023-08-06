@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\ResourceOwnership;
-use App\Models\Scopes\HideEmergencyScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,12 +41,10 @@ class Page extends Model
         return $this->hasMany(PlaylistItem::class);
     }
 
-
     protected static function scopeNormal(Builder $query): void
     {
         $query->whereDoesntHave('project', function (Builder $query) {
             $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
         });
     }
-
 }

@@ -12,18 +12,18 @@ class LayoutSeeder extends Seeder
     {
         $layouts = [
             [
-                "name" => "None",
-                "component" => "None",
-                "project_id" => Project::firstWhere('type','system')->id,
+                'name' => 'None',
+                'component' => 'None',
+                'project_id' => Project::firstWhere('type', 'system')->id,
             ],
             [
-                "name" => "Full Screen",
-                "component" => "FullScreen",
+                'name' => 'Full Screen',
+                'component' => 'FullScreen',
             ],
             [
-                "name" => "Primary Layout",
-                "component" => "PrimaryLayout",
-            ]
+                'name' => 'Primary Layout',
+                'component' => 'PrimaryLayout',
+            ],
         ];
         Layout::upsert($layouts, ['component']);
     }

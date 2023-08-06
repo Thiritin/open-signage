@@ -25,7 +25,7 @@ class Playlist extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
 
     public function playlistItems(): HasMany

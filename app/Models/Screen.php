@@ -42,6 +42,6 @@ class Screen extends Model
 
     public function rooms()
     {
-        return $this->belongsToMany(Room::class)->withPivot(['direction','primary']);
+        return $this->belongsToMany(Room::class)->withPivot(['direction', 'primary']);
     }
 }

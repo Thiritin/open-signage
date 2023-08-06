@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Announcement;
 use App\Models\Artwork;
-use App\Models\Playlist;
 use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
-use App\Models\Scopes\HideEmergencyScope;
 use App\Models\Screen;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
@@ -19,7 +17,7 @@ class ScreenController extends Controller
     public function __invoke(Request $request, $slug = null)
     {
         $finalSlug = $slug ?? $request->get('kiosk') ?? null;
-        abort_if(is_null($finalSlug), 400, "No slug provided");
+        abort_if(is_null($finalSlug), 400, 'No slug provided');
 
         $screen = Screen::firstOrCreate(['slug' => $finalSlug], [
             'name' => 'New Screen '.$finalSlug,
@@ -29,7 +27,7 @@ class ScreenController extends Controller
         ]);
 
         return Inertia::render('Main', [
-            'initialPages' => $screen->playlist->playlistItems->map(fn(PlaylistItem $playlistItem) => [
+            'initialPages' => $screen->playlist->playlistItems->map(fn (PlaylistItem $playlistItem) => [
                 'layout' => [
                     'component' => $playlistItem->layout->component,
                     'path' => $playlistItem->layout->project->path,
@@ -41,7 +39,7 @@ class ScreenController extends Controller
                 'title' => $playlistItem->title ?? '',
             ]),
             'initialScreen' => $screen,
-            'initialArtworks' => Artwork::all()->map(fn(Artwork $artwork) => [
+            'initialArtworks' => Artwork::all()->map(fn (Artwork $artwork) => [
                 'id' => $artwork->id,
                 'name' => $artwork->name,
                 'artist' => $artwork->artist,

@@ -13,7 +13,7 @@ const props = defineProps({
     playSpeed: {
         type: Number,
         required: false,
-        default: 1600+5000
+        default: 1600 + 5000
     },
     transition: {
         type: Number,
@@ -66,8 +66,11 @@ import 'hooper-vue3/dist/hooper.css';
 
 <template>
     <div class="h-screen">
-        <Hooper :mouse-drag="false" :hover-pause="false" :keys-control="false" class="h-screen w-full" :transition="transition" :wheel-control="false" :center-mode="false"  :auto-play="true" :itemsToShow="1" :pagination="false">
-            <Slide v-for="slide in artworksFilteredWithoutMissingOrientation" :duration="playSpeed" :index="slide.id" :key="slide.id">
+        <Hooper :mouse-drag="false" :hover-pause="false" :keys-control="false" class="h-screen w-full"
+                :transition="transition" :wheel-control="false" :center-mode="false" :auto-play="true" :itemsToShow="1"
+                :pagination="false">
+            <Slide v-for="slide in artworksFilteredWithoutMissingOrientation" :duration="playSpeed" :index="slide.id"
+                   :key="slide.id">
                 <div>
                     <img :src="slide[screenOrientation]" :alt="slide.name" class="object-cover h-full w-full">
                 </div>
@@ -78,6 +81,6 @@ import 'hooper-vue3/dist/hooper.css';
 
 <style scoped>
 .hooper {
-    height: 100%!important;
+    height: 100% !important;
 }
 </style>

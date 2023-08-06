@@ -5,10 +5,8 @@ namespace App\Filament\Resources\ScreenResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Table;
 
 class RoomsRelationManager extends RelationManager
 {
@@ -25,12 +23,12 @@ class RoomsRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\Select::make('direction')
                     ->required()
-                ->options([
-                    'left' => 'Left',
-                    'right' => 'Right',
-                    'top' => 'Top',
-                    'bottom' => 'Bottom',
-                ]),
+                    ->options([
+                        'left' => 'Left',
+                        'right' => 'Right',
+                        'top' => 'Top',
+                        'bottom' => 'Bottom',
+                    ]),
                 Forms\Components\Checkbox::make('primary'),
             ]);
     }
@@ -48,11 +46,11 @@ class RoomsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
-                Tables\Actions\AttachAction::make()
+                Tables\Actions\AttachAction::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make()
+                Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DetachBulkAction::class::make(),

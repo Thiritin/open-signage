@@ -10,8 +10,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
 class ScreensRelationManager extends RelationManager
@@ -31,23 +31,23 @@ class ScreensRelationManager extends RelationManager
                 TextInput::make('name')
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
 
                 DatePicker::make('last_ping_at')
                     ->label('Last Ping Date'),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('slug')
                     ->disabled()
                     ->required()
-                    ->unique(Screen::class, 'slug', fn($record) => $record),
+                    ->unique(Screen::class, 'slug', fn ($record) => $record),
 
                 Checkbox::make('provisioned'),
             ]);

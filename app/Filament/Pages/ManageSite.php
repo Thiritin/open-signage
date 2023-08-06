@@ -5,14 +5,9 @@ namespace App\Filament\Pages;
 use App\Enums\ResourceOwnership;
 use App\Services\ScreenTabResource;
 use App\Settings\GeneralSettings;
-use Closure;
-use DateTimeZone;
 use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Pages\SettingsPage;
-use Filament\Tables\Columns\SelectColumn;
 
 class ManageSite extends SettingsPage
 {
@@ -48,7 +43,7 @@ class ManageSite extends SettingsPage
                 Forms\Components\Select::make('project_id')
                     ->label('Project')
                     ->options(
-                        \App\Models\Project::where('type','=',ResourceOwnership::USER)->pluck('name', 'id')->toArray()
+                        \App\Models\Project::where('type', '=', ResourceOwnership::USER)->pluck('name', 'id')->toArray()
                     ),
                 Forms\Components\Placeholder::make('notice')->columnSpanFull()->label('These are defaults that can be overriden per case basis.'),
                 ScreenTabResource::getForm(),

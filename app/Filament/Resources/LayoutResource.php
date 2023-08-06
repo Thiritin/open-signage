@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Enums\ResourceOwnership;
 use App\Filament\Resources\LayoutResource\Pages;
 use App\Models\Layout;
-use App\Models\Project;
 use App\Settings\GeneralSettings;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
@@ -15,17 +14,20 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
 
 class LayoutResource extends Resource
 {
     protected static ?string $model = Layout::class;
-    protected static ?string $navigationGroup = "Development";
+
+    protected static ?string $navigationGroup = 'Development';
 
     protected static ?string $slug = 'layouts';
-    protected static ?string $navigationIcon = "heroicon-o-document";
+
+    protected static ?string $navigationIcon = 'heroicon-o-document';
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
@@ -33,7 +35,7 @@ class LayoutResource extends Resource
         return $form
             ->schema([
                 Select::make('project_id')
-                    ->relationship('project', 'name', fn($query) => $query->where('type', ResourceOwnership::USER))
+                    ->relationship('project', 'name', fn ($query) => $query->where('type', ResourceOwnership::USER))
                     ->default(app(GeneralSettings::class)->project_id)
                     ->hint('Autofilled by default, but you can change it if you want.')
                     ->createOptionForm(function () {
@@ -44,7 +46,7 @@ class LayoutResource extends Resource
                                     ->required(),
                                 TextInput::make('path')
                                     ->placeholder('wt23')
-                                    ->unique('projects','path')
+                                    ->unique('projects', 'path')
                                     ->required(),
                             ]),
                         ];
@@ -59,11 +61,11 @@ class LayoutResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Layout $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Layout $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Layout $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Layout $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -78,17 +80,17 @@ class LayoutResource extends Resource
                 TextColumn::make('component'),
 
                 TextColumn::make('project.type')->badge()
-                    ->formatStateUsing(fn($record) => $record->project->name)
-                    ->color(fn($state) => match ($state->value) {
+                    ->formatStateUsing(fn ($record) => $record->project->name)
+                    ->color(fn ($state) => match ($state->value) {
                         'emergency' => 'danger',
                         'system' => 'gray',
                         'user' => 'success',
-                    })
+                    }),
 
             ])->filters([
                 SelectFilter::make('project')
-                    ->relationship('project', 'name',fn($query) => $query->where('type','!=', ResourceOwnership::EMERGENCY))
-                    ->default(app(GeneralSettings::class)->project_id)
+                    ->relationship('project', 'name', fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
+                    ->default(app(GeneralSettings::class)->project_id),
             ])->actions([
                 EditAction::make(),
                 DeleteAction::make(),

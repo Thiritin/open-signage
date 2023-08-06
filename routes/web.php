@@ -23,4 +23,4 @@ Route::get('/', function () {
     return redirect('/admin');
 })->name('login');
 
-Route::get('/timetable',\App\Http\Controllers\TimetableController::class)->name('timetable');
+Route::get('timetable', \App\Http\Controllers\TimetableController::class)->name('timetable');

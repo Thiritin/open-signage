@@ -134,7 +134,8 @@ const showItemsBasedOnScreenSize = computed(() => {
                     <!-- Event Entry -->
                     <div :style="'margin-bottom:'+marginToNextEvent(room,panelIndex)+'px;'"
                          class="px-2 w-full overflow-hidden" v-for="(panel,panelIndex) in room">
-                      <div :style="'height:'+eventHeight(panel.starts_at,panel.ends_at)+'px;'"
+                      <div
+                          :style="'height:'+eventHeight(panel.starts_at,panel.ends_at)+'px;'+'background:'+panel.schedule_type?.color+'!important;'"
                            class="bg-primary-100 rounded">
                         <div class="p-2 text-left">
                           <!-- Event Name -->

@@ -23,7 +23,7 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('Screen.'.$this->screen->id),
+            new Channel('Screen.' . $this->screen->id),
         ];
     }
 

@@ -20,7 +20,7 @@ class ScreenController extends Controller
         abort_if(is_null($finalSlug), 400, 'No slug provided');
 
         $screen = Screen::firstOrCreate(['slug' => $finalSlug], [
-            'name' => 'New Screen '.$finalSlug,
+            'name' => 'New Screen ' . $finalSlug,
             'slug' => $finalSlug,
             'playlist_id' => app(GeneralSettings::class)->playlist_id,
             'provisioned' => false,

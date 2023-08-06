@@ -31,6 +31,13 @@ class Page extends Model
         'schema' => 'array',
     ];
 
+    protected static function scopeNormal(Builder $query): void
+    {
+        $query->whereDoesntHave('project', function (Builder $query) {
+            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        });
+    }
+
     public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Project::class);
@@ -39,12 +46,5 @@ class Page extends Model
     public function playlistItems(): HasMany
     {
         return $this->hasMany(PlaylistItem::class);
-    }
-
-    protected static function scopeNormal(Builder $query): void
-    {
-        $query->whereDoesntHave('project', function (Builder $query) {
-            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
-        });
     }
 }

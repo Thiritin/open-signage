@@ -28,6 +28,13 @@ class Playlist extends Model
         'id' => 'integer',
     ];
 
+    protected static function scopeNormal(Builder $query): void
+    {
+        $query->whereDoesntHave('project', function (Builder $query) {
+            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        });
+    }
+
     public function playlistItems(): HasMany
     {
         return $this->hasMany(PlaylistItem::class);
@@ -41,12 +48,5 @@ class Playlist extends Model
     public function screens(): HasMany
     {
         return $this->hasMany(Screen::class);
-    }
-
-    protected static function scopeNormal(Builder $query): void
-    {
-        $query->whereDoesntHave('project', function (Builder $query) {
-            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
-        });
     }
 }

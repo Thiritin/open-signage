@@ -9,17 +9,17 @@ class ScheduleObserver
 {
     public function created(ScheduleEntry $scheduleEntry): void
     {
-        broadcast(new UpdateScheduleEvent());
+        broadcast(new UpdateScheduleEvent);
     }
 
     public function updated(ScheduleEntry $scheduleEntry): void
     {
-        broadcast(new UpdateScheduleEvent());
+        broadcast(new UpdateScheduleEvent);
     }
 
     public function deleted(ScheduleEntry $scheduleEntry): void
     {
-        broadcast(new UpdateScheduleEvent());
+        broadcast(new UpdateScheduleEvent);
     }
 
     public function restored(ScheduleEntry $scheduleEntry): void

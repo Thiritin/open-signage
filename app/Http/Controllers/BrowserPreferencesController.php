@@ -14,13 +14,13 @@ class BrowserPreferencesController extends Controller
             $entries = collect($entries)->map(fn (
                 $value,
                 $key
-            ) => "\"$key\"".': '.(($value ? 'true' : 'false').','))->toArray();
+            ) => "\"{$key}\"" . ': ' . (($value ? 'true' : 'false') . ','))->toArray();
         } else {
             $entries['media.autoplay.default'] = 0;
             $entries = collect($entries)->map(fn (
                 $value,
                 $key
-            ) => $key.' = '.($value))->toArray();
+            ) => $key . ' = ' . ($value))->toArray();
         }
 
         return response()->streamDownload(function () use ($entries) {

@@ -36,7 +36,7 @@ class SetEmergencyPlaylistJob implements ShouldQueue
     {
         $project = Project::firstWhere('type', ResourceOwnership::EMERGENCY);
         $playList = $project->playlists()->create([
-            'name' => 'Emergency '.ucfirst(strtolower($this->type->name)).' Playlist '.now()->format('Y-m-d H:i:s'),
+            'name' => 'Emergency ' . ucfirst(strtolower($this->type->name)) . ' Playlist ' . now()->format('Y-m-d H:i:s'),
         ]);
 
         if ($this->type === EmergencyTypeEnum::NONE) {
@@ -73,8 +73,8 @@ class SetEmergencyPlaylistJob implements ShouldQueue
                 'duration' => 5,
                 'content' => [
                     'type' => $this->type->name,
-                    'title' => trans('emergency.'.$this->type->name.'.title', [], 'en'),
-                    'message' => trans('emergency.'.$this->type->name.'.message', [], 'en'),
+                    'title' => trans('emergency.' . $this->type->name . '.title', [], 'en'),
+                    'message' => trans('emergency.' . $this->type->name . '.message', [], 'en'),
                 ],
             ]);
 
@@ -84,8 +84,8 @@ class SetEmergencyPlaylistJob implements ShouldQueue
                 'duration' => 5,
                 'content' => [
                     'type' => $this->type->name,
-                    'title' => trans('emergency.'.$this->type->name.'.title', [], 'de'),
-                    'message' => trans('emergency.'.$this->type->name.'.message', [], 'de'),
+                    'title' => trans('emergency.' . $this->type->name . '.title', [], 'de'),
+                    'message' => trans('emergency.' . $this->type->name . '.message', [], 'de'),
                 ],
             ]);
         }

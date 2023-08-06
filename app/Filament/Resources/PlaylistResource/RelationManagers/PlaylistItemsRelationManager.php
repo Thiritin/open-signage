@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 
 use App\Models\PlaylistItem;
+use Exception;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -51,8 +52,8 @@ class PlaylistItemsRelationManager extends RelationManager
             if ($page->schema) {
                 $array = [];
                 foreach ($page->schema as $field) {
-                    $class = 'Filament\\Forms\\Components\\'.$field['type'];
-                    $array[] = $class::make('content.'.$field['property'])
+                    $class = 'Filament\\Forms\\Components\\' . $field['type'];
+                    $array[] = $class::make('content.' . $field['property'])
                         ->label($field['name'])
                         ->columnSpanFull();
                 }
@@ -68,7 +69,7 @@ class PlaylistItemsRelationManager extends RelationManager
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function table(Table $table): Table
     {

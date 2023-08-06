@@ -56,7 +56,7 @@ class ScreenResource extends Resource
 
                 TextInput::make('slug')
                     ->hint('This is the URL that will be used to access this screen.')
-                    ->prefix(config('app.url').'/screens/')
+                    ->prefix(config('app.url') . '/screens/')
                     ->required(),
 
                 Select::make('orientation')->required()->selectablePlaceholder(false)->options([

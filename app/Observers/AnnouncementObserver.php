@@ -9,17 +9,17 @@ class AnnouncementObserver
 {
     public function created(Announcement $announcement): void
     {
-        broadcast(new UpdateAnnouncementEvent());
+        broadcast(new UpdateAnnouncementEvent);
     }
 
     public function updated(Announcement $announcement): void
     {
-        broadcast(new UpdateAnnouncementEvent());
+        broadcast(new UpdateAnnouncementEvent);
     }
 
     public function deleted(Announcement $announcement): void
     {
-        broadcast(new UpdateAnnouncementEvent());
+        broadcast(new UpdateAnnouncementEvent);
     }
 
     public function restored(Announcement $announcement): void

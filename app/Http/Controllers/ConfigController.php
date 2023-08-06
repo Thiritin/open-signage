@@ -43,7 +43,7 @@ class ConfigController extends Controller
         // Make sure to exclude general settings
         $entries = collect($settings)->except(['name', 'starts_at', 'ends_at', 'playlist_id', 'project_id'])
             ->reject(fn ($value) => empty($value) && ! is_bool($value))
-            ->map(fn ($value, $key) => $key.'='.$this->convertValue($key, $value))
+            ->map(fn ($value, $key) => $key . '=' . $this->convertValue($key, $value))
             ->toArray();
 
         return response()->streamDownload(function () use ($entries) {
@@ -72,7 +72,7 @@ class ConfigController extends Controller
         }
 
         if ($key === 'volume_level') {
-            return $value.'%';
+            return $value . '%';
         }
 
         return $value;

@@ -2,7 +2,8 @@
 
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
-return new class () extends SettingsMigration {
+return new class extends SettingsMigration
+{
     public function up(): void
     {
         $this->migrator->add('general.name', 'Open Signage Event');
@@ -51,7 +52,7 @@ return new class () extends SettingsMigration {
             'onscreen_buttons_position' => null,
             'refresh_webpage' => null,
             'virtual_keyboard' => false,
-            'wallpaper' => config('app.url').'/storage/splash.png',
+            'wallpaper' => config('app.url') . '/storage/splash.png',
             'persistence' => 'none',
             'swapfile' => null,
             'removable_devices' => false,
@@ -68,7 +69,7 @@ return new class () extends SettingsMigration {
             'project_id' => null,
         ];
         foreach ($thinClientConfig as $key => $value) {
-            $this->migrator->add('general.'.$key, $value);
+            $this->migrator->add('general.' . $key, $value);
         }
     }
 

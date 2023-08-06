@@ -1,7 +1,7 @@
 <script setup>
 import {computed} from "vue";
 
-defineProps({
+const props = defineProps({
     artworks: {
         type: Array,
         required: false
@@ -30,6 +30,12 @@ const screenType = computed(() => {
     }
 });
 
+const artworksFilteredWithoutMissingOrientation = computed(() => {
+    return props.artworks.filter(artwork => {
+        return artwork[screenType.value] !== null
+    })
+});
+
 import {Hooper, Slide} from 'hooper-vue3';
 import 'hooper-vue3/dist/hooper.css';
 </script>
@@ -37,7 +43,7 @@ import 'hooper-vue3/dist/hooper.css';
 <template>
     <div class="h-screen">
         <Hooper :mouse-drag="false" :keys-control="false" class="h-screen w-full" :transition="transition" :wheel-control="false" :center-mode="true"  :auto-play="true" :itemsToShow="1" :pagination="false">
-            <Slide v-for="slide in artworks" :duration="playSpeed" :index="slide.id" :key="slide.id">
+            <Slide v-for="slide in artworksFilteredWithoutMissingOrientation" :duration="playSpeed" :index="slide.id" :key="slide.id">
                 <div>
                     <img :src="slide[screenType]" :alt="slide.name" class="object-cover h-full w-full">
                 </div>

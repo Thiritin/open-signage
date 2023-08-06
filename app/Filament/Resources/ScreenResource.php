@@ -71,7 +71,7 @@ class ScreenResource extends Resource
                     'inverted' => 'Inverted',
                 ]),
 
-                Checkbox::make('provisioned')->helperText('If checked, this screen will be shown in the filter, this serves no function other than exluding possible randomly autoregistered screens.')->required(),
+                Checkbox::make('provisioned')->helperText('If checked, this screen will be shown in the filter, this serves no function other than exluding possible randomly autoregistered screens.'),
 
                 Section::make('Network Settings')->columns(3)->description('Used for auto provisioning of thin clients.')->label('Network Settings')->schema([
                     TextInput::make('ip_address')

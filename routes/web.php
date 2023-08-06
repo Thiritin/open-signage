@@ -22,3 +22,5 @@ Route::get('browser/{browser}/preferences', \App\Http\Controllers\BrowserPrefere
 Route::get('/', function () {
     return redirect('/admin');
 })->name('login');
+
+Route::get('/timetable',\App\Http\Controllers\TimetableController::class)->name('timetable');

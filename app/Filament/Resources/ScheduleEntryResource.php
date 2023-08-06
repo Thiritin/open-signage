@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScheduleEntryResource\Pages;
 use App\Models\ScheduleEntry;
+use App\Settings\GeneralSettings;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
@@ -38,13 +39,32 @@ class ScheduleEntryResource extends Resource
                         TextInput::make('title')
                             ->required(),
 
-                        Select::make('room_id')->relationship('room', 'name'),
+                        Select::make('room_id')
+                            ->relationship('room', 'name')
+                            ->createOptionForm(fn (Form $form) => $form->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                            ]))
+                            ->editOptionForm(fn (Form $form) => $form->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                            ])),
                     ])->columnSpan(1),
                     Section::make('Event Time')->schema([
                         DateTimePicker::make('starts_at')
+                            ->minutesStep(15)
+                            ->hoursStep(1)
+                            ->native(false)
+                            ->minDate(app(GeneralSettings::class)->starts_at)
+                            ->maxDate(app(GeneralSettings::class)->ends_at)
                             ->label('Starts Date'),
 
                         DateTimePicker::make('ends_at')
+                            ->minutesStep(15)
+                            ->hoursStep(1)
+                            ->native(false)
+                            ->minDate(app(GeneralSettings::class)->starts_at)
+                            ->maxDate(app(GeneralSettings::class)->ends_at)
                             ->label('Ends Date'),
                     ])->columnSpan(1),
                 ]),

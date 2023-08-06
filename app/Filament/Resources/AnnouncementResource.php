@@ -9,6 +9,9 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -54,11 +57,16 @@ class AnnouncementResource extends Resource
 
                 TextColumn::make('starts_at')
                     ->label('Starts Date')
+                    ->sortable()
                     ->date(),
 
                 TextColumn::make('ends_at')
                     ->label('Ends Date')
+                    ->sortable()
                     ->date(),
+            ])->actions([
+                EditAction::make(),
+                DeleteAction::make(),
             ]);
     }
 

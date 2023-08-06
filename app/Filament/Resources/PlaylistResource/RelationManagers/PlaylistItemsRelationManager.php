@@ -23,6 +23,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
 
 class PlaylistItemsRelationManager extends RelationManager
@@ -43,20 +44,19 @@ class PlaylistItemsRelationManager extends RelationManager
                     ->required(),
 
                 Select::make('page_id')
-                    ->relationship('page', 'name')
+                    ->relationship('page', 'name', fn(Builder $query) => $query->normal())
                     ->columnSpan(5)
                     ->required(),
 
                 Select::make('layout_id')
-                    ->relationship('layout', 'name')
+                    ->relationship('layout', 'name', fn(Builder $query) => $query->normal())
                     ->columnSpan(5)
                     ->required(),
             ])->columns(12)->columnSpanFull(),
             TextInput::make('title')->columnSpanFull(),
         ];
-
-        if (isset(request()->get('updates')[0]['payload']['params'][1]) || isset(request()->get('serverMemo')['data']['mountedTableActionRecord'])) {
-            $id = request()->get('updates')[0]['payload']['params'][1] ?? request()->get('serverMemo')['data']['mountedTableActionRecord'];
+        if ($this->mountedTableActionRecord) {
+            $id = $this->mountedTableActionRecord;
             $page = PlaylistItem::find($id)->page;
             if ($page->schema) {
                 $array = [];
@@ -85,20 +85,24 @@ class PlaylistItemsRelationManager extends RelationManager
             ->columns([
                 TextInputColumn::make('title'),
 
+                TextInputColumn::make('duration')->type('number'),
+
                 SelectColumn::make('page_id')->options(
-                    \App\Models\Page::query()
+                    \App\Models\Page::normal()
                         ->orderBy('name')
                         ->pluck('name', 'id')
                         ->toArray()
-                )->disablePlaceholderSelection(),
+                )->selectablePlaceholder(false),
 
                 SelectColumn::make('layout_id')->options(
-                    \App\Models\Layout::query()
+                    \App\Models\Layout::normal()
                         ->orderBy('name')
                         ->pluck('name', 'id')
                         ->toArray()
-                )->disablePlaceholderSelection(),
+                )->selectablePlaceholder(false),
             ])
+            ->reorderable('sort')
+            ->paginated(false)
             ->headerActions([
                 \Filament\Tables\Actions\CreateAction::make()->modalWidth('7xl')
             ])

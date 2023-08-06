@@ -26,4 +26,9 @@ class Announcement extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
+
+    public function room()
+    {
+        return $this->belongsTo(\App\Models\Room::class);
+    }
 }

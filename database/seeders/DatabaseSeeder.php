@@ -22,16 +22,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(EmergencySeeder::class);
         $this->call(SystemSeeder::class);
-/*
-        $this->call([
-            ProjectSeeder::class,
-            LayoutSeeder::class,
-            PageSeeder::class,
-            PlaylistSeeder::class
-        ]);*/
+
+        // Wild Times Seeder
+        $this->call(WildTimesSeeder::class);
 
         if (App::isLocal()) {
-            User::updateOrCreate([
+            User::firstOrCreate([
                 'name' => 'Admin',
             ], [
                 'name' => 'Admin',

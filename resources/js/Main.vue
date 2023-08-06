@@ -19,12 +19,17 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    initialArtworks: {
+        type: Array,
+        required: true
+    },
 });
 
 const pages = ref(props.initialPages);
 const announcements = ref(props.initialAnnouncements);
 const schedule = ref(props.initialSchedule);
 const screen = ref(props.initialScreen);
+const artworks = ref(props.initialArtworks);
 
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {
@@ -92,6 +97,7 @@ watch(activePageIndex, (value) => {
                 v-show="mappedPages[activePageIndex].index === activePageIndex"
                 :screen="screen"
                 :schedule="schedule"
+                :artworks="artworks"
                 :announcements="announcements"
                 :page="mappedPages[activePageIndex]"
                 :is="layouts.find(item => item.component === mappedPages[activePageIndex].layout.component && item.path === mappedPages[activePageIndex].layout.path).resolvedLayout"></component>

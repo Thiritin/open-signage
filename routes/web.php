@@ -23,4 +23,4 @@ Route::get('/config',\App\Http\Controllers\ConfigController::class)->name('confi
 Route::get('/browser/{browser}/preferences',\App\Http\Controllers\BrowserPreferencesController::class)->name('browser.preferences');
 Route::get('/', function () {
     return redirect('/admin');
-});
+})->name('login');

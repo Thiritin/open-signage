@@ -6,6 +6,7 @@ use App\Filament\Resources\ArtworkResource\Pages;
 use App\Filament\Resources\ArtworkResource\RelationManagers;
 use App\Models\Artwork;
 use Filament\Forms;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,16 +29,19 @@ class ArtworkResource extends Resource
                 Forms\Components\TextInput::make('artist'),
                 Forms\Components\FileUpload::make('file_horizontal')
                     ->image()
-                    ->imageCropAspectRatio("16:9")
-                    ->imageEditor(),
+                    ->imageEditor()
+                    ->imageEditorAspectRatios(["16:9",null])
+                    ->imageEditorMode(2),
                 Forms\Components\FileUpload::make('file_vertical')
                     ->image()
-                    ->imageCropAspectRatio("9:16")
-                    ->imageEditor(),
+                    ->imageEditor()
+                    ->imageEditorAspectRatios(["9:16",null])
+                    ->imageEditorMode(2),
                 Forms\Components\FileUpload::make('file_banner')
                     ->image()
-                    ->imageCropAspectRatio("5:2")
                     ->imageEditor()
+                    ->imageEditorAspectRatios(["5:2",null])
+                    ->imageEditorMode(2)
                     ->columnSpanFull(),
             ]);
     }

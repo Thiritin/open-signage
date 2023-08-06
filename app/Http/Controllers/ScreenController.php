@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\Artwork;
 use App\Models\Playlist;
 use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
@@ -10,6 +11,7 @@ use App\Models\Scopes\HideEmergencyScope;
 use App\Models\Screen;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ScreenController extends Controller
@@ -39,8 +41,16 @@ class ScreenController extends Controller
                 'title' => $playlistItem->title ?? '',
             ]),
             'initialScreen' => $screen,
+            'initialArtworks' => Artwork::all()->map(fn(Artwork $artwork) => [
+                'id' => $artwork->id,
+                'name' => $artwork->name,
+                'artist' => $artwork->artist,
+                'horizontal' => Storage::disk('public')->url($artwork->file_horizontal),
+                'vertical' => Storage::disk('public')->url($artwork->file_vertical),
+                'banner' => Storage::disk('public')->url($artwork->file_banner),
+            ])->toArray(),
             'initialAnnouncements' => Announcement::all()->toArray(),
-            'initialSchedule' => ScheduleEntry::all()->toArray(),
+            'initialSchedule' => ScheduleEntry::with('room')->get()->toArray(),
         ]);
     }
 }

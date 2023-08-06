@@ -7,6 +7,7 @@ use App\Models\Layout;
 use App\Models\Page;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Settings\GeneralSettings;
 use Illuminate\Database\Seeder;
 
 class SystemSeeder extends Seeder
@@ -17,37 +18,60 @@ class SystemSeeder extends Seeder
             'path' => 'system',
         ], [
             'name' => 'System',
-            'path' => 'system',
+            'path' => 'System',
             'type' => ResourceOwnership::SYSTEM,
         ]);
 
-        $page = Page::updateOrCreate([
+        $pageScreenIdent = $project->pages()->updateOrCreate([
             "component" => "ScreenIdentification",
-            "project_id" => $project->id,
-        ],[
+        ], [
             "name" => "Screen Identification",
             "component" => "ScreenIdentification",
-            "project_id" => $project->id,
         ]);
 
-        $layout = Layout::updateOrCreate([
+        $layoutScreenIdent = $project->layouts()->updateOrCreate([
             "component" => "None",
-            "project_id" => $project->id,
-        ],[
+        ], [
             "name" => "None",
-            "project_id" => $project->id,
             "component" => "None",
         ]);
 
-        $playlist = Playlist::firstOrCreate([
+        $playlist = $project->playlists()->firstOrCreate([
             'name' => 'Screen Identification',
-            'project_id' => $project->id,
         ]);
         $playlist->playlistItems()->updateOrCreate([
-            'page_id' => $page->id,
-            'layout_id' => $layout->id,
-        ],[
+            'page_id' => $pageScreenIdent->id,
+            'layout_id' => $layoutScreenIdent->id,
+        ], [
             'duration' => 0,
+        ]);
+
+        $settings = app(GeneralSettings::class);
+        if (empty($settings->playlist_id)) {
+            $settings->playlist_id = $playlist->id;
+            $settings->save();
+        }
+
+        /**
+         * Artwork Autoplay System Page
+         */
+        $artworkPage = $project->pages()->updateOrCreate([
+            "component" => "ArtworkAutoplay",
+        ], [
+            "name" => "Artwork Autoplay",
+            "component" => "ArtworkAutoplay",
+            "schema" => [
+                [
+                    "name" => "Show Duration (ms)",
+                    "property" => "playSpeed",
+                    "type" => "TextInput",
+                ],
+                [
+                    "name" => "Transition Duration (ms)",
+                    "property" => "transition",
+                    "type" => "TextInput",
+                ]
+            ]
         ]);
     }
 }

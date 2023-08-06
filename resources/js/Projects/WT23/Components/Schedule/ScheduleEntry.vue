@@ -15,7 +15,7 @@
     <div class="text-white flex justify-between flex-row">
         <div>
             <div class="text-4xl themeFont">{{ entry.title }}</div>
-            <div class="text-3xl themeFont text-secondary">{{ entry.room }}</div>
+            <div class="text-3xl themeFont text-secondary">{{ entry.room.name }}</div>
         </div>
         <div class="flex gap-3">
             <div v-if="isCurrentTimeBetween(entry.starts_at,entry.ends_at)">

@@ -43,7 +43,7 @@ class Playlist extends Model
         return $this->hasMany(Screen::class);
     }
 
-    protected static function normalScope(Builder $query): void
+    protected static function scopeNormal(Builder $query): void
     {
         $query->whereDoesntHave('project', function (Builder $query) {
             $query->where('type', '=', ResourceOwnership::EMERGENCY->value);

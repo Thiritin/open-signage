@@ -15,6 +15,6 @@ attrs = {
 
 <template>
     <div class="h-screen overflow-hidden bg-primary flex flex-col flex-grow">
-        <component class="pt-8 px-8" :is="page.resolvedComponent" v-bind="attrs"></component>
+        <component :is="page.resolvedComponent" v-bind="attrs"></component>
     </div>
 </template>

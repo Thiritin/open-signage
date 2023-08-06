@@ -20,7 +20,7 @@ class EmergencySeeder extends Seeder
             [
                 'name' => 'Emergency',
                 'type' => ResourceOwnership::EMERGENCY,
-                'path' => 'emergency' // DO NOT CHANGE PATH
+                'path' => 'Emergency' // DO NOT CHANGE PATH
             ]);
 
         $alertPage = Page::updateOrCreate([

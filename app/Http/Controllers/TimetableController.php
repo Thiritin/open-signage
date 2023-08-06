@@ -12,6 +12,7 @@ class TimetableController extends Controller
         return Inertia::render('Timetable', [
             'schedule' => ScheduleEntry::with('room')->get()
                 ->groupBy(fn ($entry) => $entry->starts_at->format('Y-m-d'))
+                ->sortBy(fn ($entries, $date) => $date)
                 ->map(fn ($room) => collect($room)->sortBy('starts_at')->groupBy('room.name')->values())
                 ->values()
                 ->toArray(),

@@ -104,7 +104,7 @@ const showItemsBasedOnScreenSize = computed(() => {
 <template>
   <div class="bg-primary-400 overflow-hidden w-screen h-screen">
     <div class="w-screen h-screen">
-      <Carousel :wrapAround="true" class="w-screen" :autoplay="0" :itemsToShow="showItemsBasedOnScreenSize" :center-mode="false">
+      <Carousel snapAlign="start" :wrapAround="true" class="w-screen" :autoplay="0" :itemsToShow="showItemsBasedOnScreenSize" :center-mode="false">
         <Slide class="w-screen block border-l-4 first:border-l-0 border-accent" :key="dayIndex" v-for="(day,dayIndex) in schedule">
           <div class="h-screen flex flex-col">
             <!-- Day Name -->

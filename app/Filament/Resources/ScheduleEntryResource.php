@@ -6,6 +6,7 @@ use App\Filament\Resources\ScheduleEntryResource\Pages;
 use App\Models\ScheduleEntry;
 use App\Settings\GeneralSettings;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
@@ -49,6 +50,23 @@ class ScheduleEntryResource extends Resource
                                 TextInput::make('name')
                                     ->required(),
                             ])),
+
+                        Select::make('schedule_type_id')
+                            ->relationship('scheduleType', 'name')
+                            ->createOptionForm(fn (Form $form) => $form->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                                ColorPicker::make('color')
+                                    ->required(),
+                            ]))
+                            ->editOptionForm(fn (Form $form) => $form->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                                ColorPicker::make('color')
+                                    ->required(),
+                            ]))->helperText('Color is used for the background in the timetable.'),
+
+
                     ])->columnSpan(1),
                     Section::make('Event Time')->schema([
                         DateTimePicker::make('starts_at')

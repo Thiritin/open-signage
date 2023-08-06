@@ -32,4 +32,9 @@ class ScheduleEntry extends Model
     {
         return $this->belongsTo(\App\Models\Room::class);
     }
+
+    public function scheduleType()
+    {
+        return $this->belongsTo(\App\Models\ScheduleType::class);
+    }
 }

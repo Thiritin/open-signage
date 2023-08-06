@@ -31,9 +31,11 @@ const screenType = computed(() => {
 });
 
 const artworksFilteredWithoutMissingOrientation = computed(() => {
-    return props.artworks.filter(artwork => {
+    let filteredArt = props.artworks.filter(artwork => {
         return artwork[screenType.value] !== null
     })
+    // Randomize the order of the artworks
+    return filteredArt.sort(() => Math.random() - 0.5);
 });
 
 import {Hooper, Slide} from 'hooper-vue3';

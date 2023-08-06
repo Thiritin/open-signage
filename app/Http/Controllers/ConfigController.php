@@ -23,6 +23,7 @@ class ConfigController extends Controller
                 'slug' => $kiosk,
                 'hostname' => $kiosk,
                 'provisioned' => true,
+                'playlist_id' => app(GeneralSettings::class)->playlist_id,
             ]);
         }
         $settings = app(GeneralSettings::class)->toArray();

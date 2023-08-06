@@ -67,6 +67,8 @@ class ScreenResource extends Resource
                 ]),
 
                 Checkbox::make('provisioned')->helperText('If checked, this screen will be shown in the filter, this serves no function other than exluding possible randomly autoregistered screens.'),
+                Checkbox::make('should_restart')->helperText('If checked, kiosk managed screens will restart once and this checkbox will be unset.'),
+
 
                 Section::make('Network Settings')->columns(3)->description('Used for auto provisioning of thin clients.')->label('Network Settings')->schema([
                     TextInput::make('ip_address')

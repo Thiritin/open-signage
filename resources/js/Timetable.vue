@@ -48,7 +48,7 @@ const groupedSchedule = computed(() => {
 
 
 let count = 0
-for (let schedule in groupedSchedule) {
+for (let schedule in groupedSchedule.value) {
     count = count + 1
 }
 
@@ -78,7 +78,7 @@ const showItemsBasedOnScreenSize = computed(() => {
     } else if (width < 1920) {
         showItems = 3;
     } else {
-        showItems = 5;
+        showItems = count;
     }
 
     if (showItems >= count) {

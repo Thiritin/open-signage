@@ -10,10 +10,10 @@ import HeaderLogo from "@/Projects/WT23/Components/HeaderLogo.vue";
 let attrs = reactive(useAttrs());
 
 const usableAttributes = computed(() => {
-   return {
-         ...attrs,
-         ...props.page
-   }
+    return {
+        ...attrs,
+        ...props.page.props
+    }
 })
 
 </script>
@@ -23,7 +23,7 @@ const usableAttributes = computed(() => {
         <!-- Header Menu -->
         <HeaderLogo :title="page.title"/>
         <!-- Main Content -->
-        <component class="px-8" :is="page.resolvedComponent" v-bind="usableAttributes"></component>
+        <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
     </div>
 </template>
 

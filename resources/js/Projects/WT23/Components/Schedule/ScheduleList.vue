@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <Card class="p-6 space-y-8">
+    <div class="space-y-6">
         <slot></slot>
-    </Card>
+    </div>
 </template>
 
 <style scoped>

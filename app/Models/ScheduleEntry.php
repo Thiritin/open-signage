@@ -25,7 +25,7 @@ class ScheduleEntry extends Model
         'id' => 'integer',
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
-        'flags' => 'json',
+        'flags' => 'array',
     ];
 
     public function room()

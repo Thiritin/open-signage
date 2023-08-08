@@ -17,6 +17,14 @@ const props = defineProps({
     showSchedule: {
         type: Boolean,
         default: true
+    },
+    showDate: {
+        type: String,
+        required: false
+    },
+    showToday: {
+        type: Boolean,
+        required: false
     }
 })
 import ScheduleEntry from "@/Projects/WT23/Components/Schedule/ScheduleEntry.vue";
@@ -27,51 +35,54 @@ const scrollLeft = ref(null);
 const scrollRight = ref(null);
 
 onMounted(() => {
-    pageScroll(scrollLeft)
-    pageScroll(scrollRight)
-    const intervalId = setInterval(updateComputedProperties, 5000); // Update every 1 second
-    onUnmounted(() => clearInterval(intervalId));
+    const intervalId = setInterval(updateComputedProperties, 2000); // Update every 1 second
+    const intervalScoll = setInterval(() => {
+        pageScroll(scrollLeft)
+        pageScroll(scrollRight)
+    }, 50); // Update every 1 second
+    onUnmounted(() => {
+        clearInterval(intervalId);
+        clearInterval(intervalScoll);
+    });
 })
 
 let scrollingDown = true;
+let stop = false;
 const currentTime = ref(new Date());
 
 function pageScroll(ref) {
     if (ref.value === null) return;
-
+    if (stop) return;
     const windowHeight = ref.value.clientHeight;
     const pageHeight = ref.value.offsetHeight;
     const scrollHeight = ref.value.scrollHeight;
     const endScoll = scrollHeight - pageHeight;
-    if (scrollHeight === pageHeight) return;
 
-    let stop = false;
+    if (scrollHeight === pageHeight) {
+        return;
+    }
+
     // Check if we reached the bottom of the page
     if (ref.value.scrollTop >= endScoll) {
         if (scrollingDown === true) {
-            setTimeout(() => {
-                scrollingDown = false;
-            }, 5000);
+            stop = true;
+            setTimeout(() => stop = false, 5000)
         }
-    } else if (ref.value.scrollTop <= 0) {
+        scrollingDown = false;
+    } else if (ref.value.scrollTop === 0) {
         if (scrollingDown === false) {
-            setTimeout(() => {
-                scrollingDown = true;
-            }, 5000);
+            stop = true;
+            setTimeout(() => stop = false, 5000)
         }
+        scrollingDown = true
     }
 
     // Scroll down or up depending on the scrollingDown flag
     if (scrollingDown) {
-        ref.value.scrollTop++; // Scroll down by 1 pixel
+        ref.value.scrollTop = ref.value.scrollTop + 1.5;
     } else {
-        ref.value.scrollTop--; // Scroll up by 1 pixel
+        ref.value.scrollTop = ref.value.scrollTop - 1.5;
     }
-
-    // Repeat the scrolling process after a short delay (10ms in this case)
-    setTimeout(() => {
-        pageScroll(ref);
-    }, 15);
 }
 
 // Filter announcements, make sure they are today and ends at is not in the past
@@ -86,11 +97,19 @@ const filteredAnnouncements = computed(() => {
 
 // Filtered Schedules
 const filteredSchedule = computed(() => {
+    const now = currentTime.value;
     return props.schedule.filter((entry) => {
-        const now = currentTime.value;
         const start = new Date(entry.starts_at);
-        const end = new Date(entry.ends_at);
-        return (end > now) && (end.getDate() >= now.getDate() || start.getDate() <= now.getDate());
+        const end = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 1000 * 60));
+
+        if (props.showToday === true) {
+            return (end.getDate() === now.getDate())
+        }
+
+        if (props.showDate !== null) {
+            return (end.getDate() >= now.getDate()) && (new Date(entry.starts_at).getDate() === new Date(props.showDate).getDate());
+        }
+        return (end.getDate() >= now.getDate())
     })
 })
 
@@ -111,9 +130,9 @@ const hasFilteredSchedule = computed(() => {
 
 <template>
     <div
-        class="gap-8 overflow-hidden flex flex-col"
+        class="gap-8 overflow-hidden flex flex-col mx-4"
         :class="{'xl:flex-row': hasFilteredAnnouncements && hasFilteredSchedule}">
-        <div ref="scrollLeft" class="overflow-auto flex-grow pt-6" :class="{'xl:w-1/2': hasFilteredAnnouncements}"
+        <div ref="scrollLeft" class="overflow-auto flex-grow pt-6 pb-6" :class="{'xl:w-1/2': hasFilteredAnnouncements}"
              v-if="hasFilteredSchedule">
             <ScheduleList class="pb-6">
                 <TransitionGroup name="list">
@@ -121,10 +140,12 @@ const hasFilteredSchedule = computed(() => {
                 </TransitionGroup>
             </ScheduleList>
         </div>
-        <div ref="scrollRight" :class="{'xl:w-1/2': hasFilteredSchedule}" class="space-y-6 overflow-auto flex-grow pb-6 pt-6"
+        <div ref="scrollRight" :class="{'xl:w-1/2': hasFilteredSchedule}"
+             class="space-y-6 overflow-auto flex-grow pb-6 pt-6"
              v-if="hasFilteredAnnouncements">
             <TransitionGroup name="list">
-                <AnnouncementCard :key="entry.id" v-for="entry in filteredAnnouncements" :entry="entry"></AnnouncementCard>
+                <AnnouncementCard :key="entry.id" v-for="entry in filteredAnnouncements"
+                                  :entry="entry"></AnnouncementCard>
             </TransitionGroup>
         </div>
         <div class="mt-32 text-center"

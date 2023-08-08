@@ -1,7 +1,7 @@
 import colors from 'tailwindcss/colors';
 import 'dotenv/config';
 
-const projectPath = process.env.VITE_PROJECT_PATH;
+const projectPath = process.env.VITE_PROJECT_PATH ?? "WT23";
 const theme = require('./resources/js/Projects/' + projectPath + '/theme.js');
 
 /** @type {import('tailwindcss').Config} */

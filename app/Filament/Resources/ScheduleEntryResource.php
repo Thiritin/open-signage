@@ -72,16 +72,12 @@ class ScheduleEntryResource extends Resource
                     ])->columnSpan(1),
                     Section::make('Event Time')->schema([
                         DateTimePicker::make('starts_at')
-                            ->minutesStep(15)
-                            ->hoursStep(1)
                             ->native(false)
                             ->minDate(app(GeneralSettings::class)->starts_at)
                             ->maxDate(app(GeneralSettings::class)->ends_at)
                             ->label('Starts Date'),
 
                         DateTimePicker::make('ends_at')
-                            ->minutesStep(15)
-                            ->hoursStep(1)
                             ->native(false)
                             ->minDate(app(GeneralSettings::class)->starts_at)
                             ->maxDate(app(GeneralSettings::class)->ends_at)

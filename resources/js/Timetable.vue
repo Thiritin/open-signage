@@ -46,6 +46,12 @@ const groupedSchedule = computed(() => {
     return groupedByDate;
 })
 
+
+let count = 0
+for (let schedule in groupedSchedule) {
+    count = count + 1
+}
+
 function eventHeight(startTime, endTime) {
     let timeDifference = (new Date(endTime)).getTime() - (new Date(startTime)).getTime();
     timeDifference = timeDifference / (1000 * 60);
@@ -74,6 +80,11 @@ const showItemsBasedOnScreenSize = computed(() => {
     } else {
         showItems = 5;
     }
+
+    if (showItems > count) {
+        showItems = count;
+    }
+
     return showItems;
 })
 

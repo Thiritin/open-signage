@@ -81,7 +81,7 @@ const showItemsBasedOnScreenSize = computed(() => {
         showItems = 5;
     }
 
-    if (showItems > count) {
+    if (showItems >= count) {
         showItems = count;
     }
 

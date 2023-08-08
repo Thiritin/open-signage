@@ -42,9 +42,22 @@ class ScheduleEntryResource extends Resource
                     Section::make('Meta')->schema([
                         TextInput::make('title')
                             ->required(),
+                        Textarea::make('description'),
 
                         Select::make('room_id')
                             ->relationship('room', 'name')
+                            ->required()
+                            ->createOptionForm(fn (Form $form) => $form->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                            ]))
+                            ->editOptionForm(fn (Form $form) => $form->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                            ])),
+
+                        Select::make('schedule_organizer_id')
+                            ->relationship('scheduleOrganizer', 'name')
                             ->createOptionForm(fn (Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
@@ -75,12 +88,14 @@ class ScheduleEntryResource extends Resource
                             ->native(false)
                             ->minDate(app(GeneralSettings::class)->starts_at)
                             ->maxDate(app(GeneralSettings::class)->ends_at)
+                            ->required()
                             ->label('Starts Date'),
 
                         DateTimePicker::make('ends_at')
                             ->native(false)
                             ->minDate(app(GeneralSettings::class)->starts_at)
                             ->maxDate(app(GeneralSettings::class)->ends_at)
+                            ->required()
                             ->label('Ends Date'),
                     ])->columnSpan(1),
                 ]),

@@ -28,13 +28,18 @@ class ScheduleEntry extends Model
         'flags' => 'array',
     ];
 
-    public function room()
+    public function room(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Room::class);
     }
 
-    public function scheduleType()
+    public function scheduleType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\ScheduleType::class);
+    }
+
+    public function scheduleOrganizer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\ScheduleOrganizer::class);
     }
 }

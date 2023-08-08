@@ -10,7 +10,7 @@ class TimetableController extends Controller
     public function __invoke()
     {
         return Inertia::render('Timetable', [
-            'schedule' => ScheduleEntry::with(['room', 'scheduleType'])->get()->values()->toArray(),
+            'schedule' => ScheduleEntry::with(['room', 'scheduleType'])->orderBy('starts_at')->get()->values()->toArray(),
         ]);
     }
 }

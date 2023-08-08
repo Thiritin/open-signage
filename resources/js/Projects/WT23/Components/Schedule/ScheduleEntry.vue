@@ -83,7 +83,7 @@ defineProps(['entry'])
                         DELAYED
                     </div>
                 </div>
-                <div v-else-if="entryInPast">
+                <div v-else-if="entryInPast(entry)">
                     <div class="font-mono p-2 text-2xl font-bold text-center">
                         ENDED
                     </div>

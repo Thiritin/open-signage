@@ -121,13 +121,13 @@ function marginToNextEvent(rooms, index) {
 
 function marginToFirstEvent(rooms) {
     let firstPanel = rooms[0];
-    let firstPanelStartsDate = new Date(firstPanel.starts_at);
-    let timeDifference = toMinutes(firstPanelStartsDate) - earliestTimeAllDays.value;
+    let firstPanelStartsDate = toMinutes(new Date(firstPanel.starts_at));
+    let timeDifference = firstPanelStartsDate - earliestTimeAllDays.value;
     timeDifference = timeDifference + 10;
-    if (toMinutes(firstPanelStartsDate) === earliestTimeAllDays.value) {
-        timeDifference = 10;
-    }
 
+    if (firstPanelStartsDate === earliestTimeAllDays.value) {
+        return 10;
+    }
     return timeDifference;
 }
 

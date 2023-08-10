@@ -71,5 +71,19 @@ class SystemSeeder extends Seeder
                 ],
             ],
         ]);
+
+        $fullScreenFlv = $project->pages()->updateOrCreate([
+            'component' => 'FullScreenFlv',
+        ], [
+            'name' => 'Full Screen Flv',
+            'component' => 'FullScreenFlv',
+            'schema' => [
+                [
+                    'name' => 'Stream URL (FLV)',
+                    'property' => 'streamUrl',
+                    'type' => 'TextInput',
+                ],
+            ],
+        ]);
     }
 }

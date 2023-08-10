@@ -94,13 +94,15 @@ const latestTimeAllDays = computed(() => {
     return new Date(latestTime);
 })
 
+const heightFactor = 1.5;
+
 function eventHeight(startTime, endTime) {
     let timeDifference = (new Date(endTime)).getTime() - (new Date(startTime)).getTime();
     timeDifference = timeDifference / (1000 * 60);
     if (timeDifference < 60) {
         timeDifference = 60;
     }
-    return timeDifference;
+    return (timeDifference * heightFactor) - 10;
 }
 
 function toMinutes(date) {
@@ -115,7 +117,7 @@ function marginToNextEvent(rooms, index) {
     let currentPanel = rooms[index];
     let nextPanel = rooms[index + 1];
     let timeDifference = toMinutes(new Date(nextPanel.starts_at)) - toMinutes(new Date(currentPanel.ends_at));
-    return timeDifference + 10;
+    return (timeDifference * heightFactor) + 10;
 }
 
 
@@ -127,7 +129,7 @@ function marginToFirstEvent(rooms) {
     if (firstPanelStartsDate === earliestTimeAllDays.value) {
         return 10;
     }
-    return timeDifference;
+    return timeDifference * heightFactor;
 }
 
 const showItemsBasedOnScreenSize = computed(() => {
@@ -168,7 +170,7 @@ onMounted(() => {
 })
 
 const timeSinceStart = computed(() => {
-    return toMinutes(todaysDate.value) - earliestTimeAllDays.value;
+    return (toMinutes(todaysDate.value) - earliestTimeAllDays.value) * heightFactor;
 })
 
 function returnDivOrComponent(component) {

@@ -117,7 +117,10 @@ function marginToNextEvent(rooms, index) {
     let currentPanel = rooms[index];
     let nextPanel = rooms[index + 1];
     let timeDifference = toMinutes(new Date(nextPanel.starts_at)) - toMinutes(new Date(currentPanel.ends_at));
-    return (timeDifference * heightFactor) + 10;
+    if (timeDifference <= 10) {
+        timeDifference = 10;
+    }
+    return (timeDifference * heightFactor);
 }
 
 

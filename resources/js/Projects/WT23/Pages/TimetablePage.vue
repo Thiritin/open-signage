@@ -94,7 +94,7 @@ const latestTimeAllDays = computed(() => {
     return new Date(latestTime);
 })
 
-const heightFactor = 1.5;
+const heightFactor = 1;
 
 function eventHeight(startTime, endTime) {
     let timeDifference = (new Date(endTime)).getTime() - (new Date(startTime)).getTime();

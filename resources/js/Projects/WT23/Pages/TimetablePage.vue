@@ -125,6 +125,7 @@ function marginToFirstEvent(rooms) {
     let firstPanel = rooms[0];
     let firstPanelStartsDate = toMinutes(new Date(firstPanel.starts_at));
     let timeDifference = firstPanelStartsDate - earliestTimeAllDays.value;
+    timeDifference = timeDifference + 10;
     if (firstPanelStartsDate === earliestTimeAllDays.value) {
         return 10;
     }

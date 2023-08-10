@@ -31,6 +31,11 @@ const props = defineProps({
         type: String,
         required: false
     },
+    heightFactor: {
+        type: Number,
+        required: false,
+        default: 1
+    }
 })
 
 const groupedSchedule = computed(() => {
@@ -94,7 +99,7 @@ const latestTimeAllDays = computed(() => {
     return new Date(latestTime);
 })
 
-const heightFactor = 6;
+const heightFactor = props.heightFactor;
 
 function eventHeight(startTime, endTime) {
     let timeDifference = (new Date(endTime)).getTime() - (new Date(startTime)).getTime();

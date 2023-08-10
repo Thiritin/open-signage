@@ -100,7 +100,7 @@ function eventHeight(startTime, endTime) {
     if (timeDifference < 60) {
         timeDifference = 60;
     }
-    return timeDifference;
+    return timeDifference - 10;
 }
 
 function toMinutes(date) {

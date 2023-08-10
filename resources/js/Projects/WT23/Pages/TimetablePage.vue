@@ -114,7 +114,8 @@ function marginToNextEvent(rooms, index) {
     }
     let currentPanel = rooms[index];
     let nextPanel = rooms[index + 1];
-    return toMinutes(new Date(nextPanel.starts_at)) - toMinutes(new Date(currentPanel.ends_at));
+    let timeDifference = toMinutes(new Date(nextPanel.starts_at)) - toMinutes(new Date(currentPanel.ends_at));
+    return timeDifference + 10;
 }
 
 
@@ -123,7 +124,6 @@ function marginToFirstEvent(rooms) {
     let firstPanelStartsDate = toMinutes(new Date(firstPanel.starts_at));
     let timeDifference = firstPanelStartsDate - earliestTimeAllDays.value;
     timeDifference = timeDifference + 10;
-
     if (firstPanelStartsDate === earliestTimeAllDays.value) {
         return 10;
     }

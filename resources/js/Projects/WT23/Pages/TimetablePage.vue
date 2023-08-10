@@ -99,9 +99,6 @@ const heightFactor = 1;
 function eventHeight(startTime, endTime) {
     let timeDifference = (new Date(endTime)).getTime() - (new Date(startTime)).getTime();
     timeDifference = timeDifference / (1000 * 60);
-    if (timeDifference < 60) {
-        timeDifference = 60;
-    }
     return (timeDifference * heightFactor) - 10;
 }
 

@@ -41,12 +41,6 @@ class ConfigController extends Controller
 
         $settings['browser_preferences'] = route('browser.preferences', ['browser' => $settings['browser'] ?? 'chrome']);
 
-        // TODO: Remove this, if this is still here in 2024 ;-) this was not used, and if it was... well shit
-        if (true) {
-            $settings['additional_components'] = '08-ssh.xzm';
-            $settings['root_password'] = 'toor';
-        }
-
         // Make sure to exclude general settings
         $entries = collect($settings)->except(['name', 'starts_at', 'ends_at', 'playlist_id', 'project_id'])
             ->reject(fn ($value) => empty($value) && ! is_bool($value))

@@ -23,14 +23,14 @@ class SystemSeeder extends Seeder
         $pageScreenIdent = $project->pages()->updateOrCreate([
             'component' => 'ScreenIdentification',
         ], [
-            'name' => 'Screen Identification',
+            'name' => 'System - Screen Identification',
             'component' => 'ScreenIdentification',
         ]);
 
         $layoutScreenIdent = $project->layouts()->updateOrCreate([
             'component' => 'None',
         ], [
-            'name' => 'None',
+            'name' => 'System - None',
             'component' => 'None',
         ]);
 
@@ -56,7 +56,7 @@ class SystemSeeder extends Seeder
         $artworkPage = $project->pages()->updateOrCreate([
             'component' => 'ArtworkAutoplay',
         ], [
-            'name' => 'Artwork Autoplay',
+            'name' => 'System - Artwork Autoplay',
             'component' => 'ArtworkAutoplay',
             'schema' => [
                 [
@@ -75,13 +75,41 @@ class SystemSeeder extends Seeder
         $fullScreenFlv = $project->pages()->updateOrCreate([
             'component' => 'FullScreenFlv',
         ], [
-            'name' => 'Full Screen Flv',
+            'name' => 'System - Full Screen Flv',
             'component' => 'FullScreenFlv',
             'schema' => [
                 [
                     'name' => 'Stream URL (FLV)',
                     'property' => 'streamUrl',
                     'type' => 'TextInput',
+                ],
+            ],
+        ]);
+
+        $fullScreenImage = $project->pages()->updateOrCreate([
+            'component' => 'FullScreenImage',
+        ], [
+            'name' => 'System - Full Screen Image',
+            'component' => 'FullScreenImage',
+            'schema' => [
+                [
+                    'name' => 'Image',
+                    'property' => 'image',
+                    'type' => 'ImageInput',
+                ],
+            ],
+        ]);
+
+        $fullScreenVideo = $project->pages()->updateOrCreate([
+            'component' => 'FullScreenVideo',
+        ], [
+            'name' => 'System - Full Screen Video',
+            'component' => 'FullScreenVideo',
+            'schema' => [
+                [
+                    'name' => 'Video',
+                    'property' => 'video',
+                    'type' => 'FileInput',
                 ],
             ],
         ]);

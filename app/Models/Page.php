@@ -47,4 +47,9 @@ class Page extends Model
     {
         return $this->hasMany(PlaylistItem::class);
     }
+
+    public function getFormatNameAttribute(): string
+    {
+        return $this->project->name." - ".$this->name;
+    }
 }

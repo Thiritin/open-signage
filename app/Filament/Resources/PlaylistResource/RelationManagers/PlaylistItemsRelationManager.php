@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 
+use App\Models\Page;
 use App\Models\PlaylistItem;
 use Exception;
 use Filament\Forms\Components\Group;
@@ -36,13 +37,16 @@ class PlaylistItemsRelationManager extends RelationManager
 
                 Select::make('page_id')
                     ->relationship('page', 'name', fn (Builder $query) => $query->normal())
+                    ->label('Page')
                     ->columnSpan(5)
                     ->required(),
 
                 Select::make('layout_id')
                     ->relationship('layout', 'name', fn (Builder $query) => $query->normal())
+                    ->label('Layout')
                     ->columnSpan(5)
                     ->required(),
+
             ])->columns(12)->columnSpanFull(),
             TextInput::make('title')->columnSpanFull(),
         ];
@@ -79,12 +83,11 @@ class PlaylistItemsRelationManager extends RelationManager
 
                 TextInputColumn::make('duration')->type('number'),
 
-                SelectColumn::make('page_id')->options(
-                    \App\Models\Page::normal()
+                SelectColumn::make('page_id')
+                    ->options(\App\Models\Page::normal()
                         ->orderBy('name')
                         ->pluck('name', 'id')
-                        ->toArray()
-                )->selectablePlaceholder(false),
+                        ->toArray())->selectablePlaceholder(false),
 
                 SelectColumn::make('layout_id')->options(
                     \App\Models\Layout::normal()

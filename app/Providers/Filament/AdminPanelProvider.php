@@ -51,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->maxContentWidth('full')
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,

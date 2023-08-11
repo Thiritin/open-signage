@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ResourceOwnership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,6 +39,11 @@ class Screen extends Model
     public function playlist(): BelongsTo
     {
         return $this->belongsTo(Playlist::class);
+    }
+
+    public function isEmergency()
+    {
+        return $this->playlist->project->type === ResourceOwnership::EMERGENCY;
     }
 
     public function rooms()

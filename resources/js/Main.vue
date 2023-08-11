@@ -40,6 +40,12 @@ Echo.channel('ScreenAll')
     })
 
 Echo.channel('Screen.' + props.initialScreen.id)
+    .listen('.screen.refresh', (e) => {
+        window.location.reload();
+    })
+    .listen('.artwork.update', (e) => {
+        artworks.value = e.artworks;
+    })
     .listen('.page.update', (e) => {
         pages.value = e.pages;
         screen.value = e.screen;

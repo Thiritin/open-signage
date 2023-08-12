@@ -17,6 +17,10 @@ class RestartController extends Controller
             return 'restart';
         }
 
+        $screen->update([
+            'last_ping_at' => now()
+        ]);
+
         return '';
     }
 }

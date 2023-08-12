@@ -133,18 +133,16 @@ class ScreenResource extends Resource
 
                 CheckboxColumn::make('provisioned'),
 
-                /*TextColumn::make('last_ping_at')
-                    ->label('Last Ping Date')
-                    ->date(),*/
+                TextColumn::make('last_ping_at')
+                    ->label('Last Ping')
+                    ->state(fn (?Screen $record): string => $record?->last_ping_at?->diffForHumans() ?? '-'),
+
             ])->filters([
                 Filter::make('provisioned')->label('Show only provisioned screens')->query(fn (
                     Builder $query
                 ) => $query->where('provisioned', true))->default(true),
             ])->actions([
                 \Filament\Tables\Actions\EditAction::make('Edit'),
-            ])
-            ->columnToggleFormColumns([
-                'mode', 'screenGroup.name', 'playlist_id', 'name', 'slug', 'hostname', 'provisioned',
             ])
             ->striped()
             ->bulkActions([

@@ -31,11 +31,22 @@ const schedule = ref(props.initialSchedule);
 const screen = ref(props.initialScreen);
 const artworks = ref(props.initialArtworks);
 const isConnected = ref(true);
+const connectionError = ref("");
 
 // Send a ping to the server every 60 seconds
 setInterval(() => {
-    window.axios.post(route('screens.ping', {screen: props.initialScreen.id,shared_secret: new URLSearchParams(window.location.search).get('shared_secret')}));
-}, 2000);
+    window
+        .axios
+        .post(route('screens.ping', {
+            screen: props.initialScreen.id,
+            shared_secret: new URLSearchParams(window.location.search).get('shared_secret')
+        }))
+        .then((response) => isConnected.value = true)
+        .catch((error) => {
+            isConnected.value = false;
+            connectionError.value = "Ping failed"
+        });
+}, 60000);
 
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {
@@ -62,6 +73,7 @@ Echo.channel('Screen.' + props.initialScreen.id)
 window.Echo.connector.pusher.connection.bind('connecting', (payload) => {
     console.log(payload)
     isConnected.value = false
+    connectionError.value = "Socket failed"
 });
 
 window.Echo.connector.pusher.connection.bind('connected', (payload) => {
@@ -72,16 +84,17 @@ window.Echo.connector.pusher.connection.bind('connected', (payload) => {
 window.Echo.connector.pusher.connection.bind('unavailable', (payload) => {
     console.log(payload)
     isConnected.value = false
+    connectionError.value = "Socket failed"
 });
 
 
 const mappedPages = computed(() => pages.value.map((page, index) => {
-        return {
-            ...page,
-            index: index,
-            resolvedComponent: defineAsyncComponent(() => import(`./Projects/${page.path}/Pages/${page.component}.vue`))
-        }
-    }))
+    return {
+        ...page,
+        index: index,
+        resolvedComponent: defineAsyncComponent(() => import(`./Projects/${page.path}/Pages/${page.component}.vue`))
+    }
+}))
 
 function mapLayouts(mappedPages) {
     let layouts = [];
@@ -118,7 +131,9 @@ watch(activePageIndex, (value) => {
 </script>
 
 <template>
-    <div v-if="isConnected === false" class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting...</div>
+    <div v-if="isConnected === false"
+         class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting... {{ connectionError }}
+    </div>
     <Transition>
         <KeepAlive>
             <component

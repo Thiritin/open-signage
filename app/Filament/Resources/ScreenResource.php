@@ -144,6 +144,7 @@ class ScreenResource extends Resource
             ])->actions([
                 \Filament\Tables\Actions\EditAction::make('Edit'),
             ])
+            ->poll(10)
             ->striped()
             ->bulkActions([
                 BulkAction::make('Refresh')

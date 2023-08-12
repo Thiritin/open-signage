@@ -44,4 +44,17 @@ class PlaylistItem extends Model
     {
         return $this->belongsTo(Layout::class);
     }
+
+    public function parsedContent(): array
+    {
+        $schema = collect($this->page->schema);
+        $data = collect($this->content)->map(function ($value, $key) use (&$schema) {
+            $property = $schema->where('property',$key)->first();
+            if($property['type'] === "ImageInput" || $property['type'] === "FileInput") {
+                return \Storage::drive('public')->url($value);
+            }
+            return $value;
+        });
+        return $data->toArray();
+    }
 }

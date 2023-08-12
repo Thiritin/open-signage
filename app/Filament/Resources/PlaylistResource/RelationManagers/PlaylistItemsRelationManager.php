@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 use App\Models\PlaylistItem;
 use Exception;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -57,10 +58,16 @@ class PlaylistItemsRelationManager extends RelationManager
             if ($page->schema) {
                 $array = [];
                 foreach ($page->schema as $field) {
-                    $class = 'Filament\\Forms\\Components\\' . $field['type'];
-                    $array[] = $class::make('content.' . $field['property'])
-                        ->label($field['name'])
+                    if($field['type'] === "ImageInput") {
+                        $item = FileUpload::make('content.' . $field['property'])->image();
+                    } else {
+                        $class = 'Filament\\Forms\\Components\\' . $field['type'];
+                        $item = $class::make('content.' . $field['property']);
+                    }
+
+                    $item = $item->label($field['name'])
                         ->columnSpanFull();
+                    $array[] = $item;
                 }
                 $formSchema[] = Section::make('Page Content')
                     ->schema($array)

@@ -97,6 +97,11 @@ class SystemSeeder extends Seeder
                     'property' => 'image',
                     'type' => 'ImageInput',
                 ],
+                [
+                    'name' => 'Cover full screen (Image will be zoomed in to cover the entire screen)',
+                    'property' => 'cover',
+                    'type' => 'Checkbox',
+                ],
             ],
         ]);
 

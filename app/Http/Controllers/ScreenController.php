@@ -34,7 +34,7 @@ class ScreenController extends Controller
                 ],
                 'path' => $playlistItem->page->project->path,
                 'component' => $playlistItem->page->component,
-                'props' => $playlistItem->content,
+                'props' => $playlistItem->parsedContent(),
                 'duration' => $playlistItem->duration,
                 'title' => $playlistItem->title ?? '',
             ]),

@@ -9,6 +9,7 @@ class EnsureSharedSecretIsSetMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
+        if(\App::isLocal()) return $next($request);
         if (empty(config('app.shared_secret'))) {
             abort(403, 'Shared secret is not set in config, aborting.');
         }

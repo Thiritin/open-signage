@@ -54,7 +54,7 @@ defineProps({
          :style="'color:'+textColor+';background-image: url(\''+image+'\');'">
         <div class="p-16" :class="{'bg-white bg-opacity-80 max-w-7xl mx-auto min-h-full': useContainer}">
             <h1 class="themeFont mb-12" :class="headerSize">{{ title }}</h1>
-            <p class="font-semibold leading-normal mx-auto whitespace-pre-wrap" :class="textSize">
+            <p class="font-semibold themeFontSecondary leading-normal mx-auto whitespace-pre-wrap" :class="textSize">
                 <div class="textscreen" v-html="text"></div>
             </p>
         </div>

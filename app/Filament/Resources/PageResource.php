@@ -6,6 +6,7 @@ use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
 use App\Models\Project;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -70,6 +71,9 @@ class PageResource extends Resource
                             'TextInput' => 'Text',
                             'Textarea' => 'Textarea',
                             'Checkbox' => 'Checkbox',
+                            'FileInput' => 'File',
+                            'ImageInput' => 'Image',
+                            'DatePicker' => 'Date',
                         ])
                         ->required(),
                 ]),

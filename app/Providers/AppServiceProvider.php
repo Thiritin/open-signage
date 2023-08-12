@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Channels\AdminChannel;
 use App\Models\Announcement;
 use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
@@ -11,6 +12,7 @@ use App\Observers\PlaylistItemObserver;
 use App\Observers\ScheduleObserver;
 use App\Observers\ScreenObserver;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Notification;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,5 +33,9 @@ class AppServiceProvider extends ServiceProvider
         PlaylistItem::observe(PlaylistItemObserver::class);
         Announcement::observe(AnnouncementObserver::class);
         ScheduleEntry::observe(ScheduleObserver::class);
+
+        Notification::extend('admin', function ($app) {
+            return new AdminChannel();
+        });
     }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent} from "vue";
+import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent, onUnmounted} from "vue";
 
 const props = defineProps({
     initialPages: {
@@ -33,8 +33,7 @@ const artworks = ref(props.initialArtworks);
 const isConnected = ref(true);
 const connectionError = ref("");
 
-// Send a ping to the server every 60 seconds
-setInterval(() => {
+const ping = () => {
     window
         .axios
         .post(route('screens.ping', {
@@ -46,7 +45,15 @@ setInterval(() => {
             isConnected.value = false;
             connectionError.value = "Ping failed"
         });
-}, 60000);
+};
+
+onMounted(() => {
+    ping();
+    const pingInterval = setInterval(ping, 60000);
+    onUnmounted(() => {
+        clearInterval(pingInterval);
+    });
+});
 
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {
@@ -71,18 +78,15 @@ Echo.channel('Screen.' + props.initialScreen.id)
     });
 
 window.Echo.connector.pusher.connection.bind('connecting', (payload) => {
-    console.log(payload)
     isConnected.value = false
-    connectionError.value = "Socket failed"
+    connectionError.value = "Socket reconnecting"
 });
 
 window.Echo.connector.pusher.connection.bind('connected', (payload) => {
-    console.log(payload)
     isConnected.value = true
 });
 
 window.Echo.connector.pusher.connection.bind('unavailable', (payload) => {
-    console.log(payload)
     isConnected.value = false
     connectionError.value = "Socket failed"
 });
@@ -132,7 +136,7 @@ watch(activePageIndex, (value) => {
 
 <template>
     <div v-if="isConnected === false"
-         class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting... {{ connectionError }}
+         class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting... ({{ connectionError }})
     </div>
     <Transition>
         <KeepAlive>

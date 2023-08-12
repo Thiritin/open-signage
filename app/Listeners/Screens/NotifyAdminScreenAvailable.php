@@ -4,9 +4,12 @@ namespace App\Listeners\Screens;
 
 use App\Events\Screens\FirstPingEvent;
 use App\Models\User;
+use App\Notifications\ScreenFirstTimeNotification;
+use App\Notifications\ScreenOfflineNotification;
 use Filament\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyAdminScreenAvailable
+class NotifyAdminScreenAvailable implements ShouldQueue
 {
     public function __construct()
     {
@@ -14,16 +17,7 @@ class NotifyAdminScreenAvailable
 
     public function handle(FirstPingEvent $event): void
     {
-        $recipients = User::all();
-
-        Notification::make()
-            ->title('Screen has connected for the first time!')
-            ->body("Screen {$event->screen->name} has connected for the first time and is ready for playlist assignment!")
-            ->success()
-            ->icon('heroicon-o-computer-desktop')
-            ->actions([
-                \Filament\Notifications\Actions\Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$event->screen))->link(),
-            ])
-            ->sendToDatabase($recipients);
+        \Illuminate\Support\Facades\Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
+            ->notify(new ScreenFirstTimeNotification($event->screen));
     }
 }

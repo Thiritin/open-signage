@@ -4,10 +4,12 @@ namespace App\Jobs;
 
 use App\Enums\EmergencyTypeEnum;
 use App\Enums\ResourceOwnership;
+use App\Events\EmergencyEvent;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Scopes\HideEmergencyScope;
 use App\Models\Screen;
+use App\Models\User;
 use App\Settings\GeneralSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,6 +26,7 @@ class SetEmergencyPlaylistJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
+        private readonly User $user,
         private readonly EmergencyTypeEnum $type,
         private readonly Collection $screens,
         private readonly ?string $message = null,
@@ -34,6 +37,10 @@ class SetEmergencyPlaylistJob implements ShouldQueue
 
     public function handle(): void
     {
+        // Log Action
+        event(new EmergencyEvent($this->user, $this->type, $this->screens, $this->message, $this->title));
+
+        // Create Emergency Playlist
         $project = Project::firstWhere('type', ResourceOwnership::EMERGENCY);
         $playList = $project->playlists()->create([
             'name' => 'Emergency ' . ucfirst(strtolower($this->type->name)) . ' Playlist ' . now()->format('Y-m-d H:i:s'),

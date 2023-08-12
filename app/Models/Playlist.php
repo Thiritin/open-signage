@@ -30,8 +30,11 @@ class Playlist extends Model
 
     protected static function scopeNormal(Builder $query): void
     {
-        $query->whereDoesntHave('project', function (Builder $query) {
-            $query->where('type', '=', ResourceOwnership::EMERGENCY->value);
+        $query->whereHas('project', function (Builder $query) {
+            $query->where('type', '!=', ResourceOwnership::EMERGENCY->value)
+                ->where(fn($q) => $q->where('type', '=', ResourceOwnership::USER)
+                    ->where('id', Project::firstWhere('path', config('app.default_project'))->id))
+                ->orWhere('type', '=', ResourceOwnership::SYSTEM->value);
         });
     }
 

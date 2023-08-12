@@ -7,7 +7,7 @@ use App\Events\Screens\OfflineEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class ScreenStatusOffline
+class ScreenStatusOffline implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -25,5 +25,11 @@ class ScreenStatusOffline
         $event->screen->updateQuietly([
             'status' => ScreenStatusEnum::OFFLINE,
         ]);
+
+        activity()
+            ->causedByAnonymous()
+            ->performedOn($event->screen)
+            ->event('offline')
+            ->log('Screen is offline');
     }
 }

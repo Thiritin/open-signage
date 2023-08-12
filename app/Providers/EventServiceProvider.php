@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\EmergencyEvent;
 use App\Events\Screens\FirstPingEvent;
 use App\Events\Screens\OfflineEvent;
+use App\Listeners\EmergencyNotificationsListener;
+use App\Listeners\LogEmergencyListener;
 use App\Listeners\Screens\NotifyAdminScreenAvailable;
 use App\Listeners\Screens\NotifyAdminScreenOnline;
+use App\Listeners\Screens\RebootScreenListener;
 use App\Listeners\Screens\ScreenStatusOnline;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -25,6 +29,7 @@ class EventServiceProvider extends ServiceProvider
         OfflineEvent::class => [
             \App\Listeners\Screens\ScreenStatusOffline::class,
             \App\Listeners\Screens\NotifyAdminScreenOffline::class,
+            RebootScreenListener::class,
         ],
         \App\Events\Screens\OnlineEvent::class => [
             \App\Listeners\Screens\ScreenStatusOnline::class,
@@ -33,6 +38,10 @@ class EventServiceProvider extends ServiceProvider
         FirstPingEvent::class => [
             NotifyAdminScreenAvailable::class,
             ScreenStatusOnline::class
+        ],
+        EmergencyEvent::class => [
+            EmergencyNotificationsListener::class,
+            LogEmergencyListener::class,
         ],
     ];
 

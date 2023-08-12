@@ -7,10 +7,12 @@ use App\Enums\ScreenStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Screen extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $with = ['playlist.playlistItems.layout', 'playlist.playlistItems.page', 'playlist.playlistItems'];
 
@@ -51,5 +53,14 @@ class Screen extends Model
     public function rooms()
     {
         return $this->belongsToMany(Room::class)->withPivot(['direction', 'primary']);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'playlist_id', 'screen_group_id','orientation', 'slug','hostname','ip_address','mac_address','provisioned','status'])
+            ->dontSubmitEmptyLogs()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

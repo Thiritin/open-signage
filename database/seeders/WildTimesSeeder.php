@@ -9,8 +9,6 @@ class WildTimesSeeder extends Seeder
 {
     public function run(): void
     {
-        Project::where('path', 'wt23')->delete();
-
         $project = Project::firstOrCreate([
             'path' => 'WT23',
             'name' => 'Wild Times 23',

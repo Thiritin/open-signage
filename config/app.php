@@ -187,5 +187,5 @@ return [
     ])->toArray(),
 
     'shared_secret' => env('APP_SHARED_SECRET'),
-
+    'default_project' => env('VITE_PROJECT_PATH'),
 ];

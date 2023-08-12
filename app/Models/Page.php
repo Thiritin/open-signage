@@ -50,6 +50,6 @@ class Page extends Model
 
     public function getFormatNameAttribute(): string
     {
-        return $this->project->name." - ".$this->name;
+        return $this->project->name . ' - ' . $this->name;
     }
 }

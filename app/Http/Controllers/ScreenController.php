@@ -48,7 +48,7 @@ class ScreenController extends Controller
                 'banner' => (empty($artwork->file_banner)) ? null : Storage::disk('public')->url($artwork->file_banner),
             ])->toArray(),
             'initialAnnouncements' => Announcement::all()->toArray(),
-            'initialSchedule' => ScheduleEntry::with(['room','scheduleType'])->orderBy('starts_at')->get()->toArray(),
+            'initialSchedule' => ScheduleEntry::with(['room', 'scheduleType'])->orderBy('starts_at')->get()->toArray(),
         ]);
     }
 }

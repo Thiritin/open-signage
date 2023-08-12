@@ -57,7 +57,7 @@ class ScreenResource extends Resource
 
                 TextInput::make('slug')
                     ->hint('This is the URL that will be used to access this screen.')
-                    ->prefix(config('app.url').'/screens/')
+                    ->prefix(config('app.url') . '/screens/')
                     ->required(),
 
                 Select::make('orientation')->required()->selectablePlaceholder(false)->options([
@@ -81,11 +81,11 @@ class ScreenResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -104,10 +104,10 @@ class ScreenResource extends Resource
                     ->badge()
                     ->alignStart()
                     ->size(TextColumn\TextColumnSize::Large)
-                    ->state(fn(Screen $screen) => $screen->isEmergency() ? $screen->playlist->name : 'Normal')
+                    ->state(fn (Screen $screen) => $screen->isEmergency() ? $screen->playlist->name : 'Normal')
                     ->label('Mode')
-                    ->color(fn(Screen $screen) => $screen->isEmergency() ? 'danger' : 'success')
-                    ->icon(fn(Screen $screen
+                    ->color(fn (Screen $screen) => $screen->isEmergency() ? 'danger' : 'success')
+                    ->icon(fn (Screen $screen
                     ) => $screen->isEmergency() ? 'heroicon-o-exclamation-circle' : 'heroicon-o-check-circle'),
 
                 TextColumn::make('screenGroup.name')->label('Screen Group'),
@@ -115,7 +115,7 @@ class ScreenResource extends Resource
                 SelectColumn::make('playlist_id')
                     ->label('Playlist')
                     ->selectablePlaceholder(false)
-                    ->disabled(fn(Screen $screen) => $screen->isEmergency())
+                    ->disabled(fn (Screen $screen) => $screen->isEmergency())
                     ->options(\App\Models\Playlist::whereHas('playlistItems')->normal()->pluck('name',
                         'id')->toArray()),
 
@@ -137,31 +137,31 @@ class ScreenResource extends Resource
                     ->label('Last Ping Date')
                     ->date(),*/
             ])->filters([
-                Filter::make('provisioned')->label('Show only provisioned screens')->query(fn(
+                Filter::make('provisioned')->label('Show only provisioned screens')->query(fn (
                     Builder $query
                 ) => $query->where('provisioned', true))->default(true),
             ])->actions([
                 \Filament\Tables\Actions\EditAction::make('Edit'),
             ])
             ->columnToggleFormColumns([
-                'mode', 'screenGroup.name', 'playlist_id', 'name', 'slug', 'hostname', 'provisioned'
+                'mode', 'screenGroup.name', 'playlist_id', 'name', 'slug', 'hostname', 'provisioned',
             ])
             ->striped()
             ->bulkActions([
                 BulkAction::make('Refresh')
                     ->icon('heroicon-o-arrow-path')
                     ->label('Refresh')
-                    ->action(fn(
+                    ->action(fn (
                         Collection $records
-                    ) => $records->each(fn(Screen $screen) => broadcast(new RefreshScreenEvent($screen)))),
+                    ) => $records->each(fn (Screen $screen) => broadcast(new RefreshScreenEvent($screen)))),
 
                 BulkAction::make('Restart')
                     ->icon('heroicon-o-power')
                     ->label('Restart')
                     ->tooltip('Only works on kiosk managed screens.')
-                    ->action(fn(
+                    ->action(fn (
                         Collection $records
-                    ) => $records->each(fn(Screen $screen) => $screen->updateQuietly(['should_restart' => true]))),
+                    ) => $records->each(fn (Screen $screen) => $screen->updateQuietly(['should_restart' => true]))),
 
                 BulkActionGroup::make([
                     BulkAction::make('FireEmergencyAlert')
@@ -171,7 +171,7 @@ class ScreenResource extends Resource
                         ->modalDescription('You are about to send a fire evacuation alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.')
                         ->color('danger')
                         ->icon('heroicon-m-fire')
-                        ->action(fn(
+                        ->action(fn (
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::FIRE, $records))
                         ->form([
@@ -187,7 +187,7 @@ class ScreenResource extends Resource
                         ])
                         ->color('danger')
                         ->icon('heroicon-s-arrow-right-on-rectangle')
-                        ->action(fn(
+                        ->action(fn (
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::EVACUATION, $records)),
                     BulkAction::make('CustomEmergencyAlert')
@@ -196,7 +196,7 @@ class ScreenResource extends Resource
                         ->modalHeading('STOP! You are about to send an emergency alert!')
                         ->modalDescription('You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.')
                         ->modalSubmitActionLabel('Confirm Send Alert')
-                        ->action(fn(
+                        ->action(fn (
                             Collection $records,
                             array $data
                         ) => SetEmergencyPlaylistJob::dispatchSync(
@@ -222,7 +222,7 @@ class ScreenResource extends Resource
                         ->modalHeading('STOP! You are about to send an emergency alert!')
                         ->modalDescription('You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.')
                         ->modalSubmitActionLabel('Confirm Send Alert')
-                        ->action(fn(
+                        ->action(fn (
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::TEST, $records))
                         ->form([
@@ -236,7 +236,7 @@ class ScreenResource extends Resource
                         ->modalHeading('You are about to send an emergency over alert.')
                         ->modalDescription('This will display a message on the screens that the emergency is over.')
                         ->modalSubmitActionLabel('Danger is over, lift alert')
-                        ->action(fn(
+                        ->action(fn (
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::LIFTED, $records))
                         ->form([
@@ -250,7 +250,7 @@ class ScreenResource extends Resource
                         ->modalHeading('You are about to disable the emergency mode.')
                         ->modalDescription('This will disable the emergency mode on the screens you selected and return them to normal operation.')
                         ->modalSubmitActionLabel('Confirm')
-                        ->action(fn(
+                        ->action(fn (
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(EmergencyTypeEnum::NONE, $records))
                         ->form([

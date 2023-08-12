@@ -16,6 +16,7 @@ class RestartController extends Controller
 
             return 'restart';
         }
+
         return '';
     }
 }

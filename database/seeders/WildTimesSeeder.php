@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
-use App\Settings\GeneralSettings;
 use Illuminate\Database\Seeder;
 
 class WildTimesSeeder extends Seeder
@@ -14,13 +13,6 @@ class WildTimesSeeder extends Seeder
             'path' => 'WT23',
             'name' => 'Wild Times 23',
         ]);
-
-        // Set WildTimes as Default if no project is set
-        $settings = app(GeneralSettings::class);
-        if (empty($settings->project_id)) {
-            $settings->project_id = $project->id;
-            $settings->save();
-        }
 
         $announcementPage = $project->pages()->firstOrCreate([
             'name' => 'Announcement',
@@ -60,6 +52,7 @@ class WildTimesSeeder extends Seeder
                 ],
             ],
         ]];
+
         collect($playlists)->each(function ($data) use ($project) {
             $playlist = $project->playlists()->firstOrCreate([
                 'name' => $data['name'],

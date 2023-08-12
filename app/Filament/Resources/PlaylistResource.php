@@ -6,7 +6,6 @@ use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PlaylistResource\Pages;
 use App\Filament\Resources\PlaylistResource\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
-use App\Settings\GeneralSettings;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -37,7 +36,7 @@ class PlaylistResource extends Resource
             ->schema([
                 Select::make('project_id')
                     ->relationship('project', 'name', fn ($query) => $query->where('type', ResourceOwnership::USER))
-                    ->default(app(GeneralSettings::class)->project_id)
+                    ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id)
                     ->hint('Autofilled by default, but you can change it if you want.')
                     ->createOptionForm(function () {
                         return [
@@ -85,8 +84,9 @@ class PlaylistResource extends Resource
 
             ])->filters([
                 SelectFilter::make('project')
-                    ->relationship('project', 'name', fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
-                    ->default(app(GeneralSettings::class)->project_id),
+                    ->relationship('project', 'name',
+                        fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
+                    ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id),
             ])->actions([
                 EditAction::make(),
                 DeleteAction::make(),

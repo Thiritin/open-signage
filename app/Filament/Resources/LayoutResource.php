@@ -5,7 +5,8 @@ namespace App\Filament\Resources;
 use App\Enums\ResourceOwnership;
 use App\Filament\Resources\LayoutResource\Pages;
 use App\Models\Layout;
-use App\Settings\GeneralSettings;
+use App\Models\Project;
+use Exception;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -36,7 +37,7 @@ class LayoutResource extends Resource
             ->schema([
                 Select::make('project_id')
                     ->relationship('project', 'name', fn ($query) => $query->where('type', ResourceOwnership::USER))
-                    ->default(app(GeneralSettings::class)->project_id)
+                    ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id)
                     ->hint('Autofilled by default, but you can change it if you want.')
                     ->createOptionForm(function () {
                         return [
@@ -69,6 +70,9 @@ class LayoutResource extends Resource
             ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -89,8 +93,9 @@ class LayoutResource extends Resource
 
             ])->filters([
                 SelectFilter::make('project')
-                    ->relationship('project', 'name', fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
-                    ->default(app(GeneralSettings::class)->project_id),
+                    ->relationship('project', 'name',
+                        fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
+                    ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id),
             ])->actions([
                 EditAction::make(),
                 DeleteAction::make(),

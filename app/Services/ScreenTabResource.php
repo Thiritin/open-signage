@@ -55,7 +55,7 @@ class ScreenTabResource
                     ])->default('none')->columnSpanFull(),
                     TextInput::make($prefix . 'wep_key')->default($settings->wep_key)->label('WEP Key')->columnSpanFull(),
                     TextInput::make($prefix . 'wpa_password')->default($settings->wpa_password)->label('WPA Password')->columnSpanFull(),
-                ])->hidden(fn (Get $get): bool => $get($prefix . 'connection') !== 'wireless'),
+                ])->hidden(fn (Get $get): bool => $get($prefix . 'connection') !== 'wifi'),
 
                 Section::make('EAPOL')->compact()->columnSpan(1)->schema([
                     Select::make($prefix . 'wired_authentication')->default($settings->wired_authentication)->hidden()->required()->reactive()->label('Wired Authentication')->options([

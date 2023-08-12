@@ -186,4 +186,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'shared_secret' => env('APP_SHARED_SECRET'),
+
 ];

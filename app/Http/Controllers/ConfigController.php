@@ -29,7 +29,7 @@ class ConfigController extends Controller
         $settings = app(GeneralSettings::class)->toArray();
         $settings = array_merge($settings, ($this->screen?->screenGroup?->settings ?? []));
 
-        $settings['kiosk_config'] = route('config');
+        $settings['kiosk_config'] = route('config', ['shared_secret' => config('app.shared_secret')]);
         if (! empty($kiosk)) {
             $settings['homepage'] = route('kiosk');
             $settings['hostname'] = $this->screen->hostname;
@@ -39,7 +39,8 @@ class ConfigController extends Controller
             $settings['run_command'] = '( sleep 30; reboot; ) &';
         }
 
-        $settings['browser_preferences'] = route('browser.preferences', ['browser' => $settings['browser'] ?? 'chrome']);
+        $settings['browser_preferences'] = route('browser.preferences',
+            ['browser' => $settings['browser'] ?? 'chrome', 'shared_secret' => config('app.shared_secret')]);
 
         // Make sure to exclude general settings
         $entries = collect($settings)->except(['name', 'starts_at', 'ends_at', 'playlist_id', 'project_id'])

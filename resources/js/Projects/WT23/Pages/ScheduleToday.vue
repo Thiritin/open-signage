@@ -80,9 +80,9 @@ function pageScroll(ref) {
 
     // Scroll down or up depending on the scrollingDown flag
     if (scrollingDown) {
-        ref.value.scrollTop = ref.value.scrollTop + 1.5;
+        ref.value.scrollTop = ref.value.scrollTop + 2;
     } else {
-        ref.value.scrollTop = ref.value.scrollTop - 1.5;
+        ref.value.scrollTop = ref.value.scrollTop - 2;
     }
 }
 

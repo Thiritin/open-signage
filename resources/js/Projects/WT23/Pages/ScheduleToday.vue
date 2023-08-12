@@ -64,7 +64,7 @@ function pageScroll(ref) {
     }
 
     // Check if we reached the bottom of the page
-    if (ref.value.scrollTop >= endScoll) {
+    if (ref.value.scrollTop >= (endScoll - 30)) {
         if (scrollingDown === true) {
             stop = true;
             setTimeout(() => stop = false, 5000)

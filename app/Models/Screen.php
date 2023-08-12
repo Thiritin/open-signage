@@ -28,7 +28,7 @@ class Screen extends Model
     protected $casts = [
         'id' => 'integer',
         'playlist_id' => 'integer',
-        'last_ping_at' => 'timestamp',
+        'last_ping_at' => 'datetime',
     ];
 
     public function screenGroup()

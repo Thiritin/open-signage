@@ -26,7 +26,7 @@ class ScreenTabResource
                     ->label('Connection Type')
                     ->options([
                         'wired' => 'Wired',
-                        'wireless' => 'Wireless',
+                        'wifi' => 'WiFi',
                     ])
                     ->default($settings->connection)
                     ->columnSpanFull()

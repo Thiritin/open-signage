@@ -46,7 +46,7 @@ class ScreenOnlineNotification extends Notification
             ->success()
             ->icon('heroicon-o-power')
             ->actions([
-                \Filament\Notifications\Actions\Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$event->screen))->link(),
+                \Filament\Notifications\Actions\Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$this->screen))->link(),
             ])
             ->sendToDatabase($recipients);
     }

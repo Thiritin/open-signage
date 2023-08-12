@@ -6,6 +6,7 @@ use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PlaylistResource\Pages;
 use App\Filament\Resources\PlaylistResource\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
+use App\Models\Project;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;

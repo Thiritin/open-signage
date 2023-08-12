@@ -47,7 +47,8 @@ onMounted(() => {
 })
 
 let scrollingDown = true;
-let stop = false;
+let stop = true;
+setTimeout(() => stop = false, 5000)
 const currentTime = ref(new Date());
 
 function pageScroll(ref) {

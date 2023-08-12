@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ResourceOwnership;
+use App\Enums\ScreenStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,7 @@ class Screen extends Model
         'id' => 'integer',
         'playlist_id' => 'integer',
         'last_ping_at' => 'datetime',
+        'status' => ScreenStatusEnum::class
     ];
 
     public function screenGroup()

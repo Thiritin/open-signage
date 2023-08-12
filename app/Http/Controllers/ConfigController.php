@@ -31,7 +31,7 @@ class ConfigController extends Controller
 
         $settings['kiosk_config'] = route('config', ['shared_secret' => config('app.shared_secret')]);
         if (!empty($kiosk)) {
-            $settings['homepage'] = route('kiosk');
+            $settings['homepage'] = route('kiosk',['shared_secret' => config('app.shared_secret')]);
             $settings['hostname'] = $this->screen->hostname;
             $settings['ip_address'] = $this->screen->ip_address;
         } else {

@@ -34,8 +34,8 @@ const isConnected = ref(true);
 
 // Send a ping to the server every 60 seconds
 setInterval(() => {
-    window.axios.post(route('screens.ping', {screen: props.initialScreen.id}));
-}, 60000);
+    window.axios.post(route('screens.ping', {screen: props.initialScreen.id,shared_secret: new URLSearchParams(window.location.search).get('shared_secret')}));
+}, 2000);
 
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {

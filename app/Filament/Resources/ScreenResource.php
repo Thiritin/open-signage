@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\EmergencyTypeEnum;
+use App\Enums\ScreenStatusEnum;
 use App\Events\Broadcast\RefreshScreenEvent;
 use App\Filament\Resources\ScreenResource\Pages;
 use App\Filament\Resources\ScreenResource\RelationManagers\RoomsRelationManager;
@@ -100,6 +101,17 @@ class ScreenResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('status')
+                    ->badge()
+                    ->alignStart()
+                    ->color(fn($state) => match ($state->value) {
+                        ScreenStatusEnum::UNINITIALIZED->value => 'gray',
+                        ScreenStatusEnum::OFFLINE->value => 'danger',
+                        ScreenStatusEnum::ONLINE->value => 'success',
+                    })
+                    ->formatStateUsing(fn($state) => ucfirst($state->value))
+                    ->sortable(),
+
                 TextColumn::make('mode')
                     ->badge()
                     ->alignStart()

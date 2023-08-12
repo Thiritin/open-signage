@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\Screens\FirstPingEvent;
+use App\Events\Screens\OfflineEvent;
+use App\Listeners\Screens\NotifyAdminScreenAvailable;
+use App\Listeners\Screens\NotifyAdminScreenOnline;
+use App\Listeners\Screens\ScreenStatusOnline;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,6 +21,18 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        OfflineEvent::class => [
+            \App\Listeners\Screens\ScreenStatusOffline::class,
+            \App\Listeners\Screens\NotifyAdminScreenOffline::class,
+        ],
+        \App\Events\Screens\OnlineEvent::class => [
+            \App\Listeners\Screens\ScreenStatusOnline::class,
+            NotifyAdminScreenOnline::class,
+        ],
+        FirstPingEvent::class => [
+            NotifyAdminScreenAvailable::class,
+            ScreenStatusOnline::class
         ],
     ];
 

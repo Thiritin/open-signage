@@ -23,6 +23,7 @@ Route::middleware(\App\Http\Middleware\EnsureSharedSecretIsSetMiddleware::class)
     Route::get('browser/{browser}/preferences', \App\Http\Controllers\BrowserPreferencesController::class)->name('browser.preferences');
     Route::get('screens/{screen:hostname}/restart', \App\Http\Controllers\Screens\RestartController::class)->name('screens.restart');
 });
+Route::get('screens/{screen}/ping', \App\Http\Controllers\Screens\PingController::class)->name('screens.restart');
 
 Route::get('/', function () {
     return redirect('/admin');

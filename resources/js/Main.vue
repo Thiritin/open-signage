@@ -32,6 +32,11 @@ const screen = ref(props.initialScreen);
 const artworks = ref(props.initialArtworks);
 const isConnected = ref(true);
 
+// Send a ping to the server every 60 seconds
+setInterval(() => {
+    window.axios.post(route('screens.ping', {screen: props.initialScreen.id}));
+}, 60000);
+
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {
         announcements.value = e.announcements;

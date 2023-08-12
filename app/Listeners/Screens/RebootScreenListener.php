@@ -23,7 +23,7 @@ class RebootScreenListener implements ShouldQueue
             ->event('refresh')
             ->log('Refreshing webpage due to offline status');
 
-        // Schedule Automated Reboot in 2 minutes, should the refresh not solved the issue
-        AutomaticRebootOnFailureJob::dispatch($event->screen)->delay(now()->addMinutes(2));
+        // Schedule Automated Reboot in 5 minutes, should the refresh not solved the issue
+        AutomaticRebootOnFailureJob::dispatch($event->screen)->delay(now()->addMinutes(5));
     }
 }

@@ -30,7 +30,7 @@ class ScreenOfflineNotification extends Notification
             ->options(['parse_mode' => 'Markdown'])
             ->line("*Screen Offline: {$this->screen->name}*")
             ->line('')
-            ->line('The screen did not send a heartbeat for 2 minutes. The system will attempt a browser refresh, after that a reboot if the screen is still offline.')
+            ->line('The screen did not send a heartbeat for 5 minutes. The system will attempt a browser refresh, after that a reboot if the screen is still offline.')
             ->line('')
             ->line('Please check the network connection of the screen.')
             ->line('')

@@ -1,29 +1,72 @@
 <script setup>
-    defineProps({
-        title: {
-            type: String,
-            default: "Announcement"
-        },
-        text: {
-            type: String,
-            default: "Welp!\n\nLooks like there's no announcement right now."
-        },
-        centerContent: {
-            type: Boolean,
-            default: false
-        }
-    })
+const preserveClasses = [
+    "text-3xl",
+    "text-4xl",
+    "text-5xl",
+    "text-6xl",
+    "text-7xl",
+    "text-8xl",
+    "text-9xl",
+    "text-10xl",
+    "text-11xl",
+    "text-12xl",
+    "text-13xl",
+    "text-14xl",
+]
+defineProps({
+    title: {
+        type: String,
+        default: "Announcement"
+    },
+    text: {
+        type: String,
+        default: "Welp!\n\nLooks like there's no announcement right now."
+    },
+    centerContent: {
+        type: Boolean,
+        default: false
+    },
+    useContainer: {
+        type: Boolean,
+        default: false
+    },
+    image: {
+        type: String,
+        default: ""
+    },
+    textColor: {
+        type: String,
+        default: "#ffffff"
+    },
+    headerSize: {
+        type: String,
+        default: "text-12xl"
+    },
+    textSize: {
+        type: String,
+        default: "text-9xl"
+    },
+})
 </script>
 
 <template>
-    <div class="h-full m-16" :class="{'text-center max-w-[80vw]': centerContent}">
-        <h1 class="themeFont text-white text-9xl mb-12">{{ title }}</h1>
-        <p class="text-white font-semibold mx-auto text-6xl whitespace-pre-wrap">
-            {{ text }}
-        </p>
+    <div class="h-full bgImage bg-no-repeat bg-cover bg-center" :class="{'text-center': centerContent}"
+         :style="'color:'+textColor+';background-image: url(\''+image+'\');'">
+        <div class="p-16" :class="{'bg-white bg-opacity-80 max-w-7xl mx-auto min-h-full': useContainer}">
+            <h1 class="themeFont mb-12" :class="headerSize">{{ title }}</h1>
+            <p class="font-semibold leading-normal mx-auto whitespace-pre-wrap" :class="textSize">
+                <div class="textscreen" v-html="text"></div>
+            </p>
+        </div>
     </div>
 </template>
 
-<style scoped>
-
+<style>
+figcaption {
+    display: none;
+}
+.textscreen img {
+    padding:60px;
+    margin:auto;
+}
 </style>

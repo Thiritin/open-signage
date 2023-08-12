@@ -20,6 +20,76 @@ class WildTimesSeeder extends Seeder
         ], [
             'name' => 'Announcement',
             'component' => 'Announcement',
+            'schema' => [
+                [
+                    "name" => "Header",
+                    "property" => "title",
+                    "type" => "TextInput"
+                ],
+                [
+                    "name" => "Text",
+                    "property" => "text",
+                    "type" => "RichEditor"
+                ],
+                [
+                    "name" => "centerContent",
+                    "property" => "centerContent",
+                    "type" => "Checkbox"
+                ],
+                [
+                    "name" => "Use Container",
+                    "property" => "useContainer",
+                    "type" => "Checkbox"
+                ],
+                [
+                    "name" => "Image",
+                    "property" => "image",
+                    "type" => "ImageInput"
+                ],
+                [
+                    "name" => "Text Color",
+                    "property" => "textColor",
+                    "type" => "ColorPicker"
+                ],
+                [
+                    "name" => "Header Size",
+                    "property" => "headerSize",
+                    "type" => "Select",
+                    "options" => [
+                        "text-3xl" => "text-3xl",
+                        "text-4xl" => "text-4xl",
+                        "text-5xl" => "text-5xl",
+                        "text-6xl" => "text-6xl",
+                        "text-7xl" => "text-7xl",
+                        "text-8xl" => "text-8xl",
+                        "text-9xl" => "text-9xl",
+                        "text-10xl" => "text-10xl",
+                        "text-11xl" => "text-11xl",
+                        "text-12xl" => "text-12xl",
+                        "text-13xl" => "text-13xl",
+                        "text-14xl" => "text-14xl",
+                    ]
+                ],
+                [
+                    "name" => "Text Size",
+                    "property" => "textSize",
+                    "type" => "Select",
+                    "options" => [
+                        "text-3xl" => "text-3xl",
+                        "text-4xl" => "text-4xl",
+                        "text-5xl" => "text-5xl",
+                        "text-6xl" => "text-6xl",
+                        "text-7xl" => "text-7xl",
+                        "text-8xl" => "text-8xl",
+                        "text-9xl" => "text-9xl",
+                        "text-10xl" => "text-10xl",
+                        "text-11xl" => "text-11xl",
+                        "text-12xl" => "text-12xl",
+                        "text-13xl" => "text-13xl",
+                        "text-14xl" => "text-14xl",
+                    ]
+                ]
+            ]
         ]);
 
         $splashPage = $project->pages()->updateOrCreate([

@@ -74,6 +74,7 @@ class PageResource extends Resource
                             'FileInput' => 'File',
                             'ImageInput' => 'Image',
                             'DatePicker' => 'Date',
+                            'RichEditor' => 'Rich Text (HTML)',
                         ])
                         ->required(),
                 ]),

@@ -65,6 +65,10 @@ class PlaylistItemsRelationManager extends RelationManager
                         $item = $class::make('content.' . $field['property']);
                     }
 
+                    if($field['type'] === "Select") {
+                        $item = $item->options($field['options']);
+                    }
+
                     $item = $item->label($field['name'])
                         ->columnSpanFull();
                     $array[] = $item;

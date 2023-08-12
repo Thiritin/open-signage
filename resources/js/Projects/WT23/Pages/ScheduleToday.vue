@@ -39,7 +39,7 @@ onMounted(() => {
     const intervalScoll = setInterval(() => {
         pageScroll(scrollLeft)
         pageScroll(scrollRight)
-    }, 50); // Update every 1 second
+    }, 60); // Update every 1 second
     onUnmounted(() => {
         clearInterval(intervalId);
         clearInterval(intervalScoll);
@@ -67,13 +67,13 @@ function pageScroll(ref) {
     if (ref.value.scrollTop >= (endScoll - 30)) {
         if (scrollingDown === true) {
             stop = true;
-            setTimeout(() => stop = false, 5000)
+            setTimeout(() => stop = false, 10000)
         }
         scrollingDown = false;
     } else if (ref.value.scrollTop === 0) {
         if (scrollingDown === false) {
             stop = true;
-            setTimeout(() => stop = false, 5000)
+            setTimeout(() => stop = false, 10000)
         }
         scrollingDown = true
     }

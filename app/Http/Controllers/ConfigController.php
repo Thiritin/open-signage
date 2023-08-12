@@ -15,7 +15,7 @@ class ConfigController extends Controller
     {
         $kiosk = $request->get('kiosk');
 
-        if (! empty($kiosk)) {
+        if (!empty($kiosk)) {
             $this->screen = Screen::firstOrCreate([
                 'hostname' => $kiosk,
             ], [
@@ -30,7 +30,7 @@ class ConfigController extends Controller
         $settings = array_merge($settings, ($this->screen?->screenGroup?->settings ?? []));
 
         $settings['kiosk_config'] = route('config', ['shared_secret' => config('app.shared_secret')]);
-        if (! empty($kiosk)) {
+        if (!empty($kiosk)) {
             $settings['homepage'] = route('kiosk');
             $settings['hostname'] = $this->screen->hostname;
             $settings['ip_address'] = $this->screen->ip_address;
@@ -39,13 +39,17 @@ class ConfigController extends Controller
             $settings['run_command'] = '( sleep 30; reboot; ) &';
         }
 
+        if ($settings['connection'] === 'wifi') {
+            unset($settings['eapol_username'], $settings['eapol_password'], $settings['wired_authentication']);
+        }
+
         $settings['browser_preferences'] = route('browser.preferences',
             ['browser' => $settings['browser'] ?? 'chrome', 'shared_secret' => config('app.shared_secret')]);
 
         // Make sure to exclude general settings
         $entries = collect($settings)->except(['name', 'starts_at', 'ends_at', 'playlist_id', 'project_id'])
-            ->reject(fn ($value) => empty($value) && ! is_bool($value))
-            ->map(fn ($value, $key) => $key . '=' . $this->convertValue($key, $value))
+            ->reject(fn($value) => empty($value) && !is_bool($value))
+            ->map(fn($value, $key) => $key.'='.$this->convertValue($key, $value))
             ->toArray();
 
         return response()->streamDownload(function () use ($entries) {
@@ -74,7 +78,7 @@ class ConfigController extends Controller
         }
 
         if ($key === 'volume_level') {
-            return $value . '%';
+            return $value.'%';
         }
 
         return $value;

@@ -30,7 +30,7 @@ const announcements = ref(props.initialAnnouncements);
 const schedule = ref(props.initialSchedule);
 const screen = ref(props.initialScreen);
 const artworks = ref(props.initialArtworks);
-const isConnected = ref(false);
+const isConnected = ref(true);
 
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {
@@ -55,15 +55,18 @@ Echo.channel('Screen.' + props.initialScreen.id)
     });
 
 window.Echo.connector.pusher.connection.bind('connecting', (payload) => {
-    isConnected.value = false;
+    console.log(payload)
+    isConnected.value = false
 });
 
 window.Echo.connector.pusher.connection.bind('connected', (payload) => {
-    isConnected.value = true;
+    console.log(payload)
+    isConnected.value = true
 });
 
 window.Echo.connector.pusher.connection.bind('unavailable', (payload) => {
-    isConnected.value = false;
+    console.log(payload)
+    isConnected.value = false
 });
 
 
@@ -110,7 +113,7 @@ watch(activePageIndex, (value) => {
 </script>
 
 <template>
-    <div v-if="isConnected" class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting...</div>
+    <div v-if="isConnected === false" class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting...</div>
     <Transition>
         <KeepAlive>
             <component

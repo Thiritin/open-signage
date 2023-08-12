@@ -136,20 +136,19 @@ watch(activePageIndex, (value) => {
 
 <template>
     <div v-if="isConnected === false"
-         class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting... ({{ connectionError }})
+         class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting...
+        ({{ connectionError }})
     </div>
     <Transition>
-        <KeepAlive>
-            <component
-                :connected="isConnected"
-                v-show="mappedPages[activePageIndex].index === activePageIndex"
-                :screen="screen"
-                :schedule="schedule"
-                :artworks="artworks"
-                :announcements="announcements"
-                :page="mappedPages[activePageIndex]"
-                :is="layouts.find(item => item.component === mappedPages[activePageIndex].layout.component && item.path === mappedPages[activePageIndex].layout.path).resolvedLayout"></component>
-        </KeepAlive>
+        <component
+            :connected="isConnected"
+            v-show="mappedPages[activePageIndex].index === activePageIndex"
+            :screen="screen"
+            :schedule="schedule"
+            :artworks="artworks"
+            :announcements="announcements"
+            :page="mappedPages[activePageIndex]"
+            :is="layouts.find(item => item.component === mappedPages[activePageIndex].layout.component && item.path === mappedPages[activePageIndex].layout.path).resolvedLayout"></component>
     </Transition>
 </template>
 

@@ -23,7 +23,9 @@ const usableAttributes = computed(() => {
         <!-- Header Menu -->
         <HeaderLogo :title="page.title"/>
         <!-- Main Content -->
-        <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
+        <Transition>
+            <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
+        </Transition>
     </div>
 </template>
 

@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
@@ -103,6 +104,7 @@ class PlaylistItemsRelationManager extends RelationManager
             ])
             ->actions([
                 \Filament\Tables\Actions\EditAction::make()->modalWidth('7xl'),
+                ReplicateAction::make(),
                 DeleteAction::make(),
             ])
             ->bulkActions([

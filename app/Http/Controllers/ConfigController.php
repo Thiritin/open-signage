@@ -22,7 +22,7 @@ class ConfigController extends Controller
                 'name' => $kiosk,
                 'slug' => $kiosk,
                 'hostname' => $kiosk,
-                'provisioned' => true,
+                'provisioned' => false,
                 'playlist_id' => app(GeneralSettings::class)->playlist_id,
             ]);
         }

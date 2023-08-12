@@ -72,7 +72,7 @@ import 'hooper-vue3/dist/hooper.css';
             <Slide v-for="slide in artworksFilteredWithoutMissingOrientation" :duration="playSpeed" :index="slide.id"
                    :key="slide.id">
                 <div>
-                    <img :src="slide[screenOrientation]" :alt="slide.name" class="object-cover h-full w-full">
+                    <img :src="slide[screenOrientation]+'.webp'" :alt="slide.name" class="object-cover h-full w-full">
                 </div>
             </Slide>
         </Hooper>

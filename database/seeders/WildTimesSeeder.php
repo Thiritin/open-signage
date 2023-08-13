@@ -108,7 +108,7 @@ class WildTimesSeeder extends Seeder
                 [
                     "name" => "showDate",
                     "property" => "showDate",
-                    "type" => "DateInput"
+                    "type" => "DatePicker"
                 ],
                 [
                     "name" => "showItems",

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class PlaylistItem extends Model
 {
@@ -51,6 +52,9 @@ class PlaylistItem extends Model
         $data = collect($this->content)->map(function ($value, $key) use (&$schema) {
             $property = $schema->where('property',$key)->first();
             if($property['type'] === "ImageInput" || $property['type'] === "FileInput") {
+                if(Str::endsWith($value, ['jpg', 'jpeg', 'png'])) {
+                    return \Storage::drive('public')->url($value.".webp");
+                }
                 return \Storage::drive('public')->url($value);
             }
             return $value;

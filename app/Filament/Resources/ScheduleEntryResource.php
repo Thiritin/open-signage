@@ -21,6 +21,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ReplicateAction;
@@ -93,15 +94,15 @@ class ScheduleEntryResource extends Resource
                         Section::make('Event Time')->schema([
                             DateTimePicker::make('starts_at')
                                 ->native(true)
-                                ->minDate(app(GeneralSettings::class)->starts_at)
-                                ->maxDate(app(GeneralSettings::class)->ends_at)
+                                ->reactive()
+                                ->maxDate(fn(Get $get) => $get('ends_at'))
                                 ->required()
                                 ->label('Starts Date'),
 
                             DateTimePicker::make('ends_at')
                                 ->native(true)
-                                ->minDate(app(GeneralSettings::class)->starts_at)
-                                ->maxDate(app(GeneralSettings::class)->ends_at)
+                                ->reactive()
+                                ->minDate(fn(Get $get) => $get('starts_at'))
                                 ->required()
                                 ->label('Ends Date'),
                         ])->columnSpan(1),
@@ -154,6 +155,7 @@ class ScheduleEntryResource extends Resource
 
                         TextInput::make('delay')
                             ->default(0)
+                            ->required()
                             ->numeric()
                             ->suffix('minutes')
                             ->hint('Use in combination with delay'),

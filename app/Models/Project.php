@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Enums\ResourceOwnership;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    use HasFactory;
     protected $guarded = [];
 
     protected $casts = [

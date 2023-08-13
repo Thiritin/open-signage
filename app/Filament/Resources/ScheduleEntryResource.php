@@ -3,13 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScheduleEntryResource\Pages;
+use App\Models\Playlist;
+use App\Models\PlaylistItem;
 use App\Models\ScheduleEntry;
+use App\Models\Screen;
 use App\Settings\GeneralSettings;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -47,35 +53,35 @@ class ScheduleEntryResource extends Resource
                         Select::make('room_id')
                             ->relationship('room', 'name')
                             ->required()
-                            ->createOptionForm(fn (Form $form) => $form->schema([
+                            ->createOptionForm(fn(Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn (Form $form) => $form->schema([
+                            ->editOptionForm(fn(Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                             ])),
 
                         Select::make('schedule_organizer_id')
                             ->relationship('scheduleOrganizer', 'name')
-                            ->createOptionForm(fn (Form $form) => $form->schema([
+                            ->createOptionForm(fn(Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn (Form $form) => $form->schema([
+                            ->editOptionForm(fn(Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                             ])),
 
                         Select::make('schedule_type_id')
                             ->relationship('scheduleType', 'name')
-                            ->createOptionForm(fn (Form $form) => $form->schema([
+                            ->createOptionForm(fn(Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                                 ColorPicker::make('color')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn (Form $form) => $form->schema([
+                            ->editOptionForm(fn(Form $form) => $form->schema([
                                 TextInput::make('name')
                                     ->required(),
                                 ColorPicker::make('color')
@@ -83,21 +89,59 @@ class ScheduleEntryResource extends Resource
                             ]))->helperText('Color is used for the background in the timetable.'),
 
                     ])->columnSpan(1),
-                    Section::make('Event Time')->schema([
-                        DateTimePicker::make('starts_at')
-                            ->native(true)
-                            ->minDate(app(GeneralSettings::class)->starts_at)
-                            ->maxDate(app(GeneralSettings::class)->ends_at)
-                            ->required()
-                            ->label('Starts Date'),
+                    Group::make([
+                        Section::make('Event Time')->schema([
+                            DateTimePicker::make('starts_at')
+                                ->native(true)
+                                ->minDate(app(GeneralSettings::class)->starts_at)
+                                ->maxDate(app(GeneralSettings::class)->ends_at)
+                                ->required()
+                                ->label('Starts Date'),
 
-                        DateTimePicker::make('ends_at')
-                            ->native(true)
-                            ->minDate(app(GeneralSettings::class)->starts_at)
-                            ->maxDate(app(GeneralSettings::class)->ends_at)
-                            ->required()
-                            ->label('Ends Date'),
-                    ])->columnSpan(1),
+                            DateTimePicker::make('ends_at')
+                                ->native(true)
+                                ->minDate(app(GeneralSettings::class)->starts_at)
+                                ->maxDate(app(GeneralSettings::class)->ends_at)
+                                ->required()
+                                ->label('Ends Date'),
+                        ])->columnSpan(1),
+                        Section::make('Automation')->schema([
+                            Repeater::make('automation')->schema([
+
+                                Select::make('screens')
+                                    ->options(
+                                        Screen::where('provisioned', true)
+                                            ->orderBy('name')
+                                            ->pluck('name', 'id')
+                                    )
+                                    ->multiple()
+                                    ->required(),
+
+                                Select::make('type')
+                                    ->label('Type of Automation')
+                                    ->options([
+                                        'on_start' => 'On Start',
+                                        'on_end' => 'On End',
+                                        'on_start_with_delay' => 'On Start (with delay)',
+                                        'on_end_with_delay' => 'On End (with delay)',
+                                    ])
+                                    ->required(),
+
+                                Select::make('playlist')
+                                    ->label('Set Playlist')
+                                    ->options(
+                                        Playlist::normal()
+                                            ->orderBy('name')
+                                            ->pluck('name', 'id')
+                                    )
+                                    ->required(),
+
+                                Checkbox::make('has_run')
+                                    ->label('Automation has already run')
+                                    ->helperText('If this is checked the automation will not run again.'),
+                            ]),
+                        ])
+                    ]),
                 ]),
                 Group::make()->columnSpan(1)->columns(1)->schema([
                     Section::make('Flags')->schema([
@@ -121,13 +165,13 @@ class ScheduleEntryResource extends Resource
 
                     Placeholder::make('created_at')
                         ->label('Created Date')
-                        ->content(fn (
+                        ->content(fn(
                             ?ScheduleEntry $record
                         ): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                     Placeholder::make('updated_at')
                         ->label('Last Modified Date')
-                        ->content(fn (
+                        ->content(fn(
                             ?ScheduleEntry $record
                         ): string => $record?->updated_at?->diffForHumans() ?? '-'),
                 ]),

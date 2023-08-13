@@ -23,6 +23,8 @@ class ScreenFactory extends Factory
         return [
             'playlist_id' => Playlist::factory(),
             'name' => $this->faker->name,
+            'slug' => $this->faker->slug,
+            'provisioned' => $this->faker->boolean,
         ];
     }
 }

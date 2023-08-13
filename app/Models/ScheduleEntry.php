@@ -26,6 +26,7 @@ class ScheduleEntry extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'flags' => 'array',
+        'automation' => 'array',
     ];
 
     public function room(): \Illuminate\Database\Eloquent\Relations\BelongsTo

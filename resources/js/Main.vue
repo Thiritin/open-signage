@@ -214,7 +214,7 @@ watch(activePageIndex, (value, oldValue) => {
 
 <template>
     <div v-if="isConnected === false"
-         class="bg-red-600 z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting...
+         class="bg-black z-50 absolute top-0 left p-1 px-4 font-bold text-white rounded-br">Reconnecting...
         ({{ connectionError }})
     </div>
     <Transition>

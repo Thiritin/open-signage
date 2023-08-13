@@ -100,39 +100,10 @@ class WildTimesSeeder extends Seeder
         ]);
 
         $timetablePage = $project->pages()->updateOrCreate([
-          'component' => 'TimetablePage',
-        ],[
+            'component' => 'TimetablePage',
+        ], [
             'name' => 'Timetable',
             'component' => 'TimetablePage',
-            'schema' => [
-                [
-                    "name" => "showAnnouncements",
-                    "property" => "showAnnouncements",
-                    "type" => "Checkbox"
-                ],
-                [
-                    "name" => "showSchedule",
-                    "property" => "showSchedule",
-                    "type" => "Checkbox"
-                ],
-                [
-                    "name" => "showDate",
-                    "property" => "showDate",
-                    "type" => "DatePicker"
-                ],
-                [
-                    "name" => "showToday",
-                    "property" => "showToday",
-                    "type" => "Checkbox"
-                ]
-            ]
-        ]);
-
-        $schedulePage = $project->pages()->updateOrCreate([
-            'component' => 'ScheduleToday',
-        ], [
-            'name' => 'ScheduleToday',
-            'component' => 'ScheduleToday',
             'schema' => [
                 [
                     "name" => "showDate",
@@ -158,6 +129,35 @@ class WildTimesSeeder extends Seeder
                     "name" => "heightFactor",
                     "property" => "heightFactor",
                     "type" => "TextInput"
+                ]
+            ]
+        ]);
+
+        $schedulePage = $project->pages()->updateOrCreate([
+            'component' => 'ScheduleToday',
+        ], [
+            'name' => 'ScheduleToday',
+            'component' => 'ScheduleToday',
+            'schema' => [
+                [
+                    "name" => "showAnnouncements",
+                    "property" => "showAnnouncements",
+                    "type" => "Checkbox"
+                ],
+                [
+                    "name" => "showSchedule",
+                    "property" => "showSchedule",
+                    "type" => "Checkbox"
+                ],
+                [
+                    "name" => "showDate",
+                    "property" => "showDate",
+                    "type" => "DatePicker"
+                ],
+                [
+                    "name" => "showToday",
+                    "property" => "showToday",
+                    "type" => "Checkbox"
                 ]
             ]
         ]);

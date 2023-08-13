@@ -20,6 +20,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -175,6 +176,8 @@ class ScreenResource extends Resource
                     ->action(fn(
                         Collection $records
                     ) => $records->each(fn(Screen $screen) => $screen->updateQuietly(['should_restart' => true]))),
+
+                DeleteBulkAction::make(),
 
                 BulkActionGroup::make([
                     BulkAction::make('FireEmergencyAlert')

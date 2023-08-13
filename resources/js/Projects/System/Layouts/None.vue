@@ -3,22 +3,24 @@ import {computed, onMounted, reactive, useAttrs} from "vue";
 
 const props = defineProps(['page'])
 defineOptions({
-    inheritAttrs: false
+  inheritAttrs: false
 })
 
 let attrs = reactive(useAttrs());
 
 const usableAttributes = computed(() => {
-    return {
-        ...attrs,
-        ...props.page.props
-    }
+  return {
+    ...attrs,
+    ...props.page.props
+  }
 })
 
 </script>
 
 <template>
-    <div class="h-screen overflow-hidden bg-primary flex flex-col flex-grow">
-        <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
-    </div>
+  <div class="h-screen overflow-hidden bg-primary flex flex-col flex-grow">
+    <Transition>
+      <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
+    </Transition>
+  </div>
 </template>

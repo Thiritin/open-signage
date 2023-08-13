@@ -42,7 +42,7 @@ const groupedSchedule = computed(() => {
     // Group by date
     let groupedByDate = props.schedule.filter((entry) => {
       // Remove all entries with a start and end date * heightFactor < 60
-      let minutes = toMinutes(new Date(entry.ends_at)).getTime() - toMinutes(new Date(entry.starts_at)).getTime();
+      let minutes = toMinutes(new Date(entry.ends_at)) - toMinutes(new Date(entry.starts_at));
       return (minutes * props.heightFactor) >= 60;
     }).filter((entry) => {
         if (props.showDate) {

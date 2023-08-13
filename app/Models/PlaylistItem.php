@@ -60,6 +60,9 @@ class PlaylistItem extends Model
         $schema = collect($this->page->schema);
         $data = collect($this->content)->map(function ($value, $key) use (&$schema) {
             $property = $schema->where('property',$key)->first();
+            if (is_null($property)) {
+                return $value;
+            }
             if($property['type'] === "ImageInput" || $property['type'] === "FileInput") {
                 if(Str::endsWith($value, ['jpg', 'jpeg', 'png'])) {
                     return \Storage::drive('public')->url($value.".webp");

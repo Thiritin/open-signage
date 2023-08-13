@@ -38,9 +38,11 @@ class ScheduleEntryAutomationJob implements ShouldQueue
                 return $automation;
             }
 
-            Screen::whereHas('playlist', fn($q) => ($q->normal()))
+            $screens = Screen::whereHas('playlist', fn($q) => ($q->normal()))
                 ->whereIn('id', $automation['screens'])
-                ->update(['playlist_id' => $automation['playlist']]);
+                ->get();
+            $screens->each(fn(Screen $screen) => $screen->update(['playlist_id' => $automation['playlist']]));
+
 
             $automation['has_run'] = true;
             return $automation;

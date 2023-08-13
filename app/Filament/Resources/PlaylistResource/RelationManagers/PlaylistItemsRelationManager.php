@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 
 use App\Models\PlaylistItem;
 use Exception;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -128,6 +129,12 @@ class PlaylistItemsRelationManager extends RelationManager
                 \Filament\Tables\Actions\CreateAction::make()->modalWidth('7xl'),
             ])
             ->actions([
+                \Filament\Tables\Actions\Action::make('Move')->form([
+                    Select::make('playlist_id')
+                        ->relationship('playlist', 'name', fn (Builder $query) => $query->normal())
+                ])->action(fn (PlaylistItem $record, array $data) => $record->update([
+                    'playlist_id' => $data['playlist_id'],
+                ])),
                 \Filament\Tables\Actions\EditAction::make()->modalWidth('7xl'),
                 ReplicateAction::make(),
                 DeleteAction::make(),

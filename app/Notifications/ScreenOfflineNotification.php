@@ -11,7 +11,7 @@ use NotificationChannels\Telegram\TelegramMessage;
 
 class ScreenOfflineNotification extends Notification
 {
-    public function __construct(readonly private Screen $screen)
+    public function __construct(readonly public Screen $screen)
     {
     }
 

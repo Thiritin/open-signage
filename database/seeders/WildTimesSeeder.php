@@ -99,11 +99,11 @@ class WildTimesSeeder extends Seeder
             'component' => 'LogoText',
         ]);
 
-        $schedulePage = $project->pages()->updateOrCreate([
-            'component' => 'ScheduleToday',
-        ], [
-            'name' => 'ScheduleToday',
-            'component' => 'ScheduleToday',
+        $timetablePage = $project->pages()->updateOrCreate([
+          'component' => 'TimetablePage',
+        ],[
+            'name' => 'Timetable',
+            'component' => 'TimetablePage',
             'schema' => [
                 [
                     "name" => "showAnnouncements",
@@ -124,6 +124,40 @@ class WildTimesSeeder extends Seeder
                     "name" => "showToday",
                     "property" => "showToday",
                     "type" => "Checkbox"
+                ]
+            ]
+        ]);
+
+        $schedulePage = $project->pages()->updateOrCreate([
+            'component' => 'ScheduleToday',
+        ], [
+            'name' => 'ScheduleToday',
+            'component' => 'ScheduleToday',
+            'schema' => [
+                [
+                    "name" => "showDate",
+                    "property" => "showDate",
+                    "type" => "DateInput"
+                ],
+                [
+                    "name" => "showItems",
+                    "property" => "showItems",
+                    "type" => "TextInput"
+                ],
+                [
+                    "name" => "carousel",
+                    "property" => "carousel",
+                    "type" => "Checkbox"
+                ],
+                [
+                    "name" => "autoplay",
+                    "property" => "autoplay",
+                    "type" => "TextInput"
+                ],
+                [
+                    "name" => "heightFactor",
+                    "property" => "heightFactor",
+                    "type" => "TextInput"
                 ]
             ]
         ]);

@@ -104,7 +104,9 @@ class ScreenResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
+                TextColumn::make('id')
+                    ->searchable()
+                    ->sortable(),
 
                 TextColumn::make('status')
                     ->badge()

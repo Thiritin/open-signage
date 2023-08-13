@@ -33,6 +33,9 @@ class NotifyAdminScreenOnline implements ShouldQueue
      */
     public function handle(OnlineEvent $event): void
     {
+        if($event->screen->provisioned === false) {
+            return;
+        }
         \Illuminate\Support\Facades\Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
             ->notify(new ScreenOnlineNotification($event->screen));
     }

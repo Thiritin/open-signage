@@ -31,6 +31,9 @@ class NotifyAdminScreenOffline implements ShouldQueue
      */
     public function handle(OfflineEvent $event): void
     {
+        if($event->screen->provisioned === false) {
+            return;
+        }
         \Illuminate\Support\Facades\Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
             ->notify(new ScreenOfflineNotification($event->screen));
     }

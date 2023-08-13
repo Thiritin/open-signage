@@ -10,7 +10,7 @@
         </div>
         <div class="flex flex-col">
             <PageTitle class="text-5xl text-[5vw]" v-if="title.length !== 0">{{ title }}</PageTitle>
-            <CurrentTime class="xl:text-right text-5xl text-[3.4vw] themeFont text-center"></CurrentTime>
+            <CurrentTime class="xl:text-right text-5xl text-[4vw] themeFont text-center"></CurrentTime>
         </div>
     </div>
 </template>

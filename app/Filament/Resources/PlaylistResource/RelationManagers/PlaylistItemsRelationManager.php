@@ -135,6 +135,22 @@ class PlaylistItemsRelationManager extends RelationManager
                 ])->action(fn (PlaylistItem $record, array $data) => $record->update([
                     'playlist_id' => $data['playlist_id'],
                 ])),
+                \Filament\Tables\Actions\Action::make('Copy to..')->form([
+                    Select::make('playlist_id')
+                        ->relationship('playlist', 'name', fn (Builder $query) => $query->normal())
+                ])->action(fn (PlaylistItem $record, array $data) => PlaylistItem::create(array_merge($record->only([
+                    'title',
+                    'starts_at',
+                    'ends_at',
+                    'duration',
+                    'page_id',
+                    'layout_id',
+                    'is_active',
+                    'content',
+                    'sort'
+                ]), [
+                    'playlist_id' => $data['playlist_id'],
+                ]))),
                 \Filament\Tables\Actions\EditAction::make()->modalWidth('7xl'),
                 ReplicateAction::make(),
                 DeleteAction::make(),

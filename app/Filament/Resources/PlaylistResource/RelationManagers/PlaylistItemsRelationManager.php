@@ -122,6 +122,7 @@ class PlaylistItemsRelationManager extends RelationManager
                 CheckboxColumn::make('is_active')
             ])
             ->reorderable('sort')
+            ->defaultSort('sort')
             ->paginated(false)
             ->headerActions([
                 \Filament\Tables\Actions\CreateAction::make()->modalWidth('7xl'),

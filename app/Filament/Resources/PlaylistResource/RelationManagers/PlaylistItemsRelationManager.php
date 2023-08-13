@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 use App\Models\PlaylistItem;
 use Exception;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -15,6 +16,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ReplicateAction;
+use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
@@ -49,6 +51,11 @@ class PlaylistItemsRelationManager extends RelationManager
                     ->columnSpan(5)
                     ->required(),
 
+                DateTimePicker::make('starts_at')
+                    ->columnSpan(6),
+
+                DateTimePicker::make('ends_at')
+                    ->columnSpan(6),
             ])->columns(12)->columnSpanFull(),
             TextInput::make('title')->columnSpanFull(),
         ];
@@ -67,6 +74,10 @@ class PlaylistItemsRelationManager extends RelationManager
 
                     if($field['type'] === "Select") {
                         $item = $item->options($field['options']);
+                    }
+
+                    if(isset($field['required']) && $field['required']) {
+                        $item = $item->required();
                     }
 
                     $item = $item->label($field['name'])
@@ -107,6 +118,8 @@ class PlaylistItemsRelationManager extends RelationManager
                         ->pluck('name', 'id')
                         ->toArray()
                 )->selectablePlaceholder(false),
+
+                CheckboxColumn::make('is_active')
             ])
             ->reorderable('sort')
             ->paginated(false)

@@ -1,5 +1,7 @@
 <script setup>
 import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent, onUnmounted} from "vue";
+import None from "@/Projects/System/Layouts/None.vue";
+import Error from "@/Projects/System/Pages/Error.vue";
 
 const props = defineProps({
     initialPages: {
@@ -32,13 +34,16 @@ const screen = ref(props.initialScreen);
 const artworks = ref(props.initialArtworks);
 const isConnected = ref(true);
 const connectionError = ref("");
+const version = ref(props.initialScreen.version)
+const pageSwitchTimer = ref(null)
 
 const ping = () => {
     window
         .axios
         .post(route('screens.ping', {
             screen: props.initialScreen.id,
-            shared_secret: new URLSearchParams(window.location.search).get('shared_secret')
+            shared_secret: new URLSearchParams(window.location.search).get('shared_secret'),
+            version: version.value
         }))
         .then((response) => isConnected.value = true)
         .catch((error) => {
@@ -58,9 +63,11 @@ onMounted(() => {
 Echo.channel('ScreenAll')
     .listen('.announcement.update', e => {
         announcements.value = e.announcements;
+        version.value++;
     })
     .listen('.schedule.update', (e) => {
         schedule.value = e.schedule;
+        version.value++;
     })
 
 Echo.channel('Screen.' + props.initialScreen.id)
@@ -71,10 +78,12 @@ Echo.channel('Screen.' + props.initialScreen.id)
         artworks.value = e.artworks;
     })
     .listen('.page.update', (e) => {
+        activePageIndex.value = 0;
+        version.value++;
         pages.value = e.pages;
         screen.value = e.screen;
         layouts = mapLayouts(mappedPages);
-        activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;
+        activePageIndex.value = activePageIndex.value + 1 % pages.value.length;
     });
 
 window.Echo.connector.pusher.connection.bind('connecting', (payload) => {
@@ -92,13 +101,15 @@ window.Echo.connector.pusher.connection.bind('unavailable', (payload) => {
 });
 
 
-const mappedPages = computed(() => pages.value.map((page, index) => {
-    return {
-        ...page,
-        index: index,
-        resolvedComponent: defineAsyncComponent(() => import(`./Projects/${page.path}/Pages/${page.component}.vue`))
-    }
-}))
+const mappedPages = computed(() => {
+    return pages.value.map((page, index) => {
+        return {
+            ...page,
+            index: index,
+            resolvedComponent: defineAsyncComponent(() => import(`./Projects/${page.path}/Pages/${page.component}.vue`))
+        }
+    })
+})
 
 function mapLayouts(mappedPages) {
     let layouts = [];
@@ -125,11 +136,79 @@ const activePageIndex = ref(0);
 
 const activePage = computed(() => pages.value[activePageIndex.value]);
 
-watch(activePageIndex, (value) => {
-    if (pages.value.length === 0) return;
-    setTimeout(() => {
-        activePageIndex.value = (value + 1) % pages.value.length;
-    }, (activePage.value.duration ?? pages.value[0].duration) * 1000);
+const activeLayout = computed(() => {
+    if (activePage.value === undefined) return None;
+
+    let layout = layouts.find(e => e.component === activePage.value.layout.component && e.path === activePage.value.layout.path)
+    return layout.resolvedLayout ?? None;
+});
+
+const activePageComponent = computed(() => {
+    if (activePage.value === undefined) return Error;
+
+    let page = mappedPages.value.find(e => e.index === activePageIndex.value)
+    return page?.resolvedComponent ?? Error;
+});
+
+watch(activePageIndex, (value, oldValue) => {
+    if (value === oldValue) return;
+    if (pages.value.length <= 1) return;
+
+    // If current page does not match timing requirements skip to next page
+    if (activePage.value.starts_at || activePage.value.ends_at)
+        if (new Date(activePage.value.starts_at).getTime() > new Date().getTime() || new Date(activePage.value.ends_at).getTime() < new Date().getTime()) {
+            console.log("Current page does not match timing requirements, skipping to next page")
+            activePageIndex.value = (value + 1) % pages.value.length;
+        }
+
+    console.log("Clearing Timeout")
+    clearTimeout(pageSwitchTimer.value)
+
+    let validPageFound = false;
+    let skipPages = 0;
+    let nextPageIndex;
+
+    while (!validPageFound) {
+        console.log("Checking page " + (value + skipPages) % pages.value.length);
+        skipPages++;
+
+        nextPageIndex = (value + skipPages) % (pages.value.length);
+        console.log("Next page index: " + nextPageIndex)
+        const nextPage = pages.value[nextPageIndex] ?? null;
+
+        const currentTime = new Date().getTime();
+        const startsAtTime = nextPage.starts_at ? new Date(nextPage.starts_at).getTime() : null;
+        const endsAtTime = nextPage.ends_at ? new Date(nextPage.ends_at).getTime() : null;
+
+        if (startsAtTime && endsAtTime) {
+            if (currentTime >= startsAtTime && currentTime <= endsAtTime) {
+                console.log("Page between both start and end time found")
+                validPageFound = true;
+            }
+        } else if (startsAtTime) {
+            // Only starts_at is set
+            if (currentTime >= startsAtTime) {
+                console.log("Page after start time found")
+                validPageFound = true;
+            }
+        } else if (endsAtTime) {
+            // Only ends_at is set
+            if (currentTime <= endsAtTime) {
+                console.log("Page before end time found")
+                validPageFound = true;
+            }
+        } else {
+            console.log("Page without time found")
+            validPageFound = true;
+        }
+    }
+
+    console.log("Setting Timeout")
+    pageSwitchTimer.value = setTimeout(() => {
+        nextPageIndex = nextPageIndex % (pages.value.length);
+        console.log("Switching to page " + nextPageIndex);
+        activePageIndex.value = nextPageIndex;
+    }, (activePage.value?.duration ?? pages.value[0].duration) * 1000);
 }, {immediate: true});
 
 </script>
@@ -142,13 +221,13 @@ watch(activePageIndex, (value) => {
     <Transition>
         <component
             :connected="isConnected"
-            v-show="mappedPages[activePageIndex].index === activePageIndex"
+            v-show="activePageComponent"
             :screen="screen"
             :schedule="schedule"
             :artworks="artworks"
             :announcements="announcements"
-            :page="mappedPages[activePageIndex]"
-            :is="layouts.find(item => item.component === mappedPages[activePageIndex].layout.component && item.path === mappedPages[activePageIndex].layout.path).resolvedLayout"></component>
+            :page="mappedPages[activePageIndex] ?? {resolvedComponent: Error}"
+            :is="activeLayout"></component>
     </Transition>
 </template>
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,9 @@ class PlaylistItem extends Model
         'page_id' => 'integer',
         'layout_id' => 'integer',
         'content' => 'array',
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     public function playlist(): BelongsTo
@@ -44,6 +48,11 @@ class PlaylistItem extends Model
     public function layout(): BelongsTo
     {
         return $this->belongsTo(Layout::class);
+    }
+
+    protected static function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 
     public function parsedContent(): array

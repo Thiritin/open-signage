@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Events\EmergencyEvent;
 use App\Events\Screens\FirstPingEvent;
 use App\Events\Screens\OfflineEvent;
+use App\Events\UpdateAnnouncementEvent;
 use App\Listeners\EmergencyNotificationsListener;
+use App\Listeners\IncreaseVersionListener;
 use App\Listeners\LogEmergencyListener;
 use App\Listeners\Screens\NotifyAdminScreenAvailable;
 use App\Listeners\Screens\NotifyAdminScreenOnline;
@@ -42,6 +44,15 @@ class EventServiceProvider extends ServiceProvider
         EmergencyEvent::class => [
             EmergencyNotificationsListener::class,
             LogEmergencyListener::class,
+        ],
+        UpdateAnnouncementEvent::class => [
+            IncreaseVersionListener::class,
+        ],
+        \App\Events\UpdateScheduleEvent::class => [
+            IncreaseVersionListener::class,
+        ],
+        \App\Events\UpdateScreenPlaylistEvent::class => [
+            IncreaseVersionListener::class,
         ],
     ];
 

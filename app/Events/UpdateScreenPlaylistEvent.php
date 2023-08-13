@@ -23,7 +23,7 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('Screen.' . $this->screen->id),
+            new Channel('Screen.'.$this->screen->id),
         ];
     }
 
@@ -35,17 +35,21 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'pages' => $this->screen->playlist->playlistItems->map(fn (PlaylistItem $playlistItem) => [
-                'layout' => [
-                    'component' => $playlistItem->layout->component,
-                    'path' => $playlistItem->layout->project->path,
-                ],
-                'path' => $playlistItem->page->project->path,
-                'component' => $playlistItem->page->component,
-                'props' => $playlistItem->parsedContent(),
-                'duration' => $playlistItem->duration,
-                'title' => $playlistItem->title ?? '',
-            ]),
+            'pages' => $this->screen->playlist->playlistItems
+                ->filter(fn(PlaylistItem $playlistItem) => $playlistItem->is_active === true)
+                ->map(fn(PlaylistItem $playlistItem) => [
+                    'layout' => [
+                        'component' => $playlistItem->layout->component,
+                        'path' => $playlistItem->layout->project->path,
+                    ],
+                    'path' => $playlistItem->page->project->path,
+                    'component' => $playlistItem->page->component,
+                    'props' => $playlistItem->parsedContent(),
+                    'duration' => $playlistItem->duration,
+                    'title' => $playlistItem->title ?? '',
+                    'starts_at' => $playlistItem->starts_at,
+                    'ends_at' => $playlistItem->ends_at,
+                ])->values(),
             'screen' => $this->screen,
         ];
     }

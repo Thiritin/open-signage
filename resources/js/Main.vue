@@ -155,11 +155,10 @@ watch(activePageIndex, (value, oldValue) => {
     if (pages.value.length <= 1) return;
 
     // If current page does not match timing requirements skip to next page
-    if (activePage.value.starts_at || activePage.value.ends_at)
-        if (new Date(activePage.value.starts_at).getTime() > new Date().getTime() || new Date(activePage.value.ends_at).getTime() < new Date().getTime()) {
-            console.log("Current page does not match timing requirements, skipping to next page")
-            activePageIndex.value = (value + 1) % pages.value.length;
-        }
+    if ((activePage.value.starts_at && new Date(activePage.value.starts_at).getTime() > new Date().getTime()) || (activePage.value.ends_at && new Date(activePage.value.ends_at).getTime() < new Date().getTime())) {
+        console.log("Current page does not match timing requirements, skipping to next page")
+        activePageIndex.value = (value + 1) % pages.value.length;
+    }
 
     console.log("Clearing Timeout")
     clearTimeout(pageSwitchTimer.value)

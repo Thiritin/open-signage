@@ -29,6 +29,7 @@ class ScreenController extends Controller
         return Inertia::render('Main', [
             'initialPages' => $screen->playlist->playlistItems
                 ->reject(fn(PlaylistItem $playlistItem) => $playlistItem->is_active === false)
+                ->sortBy('sort')
                 ->map(fn(PlaylistItem $playlistItem) => [
                     'layout' => [
                         'component' => $playlistItem->layout->component,

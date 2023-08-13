@@ -37,6 +37,7 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
         return [
             'pages' => $this->screen->playlist->playlistItems
                 ->filter(fn(PlaylistItem $playlistItem) => $playlistItem->is_active === true)
+                ->sortBy('sort')
                 ->map(fn(PlaylistItem $playlistItem) => [
                     'layout' => [
                         'component' => $playlistItem->layout->component,

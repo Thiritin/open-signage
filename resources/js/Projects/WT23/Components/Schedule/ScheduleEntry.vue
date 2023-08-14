@@ -52,7 +52,7 @@ defineProps(['entry'])
             <div class="text-3xl themeFont text-secondary">{{ entry.room.name }}</div>
         </div>
         <div class="flex gap-3">
-            <div class="text-3xl 2xl:text-5xl themeFont rounded p-6" :class="timeBackgroundFont(entry)">
+            <div class="text-3xl 2xl:text-5xl themeFont rounded-r p-6" :class="timeBackgroundFont(entry)">
                 <div class="mb-2 whitespace-nowrap">
                     <HourTime :time="new Date(entry.starts_at).getTime() + (entry.delay * 60 * 1000)"/>
                     -

@@ -34,7 +34,9 @@ class UpdateScheduleEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'schedule' => ScheduleEntry::orderBy('starts_at')->with('room')->get()->toArray(),
+            'schedule' => ScheduleEntry::orderBy('starts_at')->with([
+                'room', 'scheduleType', 'scheduleOrganizer'
+            ])->get()->toArray(),
         ];
     }
 }

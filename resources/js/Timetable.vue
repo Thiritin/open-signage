@@ -1,13 +1,13 @@
 <script setup>
 import 'vue3-carousel/dist/carousel.css'
-import {Carousel, Slide, Pagination, Navigation} from 'vue3-carousel'
+import {Carousel, Slide} from 'vue3-carousel'
 import HourTime from "@/Components/HourTime.vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 
 const cleanUpPrevention = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6', 'grid-cols-7', 'grid-cols-8']
 
 const props = defineProps({
-    schedule: {
+    initialSchedule: {
         type: Array,
         required: true
     },
@@ -27,9 +27,16 @@ const props = defineProps({
     },
 })
 
+const schedule = ref(props.initialSchedule)
+
+Echo.channel('ScreenAll')
+    .listen('.schedule.update', (e) => {
+        schedule.value = e.schedule;
+    })
+
 const groupedSchedule = computed(() => {
     // Group by date
-    let groupedByDate = props.schedule.filter((entry) => {
+    return schedule.value.filter((entry) => {
         if (props.showDate) {
             return (new Date(entry.starts_at)).getDate() === (new Date(props.showDate)).getDate();
         }
@@ -42,8 +49,6 @@ const groupedSchedule = computed(() => {
         grouped[date].push(entry);
         return grouped;
     }, {});
-
-    return groupedByDate;
 })
 
 
@@ -107,6 +112,19 @@ function returnDivOrComponent(component) {
     return 'div';
 }
 
+function isCurrentTimeBetween(startTime, endTime, delay) {
+    const now = new Date();
+    const startTimeCompare = new Date(new Date(startTime).getTime() + delay * 60 * 1000);
+    const endTimeCompare = new Date(new Date(endTime).getTime() + delay * 60 * 1000);
+    return now >= startTimeCompare && now <= endTimeCompare;
+}
+
+function entryInPast(entry) {
+    const now = new Date();
+    const endTimeCompare = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 60 * 1000 ?? 0));
+    return now.getTime() >= endTimeCompare.getTime();
+}
+
 </script>
 
 <template>
@@ -140,21 +158,49 @@ function returnDivOrComponent(component) {
                                 <div class="p-2 text-left">
                                     <!-- Event Name -->
                                     <div class="border-b pb-1 mb-1 border-primary-500 text-primary-950">
-                                        <div
-                                            class="text-sm font-bold">
+                                        <div class="flex justify-between gap-3">
+                                            <div
+                                                class="text-sm font-bold">
                                                 <span
                                                     v-if="panel.flags.find((f) => f === 'after_dark')">[After Dark] </span>{{
-                                                panel.title
-                                            }}
+                                                    panel.title
+                                                }}
+                                            </div>
+                                            <div class="text-white text-sm">
+                                                <div v-if="isCurrentTimeBetween(panel.starts_at,panel.ends_at,(panel.delay ?? 0))">
+                                                    <div
+                                                        class="flex bg-green-600 font-bold w-fit justify-between items-center align-middle gap-2 px-2 themeFontSecondary">
+                                                        <div class="animate-blink rounded-full bg-white h-3 w-3"></div>
+                                                        <div class="whitespace-nowrap">IN PROGRESS</div>
+                                                    </div>
+                                                </div>
+                                                <div v-else-if="panel.flags.find((e) => e === 'cancelled')" class="rounded">
+                                                    <div class="font-mono px-1 font-bold text-center w-full bg-black">
+                                                        CANCELLED
+                                                    </div>
+                                                </div>
+                                                <div v-else-if="panel.flags.find((e) => e === 'moved')" class="rounded">
+                                                    <div class="font-mono px-1 font-bold text-center w-full bg-yellow-600">
+                                                        MOVED
+                                                    </div>
+                                                </div>
+                                                <div v-else-if="panel.delay && !entryInPast(panel)" class="rounded">
+                                                    <div class="font-mono px-1 font-bold text-center w-full bg-red-900">
+                                                        DELAYED
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div v-if="panel.schedule_organizer" class="text-xs">Organized by {{panel.schedule_organizer.name}}</div>
+                                        <div v-if="panel.schedule_organizer" class="text-xs">Organized by
+                                            {{ panel.schedule_organizer.name }}
+                                        </div>
                                     </div>
                                     <!-- Event Time -->
                                     <div class="flex justify-between text-sm font-semibold">
                                         <div class="text-primary-700">
-                                            <HourTime :time="panel.starts_at"></HourTime>
+                                            <HourTime :time="new Date(panel.starts_at).getTime() + (panel.delay * 60 * 1000)"/>
                                             -
-                                            <HourTime :time="panel.ends_at"></HourTime>
+                                            <HourTime :time="new Date(panel.ends_at).getTime() + (panel.delay * 60 * 1000)"/>
                                         </div>
                                         <div>
                                             {{ panel.room.name }}
@@ -194,5 +240,22 @@ function returnDivOrComponent(component) {
 
 .carousel__slide {
     display: block !important;
+}
+
+/* Styles for the animated blinking effect */
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.animate-blink {
+    animation: blink 1s infinite;
 }
 </style>

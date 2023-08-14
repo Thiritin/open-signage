@@ -157,7 +157,7 @@ function entryInPast(entry) {
                                 class="bg-primary-100 rounded">
                                 <div class="p-2 text-left">
                                     <!-- Event Name -->
-                                    <div class="border-b pb-1 mb-1 border-primary-500 text-primary-950">
+                                    <div class="pb-1 text-primary-950">
                                         <div class="flex justify-between gap-3">
                                             <div
                                                 class="text-sm font-bold">
@@ -172,12 +172,13 @@ function entryInPast(entry) {
                                                     <div
                                                         class="flex bg-green-600 rounded font-bold w-fit justify-between items-center align-middle gap-2 px-2 themeFontSecondary">
                                                         <div class="animate-blink rounded-full bg-white h-3 w-3"></div>
-                                                        <div class="whitespace-nowrap">IN PROGRESS</div>
+                                                        <div class="whitespace-nowrap">NOW</div>
                                                     </div>
                                                 </div>
                                                 <div v-else-if="panel.flags.find((e) => e === 'cancelled')"
                                                      class="rounded">
-                                                    <div class="font-mono px-1 font-bold text-center w-full bg-black rounded">
+                                                    <div
+                                                        class="font-mono px-1 font-bold text-center w-full bg-black rounded">
                                                         CANCELLED
                                                     </div>
                                                 </div>
@@ -188,7 +189,8 @@ function entryInPast(entry) {
                                                     </div>
                                                 </div>
                                                 <div v-else-if="panel.delay && !entryInPast(panel)" class="rounded">
-                                                    <div class="font-mono px-1 font-bold text-center w-full bg-red-900 rounded">
+                                                    <div
+                                                        class="font-mono px-1 font-bold text-center w-full bg-red-900 rounded">
                                                         DELAYED
                                                     </div>
                                                 </div>
@@ -198,27 +200,32 @@ function entryInPast(entry) {
                                             {{ panel.schedule_organizer.name }}
                                         </div>
                                     </div>
+                                    <div class="border-b border-primary-500 mb-1"></div>
                                     <!-- Event Time -->
-                                    <div class="flex justify-between text-sm font-semibold">
-                                        <div>
-                                            <div :class="{'font-bold': panel.delay > 0 && !entryInPast(panel)}">
-                                                <HourTime
-                                                    :time="new Date(panel.starts_at).getTime() + (panel.delay * 60 * 1000)"/>
-                                                -
-                                                <HourTime
-                                                    :time="new Date(panel.ends_at).getTime() + (panel.delay * 60 * 1000)"/>
+                                    <div>
+                                        <div class="flex justify-between text-sm font-semibold">
+                                            <div>
+                                                <div v-if="panel.delay > 0 && !entryInPast(panel)"
+                                                     class="line-through opacity-60  text-left text-xs">
+                                                    <HourTime :time="new Date(panel.starts_at).getTime()"/>
+                                                    -
+                                                    <HourTime :time="new Date(panel.ends_at).getTime()"/>
+                                                </div>
+                                                <div :class="{'font-bold': panel.delay > 0 && !entryInPast(panel)}">
+                                                    <HourTime
+                                                        :time="new Date(panel.starts_at).getTime() + (panel.delay * 60 * 1000)"/>
+                                                    -
+                                                    <HourTime
+                                                        :time="new Date(panel.ends_at).getTime() + (panel.delay * 60 * 1000)"/>
+                                                </div>
                                             </div>
-                                            <div v-if="panel.delay > 0 && !entryInPast(panel)"
-                                                 class="line-through text-center text-xs">
-                                                <HourTime :time="new Date(panel.starts_at).getTime()"/>
-                                                -
-                                                <HourTime :time="new Date(panel.ends_at).getTime()"/>
+                                            <div>
+                                                {{ panel.room.name }}
                                             </div>
-                                        </div>
-                                        <div>
-                                            {{ panel.room.name }}
                                         </div>
                                     </div>
+
+                                    <div v-if="panel.message" class="text-xs mt-2 p-1 rounded bg-white font-semibold">{{ panel.message }}</div>
                                 </div>
                             </div>
                         </div>

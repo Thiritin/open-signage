@@ -45,6 +45,7 @@ defineProps(['entry'])
 <template>
     <Card class="text-white bg-primary-500 flex justify-between flex-row">
         <div class="p-6">
+            <div v-if="entry.message" class="text-3xl mb-3 rounded font-semibold text-red-700 bg-white p-2">{{ entry.message }}</div>
             <div class="text-4xl themeFont">
                 <span v-if="entry.flags.find((f) => f === 'after_dark')">[After Dark] </span>
                 {{ entry.title }}

@@ -139,12 +139,15 @@ function returnDivOrComponent(component) {
                                 class="bg-primary-100 rounded">
                                 <div class="p-2 text-left">
                                     <!-- Event Name -->
-                                    <div
-                                        class="text-primary-950 text-sm border-b pb-1 mb-1 border-primary-500 font-bold">
+                                    <div class="border-b pb-1 mb-1 border-primary-500 text-primary-950">
+                                        <div
+                                            class="text-sm font-bold">
                                                 <span
                                                     v-if="panel.flags.find((f) => f === 'after_dark')">[After Dark] </span>{{
-                                            panel.title
-                                        }}
+                                                panel.title
+                                            }}
+                                        </div>
+                                        <div v-if="panel.schedule_organizer" class="text-xs">Organized by {{panel.schedule_organizer.name}}</div>
                                     </div>
                                     <!-- Event Time -->
                                     <div class="flex justify-between text-sm font-semibold">

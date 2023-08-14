@@ -51,6 +51,7 @@ defineProps(['entry'])
                 {{ entry.title }}
             </div>
             <div class="text-3xl themeFont text-secondary">{{ entry.room.name }}</div>
+            <div class="text-2xl themeFontSecondary text-white">{{ entry.description }}</div>
         </div>
         <div class="flex gap-3">
             <div class="text-3xl 2xl:text-5xl themeFont rounded-r p-6" :class="timeBackgroundFont(entry)">

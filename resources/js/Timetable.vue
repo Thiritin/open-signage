@@ -170,25 +170,25 @@ function entryInPast(entry) {
                                                 <div
                                                     v-if="isCurrentTimeBetween(panel.starts_at,panel.ends_at,(panel.delay ?? 0))">
                                                     <div
-                                                        class="flex bg-green-600 font-bold w-fit justify-between items-center align-middle gap-2 px-2 themeFontSecondary">
+                                                        class="flex bg-green-600 rounded font-bold w-fit justify-between items-center align-middle gap-2 px-2 themeFontSecondary">
                                                         <div class="animate-blink rounded-full bg-white h-3 w-3"></div>
                                                         <div class="whitespace-nowrap">IN PROGRESS</div>
                                                     </div>
                                                 </div>
                                                 <div v-else-if="panel.flags.find((e) => e === 'cancelled')"
                                                      class="rounded">
-                                                    <div class="font-mono px-1 font-bold text-center w-full bg-black">
+                                                    <div class="font-mono px-1 font-bold text-center w-full bg-black rounded">
                                                         CANCELLED
                                                     </div>
                                                 </div>
                                                 <div v-else-if="panel.flags.find((e) => e === 'moved')" class="rounded">
                                                     <div
-                                                        class="font-mono px-1 font-bold text-center w-full bg-yellow-600">
+                                                        class="font-mono px-1 font-bold text-center w-full bg-yellow-600 rounded">
                                                         MOVED
                                                     </div>
                                                 </div>
                                                 <div v-else-if="panel.delay && !entryInPast(panel)" class="rounded">
-                                                    <div class="font-mono px-1 font-bold text-center w-full bg-red-900">
+                                                    <div class="font-mono px-1 font-bold text-center w-full bg-red-900 rounded">
                                                         DELAYED
                                                     </div>
                                                 </div>

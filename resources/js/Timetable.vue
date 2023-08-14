@@ -167,20 +167,23 @@ function entryInPast(entry) {
                                                 }}
                                             </div>
                                             <div class="text-white text-sm">
-                                                <div v-if="isCurrentTimeBetween(panel.starts_at,panel.ends_at,(panel.delay ?? 0))">
+                                                <div
+                                                    v-if="isCurrentTimeBetween(panel.starts_at,panel.ends_at,(panel.delay ?? 0))">
                                                     <div
                                                         class="flex bg-green-600 font-bold w-fit justify-between items-center align-middle gap-2 px-2 themeFontSecondary">
                                                         <div class="animate-blink rounded-full bg-white h-3 w-3"></div>
                                                         <div class="whitespace-nowrap">IN PROGRESS</div>
                                                     </div>
                                                 </div>
-                                                <div v-else-if="panel.flags.find((e) => e === 'cancelled')" class="rounded">
+                                                <div v-else-if="panel.flags.find((e) => e === 'cancelled')"
+                                                     class="rounded">
                                                     <div class="font-mono px-1 font-bold text-center w-full bg-black">
                                                         CANCELLED
                                                     </div>
                                                 </div>
                                                 <div v-else-if="panel.flags.find((e) => e === 'moved')" class="rounded">
-                                                    <div class="font-mono px-1 font-bold text-center w-full bg-yellow-600">
+                                                    <div
+                                                        class="font-mono px-1 font-bold text-center w-full bg-yellow-600">
                                                         MOVED
                                                     </div>
                                                 </div>
@@ -197,10 +200,20 @@ function entryInPast(entry) {
                                     </div>
                                     <!-- Event Time -->
                                     <div class="flex justify-between text-sm font-semibold">
-                                        <div class="text-primary-700">
-                                            <HourTime :time="new Date(panel.starts_at).getTime() + (panel.delay * 60 * 1000)"/>
-                                            -
-                                            <HourTime :time="new Date(panel.ends_at).getTime() + (panel.delay * 60 * 1000)"/>
+                                        <div>
+                                            <div :class="{'font-bold': panel.delay > 0 && !entryInPast(panel)}">
+                                                <HourTime
+                                                    :time="new Date(panel.starts_at).getTime() + (panel.delay * 60 * 1000)"/>
+                                                -
+                                                <HourTime
+                                                    :time="new Date(panel.ends_at).getTime() + (panel.delay * 60 * 1000)"/>
+                                            </div>
+                                            <div v-if="panel.delay > 0 && !entryInPast(panel)"
+                                                 class="line-through text-center text-xs">
+                                                <HourTime :time="new Date(panel.starts_at).getTime()"/>
+                                                -
+                                                <HourTime :time="new Date(panel.ends_at).getTime()"/>
+                                            </div>
                                         </div>
                                         <div>
                                             {{ panel.room.name }}

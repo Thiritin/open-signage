@@ -56,7 +56,7 @@ defineProps(['entry'])
         <div class="flex gap-3">
             <div class="text-3xl 2xl:text-5xl themeFont rounded-r p-6" :class="timeBackgroundFont(entry)">
                 <div class="mb-2 whitespace-nowrap">
-                    <div v-if="entry.delay > 0 && !entryInPast(entry)" :class="{'line-through text-3xl text-red-100 text-center': entry.delay > 0}">
+                    <div v-if="entry.delay > 0 && !entryInPast(entry)" :class="{'line-through text-red-100 text-center': entry.delay > 0}">
                     <HourTime :time="new Date(entry.starts_at).getTime()"/>
                     -
                     <HourTime :time="new Date(entry.ends_at).getTime()"/>

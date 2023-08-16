@@ -89,7 +89,7 @@ defineProps(['entry'])
                 </div>
                 <div v-else-if="entry.delay && !entryInPast(entry)" class="rounded">
                     <div class="font-mono p-2 text-2xl font-bold text-center w-full bg-red-900">
-                        DELAYED
+                        DELAYED +{{entry.delay}}m
                     </div>
                 </div>
                 <div v-else-if="entryInPast(entry)">

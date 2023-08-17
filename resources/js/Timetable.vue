@@ -52,7 +52,7 @@ const groupedSchedule = computed(() => {
           }
           return true;
     }).reduce((grouped, entry) => {
-        let date = entry.starts_at.split('T')[0];
+        let date = entry.ends_at.split('T')[0];
         if (!grouped[date]) {
             grouped[date] = [];
         }

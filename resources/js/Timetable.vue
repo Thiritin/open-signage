@@ -234,7 +234,7 @@ function entryInPast(entry) {
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div v-if="panel.description" class="text-xs mt-1">{{ panel.description }}</div>
                                     <div v-if="panel.message" class="text-xs mt-2 p-1 rounded bg-white font-semibold">{{ panel.message }}</div>
                                 </div>
                             </div>

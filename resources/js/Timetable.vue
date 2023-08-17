@@ -36,7 +36,11 @@ Echo.channel('ScreenAll')
 
 const groupedSchedule = computed(() => {
     // Group by date
-    return schedule.value.filter((entry) => {
+    return schedule.value
+        .filter((entry) => {
+            return true;
+        })
+        .filter((entry) => {
           if (props.showDate) {
             return (new Date(entry.starts_at)).getDate() === (new Date(props.showDate)).getDate();
           }

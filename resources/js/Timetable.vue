@@ -43,7 +43,7 @@ const groupedSchedule = computed(() => {
             const start = new Date(entry.starts_at);
             const end = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 1000 * 60));
 
-            return (end.getDate() >= now.getDate() || start.getDate() >= now.getDate())
+            return (end.getDate() >= now.getDate())
             return true;
         })
         .filter((entry) => {

@@ -28,6 +28,7 @@ const props = defineProps({
 })
 
 const schedule = ref(props.initialSchedule)
+const currentTime = ref(new Date());
 
 Echo.channel('ScreenAll')
     .listen('.schedule.update', (e) => {
@@ -38,6 +39,11 @@ const groupedSchedule = computed(() => {
     // Group by date
     return schedule.value
         .filter((entry) => {
+            const now = currentTime.value;
+            const start = new Date(entry.starts_at);
+            const end = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 1000 * 60));
+
+            return (end.getDate() >= now.getDate() || start.getDate() >= now.getDate())
             return true;
         })
         .filter((entry) => {

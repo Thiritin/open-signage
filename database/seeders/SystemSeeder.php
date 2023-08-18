@@ -83,6 +83,11 @@ class SystemSeeder extends Seeder
                     'property' => 'streamUrl',
                     'type' => 'TextInput',
                 ],
+                [
+                    'name' => 'Audio Muted',
+                    'property' => 'muted',
+                    'type' => 'Checkbox',
+                ],
             ],
         ]);
 

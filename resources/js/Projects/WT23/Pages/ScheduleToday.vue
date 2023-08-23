@@ -104,7 +104,7 @@ const filteredSchedule = computed(() => {
         const end = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 1000 * 60));
 
         if (props.showToday === true) {
-            return (end.getDate() === now.getDate())
+            return (end.getDate() === now.getDate() || start.getDate() === now.getDate())
         }
 
         if (props.showDate !== null) {

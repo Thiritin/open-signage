@@ -28,6 +28,7 @@ const props = defineProps({
 })
 
 const schedule = ref(props.initialSchedule)
+const currentTime = ref(new Date());
 
 Echo.channel('ScreenAll')
     .listen('.schedule.update', (e) => {
@@ -36,13 +37,22 @@ Echo.channel('ScreenAll')
 
 const groupedSchedule = computed(() => {
     // Group by date
-    return schedule.value.filter((entry) => {
-        if (props.showDate) {
+    return schedule.value
+        .filter((entry) => {
+            const now = currentTime.value;
+            const start = new Date(entry.starts_at);
+            const end = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 1000 * 60));
+
+            return (end.getDate() >= now.getDate())
+            return true;
+        })
+        .filter((entry) => {
+          if (props.showDate) {
             return (new Date(entry.starts_at)).getDate() === (new Date(props.showDate)).getDate();
-        }
-        return true;
+          }
+          return true;
     }).reduce((grouped, entry) => {
-        let date = entry.starts_at.split('T')[0];
+        let date = entry.ends_at.split('T')[0];
         if (!grouped[date]) {
             grouped[date] = [];
         }
@@ -224,7 +234,7 @@ function entryInPast(entry) {
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div v-if="panel.description" class="text-xs mt-1">{{ panel.description }}</div>
                                     <div v-if="panel.message" class="text-xs mt-2 p-1 rounded bg-white font-semibold">{{ panel.message }}</div>
                                 </div>
                             </div>

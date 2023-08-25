@@ -6,6 +6,10 @@ const props = defineProps({
         type: Array,
         default: []
     },
+    page: {
+        type: Object,
+        required: false
+    },
     announcements: {
         type: Array,
         default: []
@@ -30,6 +34,7 @@ const props = defineProps({
 import ScheduleEntry from "@/Projects/WT23/Components/Schedule/ScheduleEntry.vue";
 import AnnouncementCard from "@/Projects/WT23/Components/AnnouncementCard.vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
+import IconRouter from "@/Projects/System/Components/IconRouter.vue";
 
 const scrollLeft = ref(null);
 const scrollRight = ref(null);
@@ -130,7 +135,11 @@ const hasFilteredSchedule = computed(() => {
 </script>
 
 <template>
+    <div>
+        <IconRouter :path="page.path" class="h-24 w-24" icon="Arrow" :mirror="true" :rotation="90"></IconRouter>
+    </div>
     <div
+        v-if="false"
         class="gap-8 overflow-hidden flex flex-col mx-4"
         :class="{'xl:flex-row': hasFilteredAnnouncements && hasFilteredSchedule}">
         <div ref="scrollLeft" class="overflow-auto flex-grow pt-6 pb-6" :class="{'xl:w-1/2': hasFilteredAnnouncements}"

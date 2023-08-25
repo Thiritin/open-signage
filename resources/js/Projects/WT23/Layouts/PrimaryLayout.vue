@@ -12,6 +12,7 @@ let attrs = reactive(useAttrs());
 const usableAttributes = computed(() => {
     return {
         ...attrs,
+        page: props.page,
         ...props.page.props
     }
 })

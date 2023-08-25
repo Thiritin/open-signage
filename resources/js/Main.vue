@@ -150,6 +150,10 @@ const activePageComponent = computed(() => {
     return page?.resolvedComponent ?? Error;
 });
 
+function nextPage() {
+    activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;
+}
+
 watch(activePageIndex, (value, oldValue) => {
     if (value === oldValue) return;
     if (pages.value.length <= 1) return;

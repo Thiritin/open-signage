@@ -30,3 +30,4 @@ Route::get('/', function () {
 })->name('login');
 
 Route::get('timetable', \App\Http\Controllers\TimetableController::class)->name('timetable');
+Route::get('efsched', \App\Http\Controllers\EurofurenceScheduleController::class)->name('efsched');

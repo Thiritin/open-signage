@@ -23,11 +23,14 @@
         "tailwindcss": "^3.2.1",
         "vite": "^4.0.0",
         "vue": "^3.2.41",
-        "vue3-carousel": "^0.3.1"
+        "vue3-carousel": "^0.3.1",
+        "animejs": "^3.2.1",
+        "lodash": "^4.17.21",
+        "moment": "^2.29.4",
+        "xregexp": "^5.1.1"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.22.10",
-        "@babel/runtime": "^7.22.10",
-        "@vitejs/plugin-legacy": "^4.1.1"
+        "terser": "^5.19.2",
+        "vite-svg-loader": "^4.0.0"
     }
 }

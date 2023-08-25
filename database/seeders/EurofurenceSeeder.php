@@ -17,5 +17,21 @@ class EurofurenceSeeder extends Seeder
             'path' => 'EF27',
             'name' => 'Eurofurence 27',
         ]);
+
+        // Create Primary Layout
+        $layout = $project->layouts()->updateOrCreate([
+            "component" => "PrimaryLayout",
+        ],[
+            'name' => 'Primary',
+            "component" => "PrimaryLayout",
+        ]);
+
+        $page = $project->pages()->updateOrCreate([
+            'component' => "Signpost",
+        ],[
+            'name' => "Signpost",
+            'component' => "Signpost",
+            'schema' => [],
+        ]);
     }
 }

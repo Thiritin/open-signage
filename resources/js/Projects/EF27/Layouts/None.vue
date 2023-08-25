@@ -8,6 +8,7 @@ defineOptions({
 let attrs = useAttrs();
 attrs = {
     ...attrs,
+    page: props.page,
     ...props.page.props
 }
 

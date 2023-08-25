@@ -18,6 +18,7 @@ let attrs = reactive(useAttrs());
 const usableAttributes = computed(() => {
     return {
         ...attrs,
+        page: props.page,
         ...props.page.props
     }
 })
@@ -28,13 +29,11 @@ const usableAttributes = computed(() => {
 
     <!-- animated background -->
     <div class="absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center">
-
         <TransmutationCircle/>
 
         <MaskSVG style="z-index: 3; width: 700px; height: 700px;" class="absolute bottom-5 flex"/>
         <MagicMist/>
         <LogoSVG style="z-index: 5; width: 700px; height: 700px;" class="absolute flex bottom-5"/>
-
     </div>
 
     <Time/>

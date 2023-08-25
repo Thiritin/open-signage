@@ -131,7 +131,7 @@ function MagicMist(uid, canvas, options = {}) {
         } catch (e) {
             console.error(e);
             localStorage.removeItem('layer_' + this.idx + '_particles');
-            for (var i = 0; i < this.particlesCount; ++i) {
+            for (var i = 0; i < this.particleCount; ++i) {
                 this.particles.push(new Particle(i, this.particles, this.bufferCanvas, this.bufferContext, options.particleOptions));
             }
             localStorage.setItem('layer_' + this.idx + '_particles', JSON.stringify(this.particles));

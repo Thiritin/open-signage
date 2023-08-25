@@ -135,8 +135,9 @@ class ScreenResource extends Resource
                     ->label('Playlist')
                     ->selectablePlaceholder(false)
                     ->disabled(fn(Screen $screen) => $screen->isEmergency())
-                    ->options(\App\Models\Playlist::whereHas('playlistItems')->normal()->pluck('name',
-                        'id')->toArray()),
+                    ->options(\App\Models\Playlist::whereHas('playlistItems')
+                        ->normal()
+                        ->pluck('name', 'id')->toArray()),
 
                 TextInputColumn::make('name')
                     ->searchable()

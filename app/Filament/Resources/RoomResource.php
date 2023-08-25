@@ -31,6 +31,11 @@ class RoomResource extends Resource
                 TextInput::make('name')
                     ->required(),
 
+                TextInput::make('venue_name'),
+                TextInput::make('external_name')
+                    ->helperText('Name from any external system.')
+                    ->hint('Do not modify if you don\'t know what you are doing.'),
+
                 Placeholder::make('created_at')
                     ->label('Created Date')
                     ->content(fn (?Room $record): string => $record?->created_at?->diffForHumans() ?? '-'),

@@ -20,16 +20,47 @@ class RoomsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->reactive()
+                    ->columnSpanFull()
                     ->maxLength(255),
-                Forms\Components\Select::make('direction')
-                    ->required()
-                    ->options([
-                        'left' => 'Left',
-                        'right' => 'Right',
-                        'top' => 'Top',
-                        'bottom' => 'Bottom',
-                    ]),
+
                 Forms\Components\Checkbox::make('primary'),
+
+                Forms\Components\CheckboxList::make('flags')->options([
+                    'first_aid' => 'First Aid',
+                    'wheelchair' => 'Wheelchair Friendly',
+                ]),
+
+                Forms\Components\Section::make('Icon')->columns()->schema([
+
+                    Forms\Components\Select::make('icon')
+                        ->required()
+                        ->reactive()
+                        ->options(config('icons.icons')),
+
+                    Forms\Components\TextInput::make('rotation')
+                        ->minValue(0)
+                        ->maxValue(359)
+                        ->numeric()
+                        ->required()
+                        ->reactive()
+                        ->datalist([
+                            '0',
+                            '45',
+                            '90',
+                            '135',
+                            '180',
+                            '225',
+                            '270',
+                            '315',
+                        ])
+                        ->visible(fn(Forms\Get $get) => in_array($get('icon'),config('icons.rotateable')))
+                        ->default(0),
+
+                    Forms\Components\Checkbox::make('mirror')
+                        ->visible(fn(Forms\Get $get) => in_array($get('icon'),config('icons.mirrorable')))
+                        ->default(false),
+                ]),
             ]);
     }
 

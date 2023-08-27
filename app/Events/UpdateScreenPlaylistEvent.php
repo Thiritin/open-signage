@@ -52,7 +52,7 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
                     'starts_at' => $playlistItem->starts_at,
                     'ends_at' => $playlistItem->ends_at,
                 ])->values(),
-            'screen' => $this->screen,
+            'screen' => $screen,
         ];
     }
 }

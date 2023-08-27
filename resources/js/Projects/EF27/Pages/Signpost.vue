@@ -1,11 +1,61 @@
 <script setup>
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 
 const props = defineProps({
     title: {
         type: String,
         default: "Event Rooms"
+    },
+    schedule: {
+        type: Array,
+        default: []
+    },
+    screen:{
+        type: Array,
+        default: []
+    },
+    page: {
+        type: Object,
+        required: false
+    },
+    announcements: {
+        type: Array,
+        default: []
+    },
+    showAnnouncements: {
+        type: Boolean,
+        default: true
+    },
+    showSchedule: {
+        type: Boolean,
+        default: true
+    },
+    showDate: {
+        type: String,
+        required: false
+    },
+    showToday: {
+        type: Boolean,
+        required: false
     }
+
+})
+
+const currentTime = ref(DateTime.now());
+
+onMounted(() => {
+    const interval = setInterval(() => {
+        currentTime.value = DateTime.now();
+    }, 5000)
+    onUnmounted(() => {
+        clearInterval(interval);
+    })
+})
+
+const nextEvent = computed(() => {
+    return props.schedule.filter(event => {
+        return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
+    })[0]
 })
 
 import LogoSVG from '@/Projects/EF27/Assets/images/logoEF27e.svg';
@@ -13,6 +63,8 @@ import straightSVG from '@/Projects/EF27/Assets/images/straight.svg';
 import rightSVG from '@/Projects/EF27/Assets/images/right.svg';
 import wheelchairSVG from '@/Projects/EF27/Assets/images/wheelchair.svg';
 import MaskSVG from "@/Projects/EF27/Assets/images/logoEF27Mask.svg";
+import IconRouter from "@/Projects/System/Components/IconRouter.vue";
+import {DateTime} from "luxon";
 
 </script>
 
@@ -20,45 +72,22 @@ import MaskSVG from "@/Projects/EF27/Assets/images/logoEF27Mask.svg";
 
     <h1 class="text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>
 
-    <!--    Beispielinhalt-->
-    <div class="flex flex-col relative z-30 text-7xl min-w-full magicTextColor top-5 magic-text">
+    <div v-for="item in screen.rooms" class="flex flex-col relative z-30 text-7xl min-w-full magicTextColor top-5 magic-text">
         <div class="mx-12 my-8 flex flex-row z-40 items-center ">
-            <straightSVG style="width: 192px; height: 192px; filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));"/>
+
+            <IconRouter style="filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));" :path="page.path" class="h-48 w-48" :icon="item.pivot.icon" :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
+
             <div ref="section" class="flex flex-col mx-12 z-40">
                 <p class="text text-9xl flex text-left items-center">
-                    Art Show <span class="text text-7xl"> @CCH Hall H Section III</span>
+                    {{ item.name }} <span class="text text-7xl"> {{ item.venue_name }} </span>
                 </p>
                 <p class="text text-7xl flex text-left items-center">
-                    Open
+                    {{ nextEvent.title }}
                 </p>
             </div>
-        </div>
-    </div>
-    <div class="flex flex-col relative z-30 text-7xl min-w-full magicTextColor top-5 magic-text">
-        <div class="mx-12 my-8 flex flex-row z-40 items-center ">
-            <straightSVG style="width: 192px; height: 192px; filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));"/>
-            <div ref="section" class="flex flex-col mx-12 z-40">
-                <p class="text text-9xl flex text-left items-center">
-                    Theater Stage <span class="text text-7xl"> @CCH Hall 3</span>
-                </p>
-                <p class="text text-7xl flex text-left items-center">
-                    Next: 17:00 Opening Ceremony
-                </p>
-            </div>
-            <wheelchairSVG style="width: 128px; height: 128px; filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));"/>
-        </div>
-    </div>
-    <div class="flex flex-col relative z-30 text-7xl min-w-full magicTextColor top-5 magic-text">
-        <div class="mx-12 my-8 flex flex-row z-40 items-center ">
-            <rightSVG style="width: 192px; height: 192px; filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));"/>
-            <div ref="section" class="flex flex-col z-40 flex-grow">
-                <p class="text text-9xl flex text-left items-center">
-                    Dance Stage <span class="text text-7xl"> @1st Floor CCH Hall 4</span>
-                </p>
-                <p ref="text1" class="text text-7xl flex text-left items-center">
-                    Next: 21:30 Midnight in the Magic Forest
-                </p>
-            </div>
+
+            <IconRouter v-if="item.pivot.flags.includes('wheelchair')" style="filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));" :path="page.path" class="h-24 w-24" icon="Wheelchair"></IconRouter>
+
         </div>
     </div>
 
@@ -123,7 +152,7 @@ body {
 .magic-text {
     position: relative;
     user-select: none;
-    //font-family: 'primaryThemeFont', sans-serif;
+//font-family: 'primaryThemeFont', sans-serif;
     white-space: pre;
 }
 

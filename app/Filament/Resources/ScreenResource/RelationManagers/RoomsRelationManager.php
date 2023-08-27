@@ -71,7 +71,10 @@ class RoomsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('pivot.direction')->label('Direction'),
+                Tables\Columns\TextColumn::make('pivot.icon')->label('Icon'),
+                Tables\Columns\TextColumn::make('pivot.rotation')->label('Rotation'),
+                Tables\Columns\IconColumn::make('pivot.mirror')->boolean()->label('Mirrored'),
+                Tables\Columns\TextColumn::make('pivot.flags')->badge()->label('Flags'),
                 Tables\Columns\IconColumn::make('pivot.primary')->boolean()->label('Primary'),
             ])
             ->filters([

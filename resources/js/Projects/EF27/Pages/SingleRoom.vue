@@ -25,6 +25,26 @@ onMounted(() => {
     })
 })
 
+function getDayDescription(starts_at) {
+    // Parse the starts_at date string into a Luxon DateTime object
+    const eventDate = DateTime.fromISO(starts_at).startOf("day");
+
+    // Get the current date and set it to the start of the day (00:00:00)
+    const currentDate = DateTime.local().startOf("day");
+
+    // Calculate the difference in days between the event date and the current date
+    const diffInDays = eventDate.diff(currentDate, "days").days;
+
+    // Check the difference and return the appropriate string
+    if (diffInDays === 0) {
+        return null; // Return nothing if the date is today
+    } else if (diffInDays === 1) {
+        return "Tomorrow"; // Return "Tomorrow" if the date is tomorrow
+    } else {
+        return eventDate.toFormat("EEEE"); // Return the weekday name for any other date
+    }
+}
+
 const primaryRoom = computed(() => {
     return props.screen.rooms.find(room => room.pivot.primary)
 })
@@ -50,7 +70,7 @@ const nextEvent = computed(() => {
                 <HourTime :time="DateTime.fromISO(nextEvent.ends_at).plus({minutes: nextEvent.delay})"/>
             </div>
             <div class="magicTextColor text-[4vw] leading-none">
-                Tomorrow
+                {{ getDayDescription(nextEvent.starts_at) }}
             </div>
             <div v-if="nextEvent.delay > 0" class="text-[5vw] leading-normal opacity-40 magicTextColor text-center">
                 <HourTime :time="nextEvent.starts_at"/>

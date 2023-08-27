@@ -1,6 +1,6 @@
 <script setup>
 import Time from "@/Projects/EF27/Components/CurrentTime.vue";
-import TransmutationCircle from "@/Projects/EF27/Components/TransmutationCircle2.vue";
+import TransmutationCircle from "@/Projects/EF27/Components/TransmutationCircle.vue";
 import MagicMist from "@/Projects/EF27/Components/MagicMist.vue";
 
 import {computed, onMounted, onUnmounted, ref} from "vue";
@@ -394,19 +394,20 @@ function loadContent(rows = [], data = [], offset = 0) {
         <TransmutationCircle/>
 
         <MaskSVG style="z-index: 3; width: 700px; height: 700px;" class="absolute bottom-5 flex"/>
-        <MagicMist/>
+        <MagicMist color="purple"/>
         <LogoSVG style="z-index: 5; width: 700px; height: 700px;" class="absolute flex bottom-5"/>
 
     </div>
 
-    <Time/>
+    <Time hourglass="true"/>
 
-    <h1 class="text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>
+    <h1 class="text-center text-[5vw] top-1 mt-2 magicTextColor themeFont">{{ title }}</h1>
 
-    <div ref="table" class="flex flex-col relative z-10 text-7xl min-w-full magicTextColor top-5 magic-text themeFontSecondary">
-        <div ref="row0" class="flex flex-row flex-nowrap relative invisible py-8 items-start">
+    <div ref="table" class="flex flex-col relative z-10 text-[4vw] min-w-full magicTextColor magic-text themeFontSecondary">
+
+        <div ref="row0" class="flex flex-row flex-nowrap relative invisible py-4 items-start">
             <div class="relative flex flex-col flex-1 text-justify items-start">
-                <div class="flex flex-row flex-nowrap relative items-baseline">
+                <div class="relative flex flex-row flex-nowrap  items-baseline">
                     <div ref="time00"
                          class="pl-4 relative flex flex-row flex-nowrap flex-shrink-0 text-justify align-top w-digit-45">
                         00:00
@@ -418,16 +419,19 @@ function loadContent(rows = [], data = [], offset = 0) {
                     </div>
                 </div>
                 <div ref="sating0"
-                     class="relative flex flex-row flex-nowrap flex-shrink-0 text-justify align-top text-5xl invisible">Doors open at ~00:00</div>
+                     class="relative flex flex-row flex-nowrap flex-shrink-0 pl-4 text-justify align-top text-[2vw] invisible">Doors open at ~00:00
+                </div>
             </div>
             <div class="px-4 relative flex flex-col flex-auto text-justify items-start">
-                <p ref="title0" class="relative flex flex-row flex-nowrap text-justify align-top">Fursuit Lounge</p>
-                <p ref="room0" class="relative flex flex-row flex-nowrap text-justify align-top text-6xl">@ CCH</p>
+                <p ref="title0" class="relative flex flex-row flex-nowrap text-justify align-top text-[5vw]">Fursuit Lounge</p>
+                <p ref="room0" class="relative flex flex-row flex-nowrap text-justify align-top text-[3vw]">@ CCH</p>
             </div>
             <div ref="note0" class="pr-4 relative flex flex-col flex-1 text-justify items-start">
+                slightly delayed
             </div>
         </div>
-        <div ref="row1" class="flex flex-row flex-nowrap relative invisible py-8 items-start">
+
+        <div ref="row1" class="flex flex-row flex-nowrap relative invisible py-4 items-start">
             <div class="relative flex flex-col flex-1 text-justify items-start">
                 <div class="flex flex-row flex-nowrap relative items-baseline">
                     <div ref="time10"
@@ -450,7 +454,7 @@ function loadContent(rows = [], data = [], offset = 0) {
             <div ref="note1" class="pr-4 relative flex flex-col flex-1 text-justify items-start">
             </div>
         </div>
-        <div ref="row2" class="flex flex-row flex-nowrap relative invisible py-8 items-start">
+        <div ref="row2" class="flex flex-row flex-nowrap relative invisible py-4 items-start">
             <div class="relative flex flex-col flex-1 text-justify items-start">
                 <div class="flex flex-row flex-nowrap relative items-baseline">
                     <div ref="time20"
@@ -473,7 +477,7 @@ function loadContent(rows = [], data = [], offset = 0) {
             <div ref="note2" class="pr-4 relative flex flex-col flex-1 text-justify items-start">
             </div>
         </div>
-        <div ref="row3" class="flex flex-row flex-nowrap relative invisible py-8 items-start">
+        <div ref="row3" class="flex flex-row flex-nowrap relative invisible py-4 items-start">
             <div class="relative flex flex-col flex-1 text-justify items-start">
                 <div class="flex flex-row flex-nowrap relative items-baseline">
                     <div ref="time30"
@@ -506,14 +510,6 @@ function loadContent(rows = [], data = [], offset = 0) {
 
 <style scoped>
 
-.magicTextColor {
-    color: rgba(155, 155, 255, 1);
-    text-shadow: 0 0 7px rgba(155, 50, 255, 1),
-    0 0 10px rgba(155, 50, 255, 1),
-    0 0 21px rgba(150, 20, 200, 0.75),
-    0 0 42px rgba(150, 20, 200, 0.5);
-    user-select: none;
-}
 
 @keyframes rotation180 {
     from {

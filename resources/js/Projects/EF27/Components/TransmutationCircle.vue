@@ -79,10 +79,3 @@ onUnmounted(() => {
 }
 
 </style>
-
-<style>
-
-/*SVG Colors*/
-.fill{fill:#9614C8;stroke:none;}
-.stroke{fill:none;stroke:#9614C8;}
-</style>

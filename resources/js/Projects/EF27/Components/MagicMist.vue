@@ -1,8 +1,6 @@
 <script setup>
 
 import {computed, onMounted, onUnmounted, ref} from "vue";
-import anime from 'animejs';
-
 (function () { //polyfill
     let lastTime = 0;
     let vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -42,34 +40,33 @@ const props = defineProps({
 
 let spritePurple = new Image();
 import spritePurpleSrc from "@/Projects/EF27/Assets/images/smoke_purple3.png";
-
 spritePurple.src = spritePurpleSrc;
-//
-// let spriteGreen = new Image();
-// import spriteGreenSrc from "@/Projects/EF27/Assets/images/smoke_green4.png";
-// spriteGreen.src = spriteGreenSrc;
-//
-// let spriteYellow = new Image();
-// import spriteYellowSrc from "@/Projects/EF27/Assets/images/smoke_yellow3.png";
-// spriteYellow.src = spriteYellowSrc;
-//
-// let spriteBlue = new Image();
-// import spriteBlueSrc from "@/Projects/EF27/Assets/images/smoke_blue3.png";
-// spriteYellow.src = spriteBlue;
-//
-// let spriteRed = new Image();
-// import spriteRedSrc from "@/Projects/EF27/Assets/images/smoke_red3.png";
-// spriteYellow.src = spriteRedSrc;
+
+let spriteGreen = new Image();
+import spriteGreenSrc from "@/Projects/EF27/Assets/images/smoke_green3.png";
+spriteGreen.src = spriteGreenSrc;
+
+let spriteYellow = new Image();
+import spriteYellowSrc from "@/Projects/EF27/Assets/images/smoke_yellow3.png";
+spriteYellow.src = spriteYellowSrc;
+
+let spriteBlue = new Image();
+import spriteBlueSrc from "@/Projects/EF27/Assets/images/smoke_blue3.png";
+spriteBlue.src = spriteBlueSrc;
+
+let spriteRed = new Image();
+import spriteRedSrc from "@/Projects/EF27/Assets/images/smoke_red3.png";
+spriteRed.src = spriteRedSrc;
 
 const sprites = {
-    purple: spritePurple
-    // ,green: spriteGreen
-    // ,yellow: spriteYellow
-    // ,blue: spriteBlue
-    // ,red: spriteRed
+    purple: spritePurple,
+    green: spriteGreen,
+    yellow: spriteYellow,
+    blue: spriteBlue,
+    red: spriteRed
 };
 
-const fpsView = ref();
+// const fpsView = ref();
 const mistLayer = ref();
 
 function generateRandom(min, max) {
@@ -460,7 +457,7 @@ function MagicMistLayerController(fps = 30) {
                 // TESTING...Report #seconds since start and achieved fps.
                 var sinceStart = now - controlTime;
                 var currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
-                fpsView.value.textContent = (/*"Elapsed time= " + Math.round(sinceStart / 1000 * 100) / 100 + " secs @ " + */ ("" + currentFps.toFixed(2)).padStart(6, '0') + " fps.");
+                // fpsView.value.textContent = (/*"Elapsed time= " + Math.round(sinceStart / 1000 * 100) / 100 + " secs @ " + */ ("" + currentFps.toFixed(2)).padStart(6, '0') + " fps.");
 
                 if (sinceStart > 60000) {
                     controlTime = now;
@@ -521,7 +518,7 @@ onMounted(() => {
             maxxVelocity: 0.5,
             maxyVelocity: 0.5,
             particleOptions: {
-                sprite: {uid: "purple"},
+                sprite: {uid: props.color},
             }
         }))
         .start();
@@ -540,7 +537,7 @@ onUnmounted(() => {
     <canvas ref="mistLayer" id="MagicMistLayer1" style="z-index: 4; visibility: hidden"
             class="absolute left-0 top-0 w-screen h-screen"></canvas>
 
-    <div ref="fpsView" class="absolute bg-black z-50  top-0 right-0 text-2xl font-bold text-white rounded-br"></div>
+<!--    <div ref="fpsView" class="absolute bg-black z-50  top-0 right-0 text-2xl font-bold text-white rounded-br"></div>-->
 
 
 </template>

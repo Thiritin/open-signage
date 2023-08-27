@@ -32,11 +32,11 @@ const usableAttributes = computed(() => {
         <TransmutationCircle/>
 
         <MaskSVG style="z-index: 3; width: 700px; height: 700px;" class="absolute bottom-5 flex"/>
-        <MagicMist/>
-        <LogoSVG style="z-index: 5; width: 700px; height: 700px;" class="absolute flex bottom-5"/>
+        <MagicMist color="purple" />
+        <LogoSVG style="z-index: 5; width: 700px; height: 700px; opacity: 0.75" class="absolute flex bottom-5"/>
     </div>
 
-    <Time/>
+    <Time hourglass="true"/>
 
     <div class="h-screen overflow-auto bg-primary flex flex-col flex-grow">
         <!-- Main Content -->
@@ -49,15 +49,6 @@ const usableAttributes = computed(() => {
 
 <style>
 
-
-.magicTextColor {
-    color: rgba(155, 155, 255, 1);
-    text-shadow: 0 0 7px rgba(155, 50, 255, 1),
-    0 0 10px rgba(155, 50, 255, 1),
-    0 0 21px rgba(150, 20, 200, 0.75),
-    0 0 42px rgba(150, 20, 200, 0.5);
-    user-select: none;
-}
 
 .bounce-enter-active {
     animation: bounce-in 0.5s;

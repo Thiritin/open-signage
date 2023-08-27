@@ -10,7 +10,7 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    screen:{
+    screen: {
         type: Array,
         default: []
     },
@@ -52,11 +52,16 @@ onMounted(() => {
     })
 })
 
-const nextEvent = computed(() => {
-    return props.schedule.filter(event => {
-        return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
-    })[0]
-})
+const nextEvent = function (room) {
+    return computed(() => {
+        return props.schedule.filter(event => {
+            return event.room_id === room.id;
+        }).filter(event => {
+            return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
+        }).shift();
+    });
+};
+
 
 import LogoSVG from '@/Projects/EF27/Assets/images/logoEF27e.svg';
 import straightSVG from '@/Projects/EF27/Assets/images/straight.svg';
@@ -65,79 +70,74 @@ import wheelchairSVG from '@/Projects/EF27/Assets/images/wheelchair.svg';
 import MaskSVG from "@/Projects/EF27/Assets/images/logoEF27Mask.svg";
 import IconRouter from "@/Projects/System/Components/IconRouter.vue";
 import {DateTime} from "luxon";
+import HourTime from "@/Components/HourTime.vue";
 
 </script>
 
 <template>
 
-    <h1 class="text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>
+    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>
 
-    <div v-for="item in screen.rooms" class="flex flex-col relative z-30 text-7xl min-w-full magicTextColor top-5 magic-text">
-        <div class="mx-12 my-8 flex flex-row z-40 items-center ">
+    <div v-for="item in screen.rooms" class="flex flex-col relative z-30 magicTextColor magic-text themeFontSecondar w-[100vw]">
 
-            <IconRouter style="filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));" :path="page.path" class="h-48 w-48" :icon="item.pivot.icon" :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
+        <div class="mx-12 flex flex-row flex-nowrap items-center">
 
-            <div ref="section" class="flex flex-col mx-12 z-40">
-                <p class="text text-9xl flex text-left items-center">
-                    {{ item.name }} <span class="text text-7xl"> {{ item.venue_name }} </span>
-                </p>
-                <p class="text text-7xl flex text-left items-center">
-                    {{ nextEvent.title }}
-                </p>
+            <IconRouter :path="page.path" class="flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
+                        :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
+
+
+            <div class="flex-1 flex-col mx-12 w-[70vw]">
+
+                <div class="flex flex-row items-baseline">
+
+                    <div class="flex text-[5vw] text-left items-center">
+                        {{ item.name }}
+                    </div>
+
+                    <div v-if="item.name !== item.venue_name" class="flex text-[2.5vw] text-left items-center">
+                        ( {{ item.venue_name }} )
+                    </div>
+
+                </div>
+
+                <div class="flex flex-row items-baseline">
+
+                    <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()" class="flex text-[3vw] text-left items-center">
+                        Now:
+                    </div>
+
+                    <div v-else class="flex text-[3vw] text-left items-center">
+                        Next:
+                    </div>
+
+                    <div class="flex text-[3vw]">
+                        {{ nextEvent(item).value.title }}
+                    </div>
+
+                </div>
+
             </div>
 
-            <IconRouter v-if="item.pivot.flags.includes('wheelchair')" style="filter: drop-shadow(5px 10px 20px rgb(150, 20, 200, 0.75));" :path="page.path" class="h-24 w-24" icon="Wheelchair"></IconRouter>
+            <div class="flex-0 flex-row magicTextColor w-[20vw]">
+
+                <IconRouter v-if="item.pivot.flags.includes('wheelchair')" :path="page.path"
+                            class="w-[5vw] svgIconGlow"
+                            icon="Wheelchair"></IconRouter>
+
+                <IconRouter v-if="item.pivot.flags.includes('first_aid')" :path="page.path"
+                            class="w-[5vw] svgIconGlow"
+                            icon="FirstAid"></IconRouter>
+
+            </div>
+
 
         </div>
+
     </div>
 
 </template>
 
 <style scoped>
-
-.section {
-    /*position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;*/
-    /*min-height: 90vh;*/
-    /*background-color: rgba(10, 10, 10, .5);*/
-}
-
-.transmutation {
-    animation: movey 20s normal forwards linear, rotation360 240s infinite linear;
-}
-
-@keyframes movey {
-    from {
-        opacity: 0;
-        top: -700px;
-    }
-    to {
-        opacity: 0.3;
-        top: 10px;
-    }
-}
-
-@keyframes rotation180 {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(180deg);
-    }
-}
-
-@keyframes rotation360 {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(359deg);
-    }
-}
-
-
 
 </style>
 
@@ -152,8 +152,7 @@ body {
 .magic-text {
     position: relative;
     user-select: none;
-//font-family: 'primaryThemeFont', sans-serif;
-    white-space: pre;
+//font-family: 'primaryThemeFont', sans-serif; white-space: pre;
 }
 
 .magic-text span {
@@ -167,24 +166,31 @@ body {
 .w-digit-15 {
     width: 1.5ch;
 }
+
 .w-digit-15 span {
     width: 1ch;
 }
+
 .w-digit-2 {
     width: 2ch;
 }
+
 .w-digit-2 span {
     width: 1ch;
 }
+
 .w-digit-45 {
     width: 4.5ch;
 }
+
 .w-digit-45 span {
     width: 1ch;
 }
+
 .w-digit-5 {
     width: 5ch;
 }
+
 .w-digit-5 span {
     width: 1ch;
 }

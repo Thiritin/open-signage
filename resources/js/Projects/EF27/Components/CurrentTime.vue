@@ -15,6 +15,13 @@ let m11 = ref();
 
 let time = getTime();
 
+const props = defineProps({
+    hourglass: {
+        type: Boolean,
+        default: false
+    }
+})
+
 onMounted(() => {
 
     m00.value.textContent = m01.value.textContent = time.minutes[1];
@@ -159,8 +166,8 @@ function getTime() {
 
         </div>
 
-        <div ref="hourGlass" id="HourGlass" class="flex ml-5">
-            <HourGlassSVG style="height: 1em"/>
+        <div v-if="props.hourglass" ref="hourGlass" id="HourGlass" class="flex ml-5">
+            <HourGlassSVG style="height: 0.9em; transform: scaleY(-1);"/>
         </div>
 
     </div>

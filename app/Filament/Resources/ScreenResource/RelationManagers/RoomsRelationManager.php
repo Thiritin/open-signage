@@ -26,10 +26,12 @@ class RoomsRelationManager extends RelationManager
 
                 Forms\Components\Checkbox::make('primary'),
 
-                Forms\Components\CheckboxList::make('flags')->options([
-                    'first_aid' => 'First Aid',
-                    'wheelchair' => 'Wheelchair Friendly',
-                ]),
+                Forms\Components\CheckboxList::make('flags')
+                    ->formatStateUsing(fn($state) => json_decode($state ?? "[]", true, 512, JSON_THROW_ON_ERROR))
+                    ->options([
+                        'first_aid' => 'First Aid',
+                        'wheelchair' => 'Wheelchair Friendly',
+                    ]),
 
                 Forms\Components\Section::make('Icon')->columns()->schema([
 
@@ -54,11 +56,11 @@ class RoomsRelationManager extends RelationManager
                             '270',
                             '315',
                         ])
-                        ->visible(fn(Forms\Get $get) => in_array($get('icon'),config('icons.rotateable')))
+                        ->visible(fn(Forms\Get $get) => in_array($get('icon'), config('icons.rotateable')))
                         ->default(0),
 
                     Forms\Components\Checkbox::make('mirror')
-                        ->visible(fn(Forms\Get $get) => in_array($get('icon'),config('icons.mirrorable')))
+                        ->visible(fn(Forms\Get $get) => in_array($get('icon'), config('icons.mirrorable')))
                         ->default(false),
                 ]),
             ]);

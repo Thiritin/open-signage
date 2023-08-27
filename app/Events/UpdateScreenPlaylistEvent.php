@@ -34,8 +34,9 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
+        $screen = $this->screen->load('rooms');
         return [
-            'pages' => $this->screen->playlist->playlistItems
+            'pages' => $screen->playlist->playlistItems
                 ->filter(fn(PlaylistItem $playlistItem) => $playlistItem->is_active === true)
                 ->sortBy('sort')
                 ->map(fn(PlaylistItem $playlistItem) => [

@@ -5,7 +5,7 @@
 @font-face {
     font-family: 'primaryThemeFont';
     font-style: normal;
-    src: local('Hansief'), url(./Assets/fonts/PermanentMarker-Regular.ttf) format('truetype');
+    src: local('PermanentMarker'), url(./Assets/fonts/PermanentMarker-Regular.ttf) format('truetype');
 }
 
 .themeFont {

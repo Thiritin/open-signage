@@ -33,5 +33,13 @@ class EurofurenceSeeder extends Seeder
             'component' => "Signpost",
             'schema' => [],
         ]);
+
+        $project->pages()->updateOrCreate([
+            'component' => "SingleRoom",
+        ],[
+            'name' => "SingleRoom",
+            'component' => "SingleRoom",
+            'schema' => [],
+        ]);
     }
 }

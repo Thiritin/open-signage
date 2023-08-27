@@ -43,7 +43,6 @@ const groupedSchedule = computed(() => {
             const start = new Date(entry.starts_at);
             const end = new Date(new Date(entry.ends_at).getTime() + (entry.delay * 1000 * 60));
 
-            return (end.getDate() >= now.getDate())
             return true;
         })
         .filter((entry) => {
@@ -68,6 +67,7 @@ for (let schedule in groupedSchedule.value) {
 }
 
 function eventHeight(startTime, endTime) {
+    return 0;
     let timeDifference = (new Date(endTime)).getTime() - (new Date(startTime)).getTime();
     timeDifference = timeDifference / (1000 * 60);
     if (timeDifference < 60) {

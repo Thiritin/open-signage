@@ -48,7 +48,8 @@ class ScreenResource extends Resource
         return $form
             ->schema([
                 Select::make('playlist_id')
-                    ->relationship('playlist', 'name')
+                    ->relationship('playlist', 'name', fn ($query) => $query->normal())
+                    ->preload()
                     ->searchable(),
 
                 TextInput::make('name')

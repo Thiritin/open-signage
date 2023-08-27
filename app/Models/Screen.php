@@ -52,13 +52,18 @@ class Screen extends Model
 
     public function rooms()
     {
-        return $this->belongsToMany(Room::class)->withPivot(['direction', 'primary']);
+        return $this->belongsToMany(Room::class)
+            ->using(RoomScreen::class)
+            ->withPivot(['rotation', 'mirror', 'icon', 'flags', 'primary']);
     }
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'playlist_id', 'screen_group_id','orientation', 'slug','hostname','ip_address','mac_address','provisioned','status'])
+            ->logOnly([
+                'name', 'playlist_id', 'screen_group_id', 'orientation', 'slug', 'hostname', 'ip_address',
+                'mac_address', 'provisioned', 'status'
+            ])
             ->dontSubmitEmptyLogs()
             ->logOnlyDirty();
         // Chain fluent methods for configuration options

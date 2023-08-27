@@ -19,7 +19,7 @@ class ScreenController extends Controller
         $finalSlug = $slug ?? $request->get('kiosk') ?? null;
         abort_if(is_null($finalSlug), 400, 'No slug provided');
 
-        $screen = Screen::firstOrCreate(['slug' => $finalSlug], [
+        $screen = Screen::with('rooms')->firstOrCreate(['slug' => $finalSlug], [
             'name' => 'New Screen '.$finalSlug,
             'slug' => $finalSlug,
             'playlist_id' => app(GeneralSettings::class)->playlist_id,

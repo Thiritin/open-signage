@@ -16,6 +16,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->job(new \App\Jobs\ScreenStatusCheckJob())->everyMinute();
         $schedule->job(new ScheduleEntryDispatcherJob())->everyMinute();
+
+        if (config('app.default_project') === "EF27") {
+            $schedule->job(new \App\Jobs\SyncEurofurenceScheduleJob())->everyMinute();
+        }
     }
 
     /**

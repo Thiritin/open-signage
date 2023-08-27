@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
+
     protected $fillable = ['name'];
 
     public function screens()
     {
-        return $this->belongsToMany(Screen::class)->withPivot('direction', 'primary');
+        return $this->belongsToMany(Screen::class)
+            ->withPivot('rotation', 'mirror', 'icon', 'flags', 'primary')
+            ->using(RoomScreen::class);
     }
 }

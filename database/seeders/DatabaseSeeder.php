@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 
         // Wild Times Seeder
         $this->call(WildTimesSeeder::class);
+        $this->call(EurofurenceSeeder::class);
 
         if (App::isLocal()) {
             User::firstOrCreate([

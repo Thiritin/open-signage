@@ -82,11 +82,11 @@ import HourTime from "@/Components/HourTime.vue";
 
         <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">
 
-            <IconRouter :path="page.path" class="flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
+            <IconRouter :path="page.path" class="flex flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
                         :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
 
 
-            <div class="flex-1 flex-col mx-12 w-[70vw]">
+            <div class="flex flex-1 flex-col mx-12 w-[70vw]">
 
                 <div class="flex flex-row items-baseline">
 
@@ -118,7 +118,7 @@ import HourTime from "@/Components/HourTime.vue";
 
             </div>
 
-            <div class="flex-0 flex-row magicTextColor w-[20vw]">
+            <div class="flex flex-0 flex-row magicTextColor w-[20vw] space-x-8">
 
                 <IconRouter v-if="item.pivot.flags.includes('wheelchair')" :path="page.path"
                             class="flex w-[5vw] svgIconGlow"

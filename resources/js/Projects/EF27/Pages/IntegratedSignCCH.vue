@@ -58,6 +58,9 @@ const nextEvent = function (room) {
             return event.room_id === room.id;
         }).filter(event => {
             return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
+        }).map((event, index) => {
+            event.title = event.title ? event.title.replace("Dealers' Den & Art Show Party", "").replace(room.name, "").replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "") : event.title;
+            return event;//event.title.replace(room.name);
         }).shift();
     });
 };
@@ -76,60 +79,37 @@ import HourTime from "@/Components/HourTime.vue";
 
 <template>
 
-<!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
+    <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
+    <div class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-10 space-y-8 justify-items-center">
 
-    <div v-for="item in screen.rooms" class="flex flex-col relative z-30 magicTextColor magic-text themeFontSecondary w-[100vw]">
+        <div v-for="item in screen.rooms" class="flex flex-col magicTextColor magic-text themeFont overflow-hidden">
 
-        <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">
+            <div class="flex text-[9vw] text-justify">
+                {{ item.name }}
+            </div>
 
-            <IconRouter :path="page.path" class="flex flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
-                        :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
-
-
-            <div class="flex flex-1 flex-col mx-12 w-[70vw]">
+            <div class="flex flex-row text-[4vw] items-baseline">
 
                 <div class="flex flex-row items-baseline">
-
-                    <div class="flex text-[5vw] text-left items-center">
-                        {{ item.name }}
+                    <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
+                         class="flex text-left magicTextColorGreen">
+                        OPEN
                     </div>
-
-                    <div v-if="item.name !== item.venue_name" class="flex text-[2.5vw] text-left items-center">
-                        ( {{ item.venue_name }} )
+                    <div v-else class="flex text-left magicTextColorRed">
+                        CLOSED
                     </div>
-
                 </div>
 
-                <div class="flex flex-row items-baseline">
-
-                    <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()" class="flex text-[3vw] text-left items-center">
-                        Now:
-                    </div>
-
-                    <div v-else class="flex text-[3vw] text-left items-center">
-                        Next:
-                    </div>
-
-                    <div class="flex text-[3vw]">
-                        {{ nextEvent(item).value.title }}
-                    </div>
-
+                <div
+                    v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local() && nextEvent(item).value.title"
+                    class="flex text-left">
+                    {{ nextEvent(item).value.title }}
+                </div>
+                <div v-else-if="nextEvent(item).value.title" class="flex text-left">
+                    Next: {{ nextEvent(item).value.title }}
                 </div>
 
             </div>
-
-            <div class="flex flex-0 flex-row magicTextColor w-[20vw] space-x-8">
-
-                <IconRouter v-if="(item.pivot.flags)?item.pivot.flags.includes('wheelchair'):false" :path="page.path"
-                            class="flex w-[5vw] svgIconGlow"
-                            icon="Wheelchair"></IconRouter>
-
-                <IconRouter v-if="(item.pivot.flags)?item.pivot.flags.includes('first_aid'):false" :path="page.path"
-                            class="flex w-[5vw] svgIconGlow"
-                            icon="FirstAid"></IconRouter>
-
-            </div>
-
 
         </div>
 

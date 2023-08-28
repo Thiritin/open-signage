@@ -10,6 +10,8 @@
 
 .themeFont {
     font-family: 'primaryThemeFont', sans-serif;
+    font-weight: 500;
+    line-height: 1.2;
 }
 
 .themeFontSecondary {
@@ -22,7 +24,7 @@
 .stroke{fill:none;stroke:#9614C8;}
 
 .magicTextColor {
-    color: rgba(155, 155, 255, 1);
+    color: rgba(175, 175, 255, 1);
     text-shadow: 0 0 7px rgba(155, 50, 255, 1),
     0 0 10px rgba(155, 50, 255, 1),
     0 0 21px rgba(150, 20, 200, 0.75),
@@ -48,4 +50,22 @@
 }
 .hourGlass {
     fill: rgba(155, 155, 255, 1);
+}
+
+.magicTextColorGreen {
+    color: rgb(50, 250, 50);
+    text-shadow: 0 0 7px rgba(50, 230, 50, 1),
+    0 0 10px rgba(100, 200, 50, 1),
+    0 0 21px rgba(90, 150, 20, 0.75),
+    0 0 42px rgba(90, 150, 20, 0.5);
+    user-select: none;
+}
+
+.magicTextColorRed {
+    color: rgb(250, 50, 50);
+    text-shadow: 0 0 7px rgb(230, 50, 50),
+    0 0 10px rgb(200, 50, 50),
+    0 0 21px rgba(150, 20, 20, 0.75),
+    0 0 42px rgba(150, 20, 20, 0.5);
+    user-select: none;
 }

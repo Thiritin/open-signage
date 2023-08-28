@@ -80,7 +80,7 @@ import HourTime from "@/Components/HourTime.vue";
 
     <div v-for="item in screen.rooms" class="flex flex-col relative z-30 magicTextColor magic-text themeFontSecondar w-[100vw]">
 
-        <div class="mx-12 flex flex-row flex-nowrap items-center">
+        <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">
 
             <IconRouter :path="page.path" class="flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
                         :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
@@ -121,11 +121,11 @@ import HourTime from "@/Components/HourTime.vue";
             <div class="flex-0 flex-row magicTextColor w-[20vw]">
 
                 <IconRouter v-if="item.pivot.flags.includes('wheelchair')" :path="page.path"
-                            class="w-[5vw] svgIconGlow"
+                            class="flex w-[5vw] svgIconGlow"
                             icon="Wheelchair"></IconRouter>
 
                 <IconRouter v-if="item.pivot.flags.includes('first_aid')" :path="page.path"
-                            class="w-[5vw] svgIconGlow"
+                            class="flex w-[5vw] svgIconGlow"
                             icon="FirstAid"></IconRouter>
 
             </div>

@@ -24,8 +24,6 @@ class RoomsRelationManager extends RelationManager
                     ->columnSpanFull()
                     ->maxLength(255),
 
-                Forms\Components\Checkbox::make('primary'),
-
                 Forms\Components\CheckboxList::make('flags')
                     ->formatStateUsing(fn($state) => json_decode($state ?? "[]", true, 512, JSON_THROW_ON_ERROR))
                     ->options([
@@ -89,7 +87,7 @@ class RoomsRelationManager extends RelationManager
                 Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DetachBulkAction::class::make(),
+                Tables\Actions\DetachBulkAction::make(),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

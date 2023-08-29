@@ -45,13 +45,9 @@ function getDayDescription(starts_at) {
     }
 }
 
-const primaryRoom = computed(() => {
-    return props.screen.rooms.find(room => room.pivot.primary)
-})
-
 const nextEvent = computed(() => {
     return props.schedule.filter(event => {
-        return event.room_id === primaryRoom.value.id;
+        return event.room_id === props.screen.room_id;
     }).filter(event => {
         return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
     })[0]
@@ -63,19 +59,17 @@ const nextEvent = computed(() => {
         <div class="text-[6vw] leading-normal font-bold text-center magicTextColor">
             {{ nextEvent.title }}
         </div>
-        <div class="mb-2 whitespace-nowrap text-5xl text-center text-[7vw] leading-normal">
+        <div class="mb-2 whitespace-nowrap text-5xl text-center text-[8vw] leading-normal">
             <div class="magicTextColor">
-                <HourTime :time="DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay})"/>
+                <HourTime :time="DateTime.fromISO(nextEvent.starts_at)"/>
                 -
-                <HourTime :time="DateTime.fromISO(nextEvent.ends_at).plus({minutes: nextEvent.delay})"/>
+                <HourTime :time="DateTime.fromISO(nextEvent.ends_at)"/>
             </div>
-            <div class="magicTextColor text-[4vw] leading-none">
-                {{ getDayDescription(nextEvent.starts_at) }}
+            <div v-if="getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay}))" class="magicTextColor text-[4vw] leading-none">
+                {{ getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay})) }}
             </div>
-            <div v-if="nextEvent.delay > 0" class="text-[5vw] leading-normal opacity-40 magicTextColor text-center">
-                <HourTime :time="nextEvent.starts_at"/>
-                -
-                <HourTime :time="nextEvent.ends_at"/>
+            <div v-if="nextEvent.delay > 0" class="text-[6vw] leading-none magicTextColor text-center">
+                Delayed by {{ nextEvent.delay }} minutes
             </div>
         </div>
     </div>

@@ -50,11 +50,16 @@ class Screen extends Model
         return $this->playlist->project->type === ResourceOwnership::EMERGENCY;
     }
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
     public function rooms()
     {
         return $this->belongsToMany(Room::class)
             ->using(RoomScreen::class)
-            ->withPivot(['rotation', 'mirror', 'icon', 'flags', 'primary']);
+            ->withPivot(['rotation', 'mirror', 'icon', 'flags']);
     }
 
     public function getActivitylogOptions(): LogOptions

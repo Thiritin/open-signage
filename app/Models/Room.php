@@ -11,10 +11,15 @@ class Room extends Model
 
     protected $fillable = ['name'];
 
+    public function screen()
+    {
+        return $this->hasOne(Screen::class);
+    }
+
     public function screens()
     {
         return $this->belongsToMany(Screen::class)
-            ->withPivot('rotation', 'mirror', 'icon', 'flags', 'primary')
+            ->withPivot('rotation', 'mirror', 'icon', 'flags')
             ->using(RoomScreen::class);
     }
 }

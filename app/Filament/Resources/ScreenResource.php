@@ -59,6 +59,13 @@ class ScreenResource extends Resource
                 Select::make('screen_group_id')
                     ->relationship('screenGroup', 'name'),
 
+                Select::make('room_id')
+                    ->relationship('room', 'name')
+                    ->preload()
+                    ->label('Primary Room')
+                    ->hint('Will be used to display room related information on the screen.')
+                    ->nullable(),
+
                 TextInput::make('slug')
                     ->hint('This is the URL that will be used to access this screen.')
                     ->prefix(config('app.url').'/screens/')

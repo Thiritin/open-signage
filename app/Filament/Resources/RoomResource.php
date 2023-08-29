@@ -9,6 +9,9 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -53,6 +56,19 @@ class RoomResource extends Resource
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+
+                TextColumn::make('venue_name')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('external_name')
+                    ->searchable()
+                    ->sortable(),
+            ])->actions([
+                EditAction::make(),
+                DeleteAction::make(),
+            ])->bulkActions([
+                DeleteBulkAction::make()
             ]);
     }
 

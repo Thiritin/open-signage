@@ -26,25 +26,25 @@ const usableAttributes = computed(() => {
 </script>
 
 <template>
+    <div>
+        <!-- animated background -->
+        <div class="absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center">
+            <TransmutationCircle/>
 
-    <!-- animated background -->
-    <div class="absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center">
-        <TransmutationCircle/>
+            <MaskSVG style="z-index: 3; width: 700px; height: 700px;" class="absolute bottom-5 flex"/>
+            <MagicMist color="purple"/>
+            <LogoSVG style="z-index: 5; width: 700px; height: 700px; opacity: 0.75" class="absolute flex bottom-5"/>
+        </div>
 
-        <MaskSVG style="z-index: 3; width: 700px; height: 700px;" class="absolute bottom-5 flex"/>
-        <MagicMist color="purple" />
-        <LogoSVG style="z-index: 5; width: 700px; height: 700px; opacity: 0.75" class="absolute flex bottom-5"/>
+        <Time hourglass="true"/>
+
+        <div class="h-screen overflow-auto bg-primary flex flex-col flex-grow">
+            <!-- Main Content -->
+            <Transition mode="out-in">
+                <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
+            </Transition>
+        </div>
     </div>
-
-    <Time hourglass="true"/>
-
-    <div class="h-screen overflow-auto bg-primary flex flex-col flex-grow">
-        <!-- Main Content -->
-        <Transition mode="out-in">
-            <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>
-        </Transition>
-    </div>
-
 </template>
 
 <style>

@@ -36,7 +36,7 @@ const usableAttributes = computed(() => {
         <LogoSVG style="z-index: 5; width: 700px; height: 700px; opacity: 0.75" class="absolute flex bottom-5"/>
     </div>
 
-<!--    <Time hourglass="true"/>-->
+    <Time hourglass="true"/>
 
     <div class="h-screen overflow-auto bg-primary flex flex-col flex-grow">
         <!-- Main Content -->

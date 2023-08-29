@@ -37,7 +37,7 @@ onUnmounted(() => {
 <template>
 
     <div class="absolute z-0 flex w-screen h-screen justify-center items-center text-center">
-        <TransmutationSVG style="z-index: 2; bottom: 200px; width: 700px; height: 700px;" class="absolute transmutation flex"/>
+        <TransmutationSVG style="z-index: 2; bottom: 200px;" class="h-[61.8vh] w-[61.8vw] absolute transmutation flex"/>
     </div>
 
 </template>

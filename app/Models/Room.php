@@ -19,7 +19,7 @@ class Room extends Model
     public function screens()
     {
         return $this->belongsToMany(Screen::class)
-            ->withPivot('rotation', 'mirror', 'icon', 'flags')
+            ->withPivot(['sort', 'rotation', 'mirror', 'icon', 'flags', 'starts_at', 'ends_at'])
             ->using(RoomScreen::class);
     }
 }

@@ -24,6 +24,10 @@ class RoomsRelationManager extends RelationManager
                     ->columnSpanFull()
                     ->maxLength(255),
 
+                Forms\Components\DateTimePicker::make('starts_at'),
+
+                Forms\Components\DateTimePicker::make('ends_at'),
+
                 Forms\Components\CheckboxList::make('flags')
                     ->formatStateUsing(fn($state) => json_decode($state ?? "[]", true, 512, JSON_THROW_ON_ERROR))
                     ->options([
@@ -34,25 +38,25 @@ class RoomsRelationManager extends RelationManager
                 Forms\Components\Section::make('Icon')->columns()->schema([
 
                     Forms\Components\Select::make('icon')
-                        ->required()
+//                        ->required()
                         ->reactive()
                         ->options(config('icons.icons')),
 
                     Forms\Components\TextInput::make('rotation')
-                        ->minValue(0)
-                        ->maxValue(359)
+                        ->minValue(-180)
+                        ->maxValue(180)
                         ->numeric()
                         ->required()
                         ->reactive()
                         ->datalist([
+                            '-135',
+                            '-90',
+                            '-45',
                             '0',
                             '45',
                             '90',
                             '135',
-                            '180',
-                            '225',
-                            '270',
-                            '315',
+                            '180'
                         ])
                         ->visible(fn(Forms\Get $get) => in_array($get('icon'), config('icons.rotateable')))
                         ->default(0),
@@ -74,12 +78,16 @@ class RoomsRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('pivot.mirror')->boolean()->label('Mirrored'),
                 Tables\Columns\TextColumn::make('pivot.flags')->badge()->label('Flags'),
                 Tables\Columns\IconColumn::make('pivot.primary')->boolean()->label('Primary'),
+                Tables\Columns\TextColumn::make('pivot.starts_at')->dateTime()->label('Start Time'),
+                Tables\Columns\TextColumn::make('pivot.ends_at')->dateTime()->label('End Time'),
             ])
+            ->reorderable('sort')
+            ->defaultSort('sort')
+            ->paginated(false)
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make(),
             ])
             ->actions([
@@ -88,7 +96,6 @@ class RoomsRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\DetachBulkAction::make(),
-                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 }

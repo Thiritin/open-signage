@@ -2,6 +2,7 @@
 import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent, onUnmounted} from "vue";
 import None from "@/Projects/System/Layouts/None.vue";
 import Error from "@/Projects/System/Pages/Error.vue";
+import {DateTime} from "luxon";
 
 const props = defineProps({
     initialPages: {
@@ -55,8 +56,11 @@ const ping = () => {
 onMounted(() => {
     ping();
     const pingInterval = setInterval(ping, 60000);
+    checkRooms();
+    const checkInterval = setInterval(checkRooms, 1000);
     onUnmounted(() => {
         clearInterval(pingInterval);
+        clearInterval(checkInterval);
     });
 });
 
@@ -149,6 +153,20 @@ const activePageComponent = computed(() => {
     let page = mappedPages.value.find(e => e.index === activePageIndex.value)
     return page?.resolvedComponent ?? Error;
 });
+
+function checkRooms() {
+
+    const currentTime = DateTime.now();
+    screen.value.rooms = screen.value.rooms.filter(room => {
+            return (!room.pivot.starts_at || currentTime >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || currentTime <= DateTime.fromSQL(room.pivot.ends_at));
+    });
+
+    // screen.rooms = computed(() => {
+    //     return screen.value.rooms.filter(room => {
+    //         return (!room.pivot.starts_at || currentTime >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || currentTime <= DateTime.fromSQL(room.pivot.ends_at));
+    //     });
+    // });
+}
 
 function nextPage() {
     activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;

@@ -59,7 +59,7 @@ class Screen extends Model
     {
         return $this->belongsToMany(Room::class)
             ->using(RoomScreen::class)
-            ->withPivot(['rotation', 'mirror', 'icon', 'flags']);
+            ->withPivot(['sort', 'rotation', 'mirror', 'icon', 'flags', 'starts_at', 'ends_at']);
     }
 
     public function getActivitylogOptions(): LogOptions

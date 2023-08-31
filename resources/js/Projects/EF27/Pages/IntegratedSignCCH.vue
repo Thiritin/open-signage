@@ -36,6 +36,15 @@ onMounted(() => {
     })
 })
 
+String.prototype.truncate = String.prototype.truncate ||
+    function ( n, useWordBoundary ){
+        if (this.length <= n) { return this; }
+        const subString = this.slice(0, n-1); // the original check
+        return (useWordBoundary
+            ? subString.slice(0, subString.lastIndexOf(" "))
+            : subString) + "&hellip;";
+};
+
 const nextEvent = function (room) {
     return computed(() => {
         return props.schedule.filter(event => {
@@ -43,12 +52,24 @@ const nextEvent = function (room) {
         }).filter(event => {
             return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay}) && !event.title.toLowerCase().includes("seating")
         }).map((event, index) => {
+            console.log(event.title);
             event.title = event.title ? event.title
-                .replace("Dealers' Den & Art Show Party", "")
+                .replace("Dealers' Den & Art Show", "")
+                .replace("Dealers' Den", "")
+                .replace("Art Show", "")
                 .replace("Fursuit Badge", "")
-                .replace(room.name, "")
-                .replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "") : event.title;
-
+                .replace("Registration", "")
+                .replace("Constore", "")
+                .replace("Fursuit Badge", "")
+                .replace("Fursuit Lounge", "")
+                .replace("Artists' Lounge", "")
+                .replace("Locker Service", "")
+                .replace("The Electric Lounge Sessions", "")
+                // .replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "")
+                // .replace("room.name", "")
+                .replace(/^[\W]+/g, "")
+        : event.title;
+            event.title = event.title.split(" – ")[0].truncate(30, true);
             return event;//event.title.replace(room.name);
         }).shift();
     });
@@ -84,21 +105,20 @@ import HourTime from "@/Components/HourTime.vue";
 <template>
 
     <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
-    <div
-        class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-10 space-y-8 justify-items-center">
-        <Transition mode="out-in">
-            <div :key="currentPageIndex">
+    <Transition mode="out-in">
+        <div  :key="currentPageIndex" class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-8 space-y-8 justify-items-center overflow-hidden">
+
                 <TransitionGroup name="list">
                     <div v-for="item in currentSlide"
-                         :key="item.id" class="flex flex-col magicTextColor magic-text themeFont overflow-hidden">
+                         :key="item.id" class="flex flex-col magicTextColor magic-text themeFont">
                         <div class="flex text-[9vw] text-justify">
                             {{ item.name }}
                         </div>
 
                         <div class="flex flex-row text-[4vw] items-baseline">
 
-                            <div class="flex flex-row items-baseline">
-                                <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
+                            <div v-if="nextEvent(item).value" class="flex flex-row items-baseline">
+                                <div v-if="nextEvent(item).value && DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
                                      class="flex text-left magicTextColorGreen">
                                     OPEN
                                 </div>
@@ -108,21 +128,20 @@ import HourTime from "@/Components/HourTime.vue";
                             </div>
 
                             <div
-                                v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local() && nextEvent(item).value.title"
+                                v-if="nextEvent(item).value && DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local() && nextEvent(item).value.title"
                                 class="flex text-left">
                                 {{ nextEvent(item).value.title }}
                             </div>
-                            <div v-else-if="nextEvent(item).value.title" class="flex text-left">
+                            <div v-else-if="nextEvent(item).value && nextEvent(item).value.title" class="flex text-left">
                                 Next: {{ nextEvent(item).value.title }}
                             </div>
 
                         </div>
                     </div>
                 </TransitionGroup>
-            </div>
-        </Transition>
-    </div>
 
+        </div>
+    </Transition>
 
 </template>
 

@@ -88,6 +88,7 @@ Echo.channel('Screen.' + props.initialScreen.id)
         appScreen.value = e.screen;
         layouts = mapLayouts(mappedPages);
         activePageIndex.value = activePageIndex.value + 1 % pages.value.length;
+        dataMapper();
     });
 
 window.Echo.connector.pusher.connection.bind('connecting', (payload) => {
@@ -154,11 +155,15 @@ const activePageComponent = computed(() => {
     return page?.resolvedComponent ?? Error;
 });
 
-unref(appScreen).validRooms = computed( () => {
-    return unref(appScreen).rooms.filter(room => {
-        return (!room.pivot.starts_at || unref(currentTime) >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || unref(currentTime) <= DateTime.fromSQL(room.pivot.ends_at));
+function dataMapper(){
+    unref(appScreen).validRooms = computed( () => {
+        return unref(appScreen).rooms.filter(room => {
+            return (!room.pivot.starts_at || unref(currentTime) >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || unref(currentTime) <= DateTime.fromSQL(room.pivot.ends_at));
+        });
     });
-});
+}
+dataMapper();
+
 
 function nextPage() {
     activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;

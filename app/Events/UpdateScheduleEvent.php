@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\ScheduleEntry;
+use App\Services\ScreenDataGenerator;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -34,9 +35,7 @@ class UpdateScheduleEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'schedule' => ScheduleEntry::orderBy('starts_at')->with([
-                'room', 'scheduleType', 'scheduleOrganizer'
-            ])->get()->toArray(),
+            'schedule' => ScreenDataGenerator::schedule(),
         ];
     }
 }

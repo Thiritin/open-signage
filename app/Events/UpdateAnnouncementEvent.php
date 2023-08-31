@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Announcement;
+use App\Services\ScreenDataGenerator;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -34,7 +35,7 @@ class UpdateAnnouncementEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'announcements' => Announcement::all()->toArray(),
+            'announcements' => ScreenDataGenerator::announcements(),
         ];
     }
 }

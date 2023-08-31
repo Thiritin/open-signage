@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ResourceOwnership;
 use App\Enums\ScreenStatusEnum;
+use App\Events\UpdateScreenPlaylistEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,6 +60,7 @@ class Screen extends Model
     {
         return $this->belongsToMany(Room::class)
             ->using(RoomScreen::class)
+            ->orderBy('sort','asc')
             ->withPivot(['sort', 'rotation', 'mirror', 'icon', 'flags', 'starts_at', 'ends_at']);
     }
 
@@ -72,5 +74,10 @@ class Screen extends Model
             ->dontSubmitEmptyLogs()
             ->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+
+    public function sendScreensUpdate()
+    {
+        broadcast(new UpdateScreenPlaylistEvent($this));
     }
 }

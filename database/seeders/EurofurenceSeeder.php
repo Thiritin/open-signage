@@ -39,7 +39,13 @@ class EurofurenceSeeder extends Seeder
         ],[
             'name' => "SingleRoom",
             'component' => "SingleRoom",
-            'schema' => [],
+            'schema' => [
+                [
+                    "name" => "Show Room Name",
+                    "property" => "showRoomName",
+                    "type" => "Checkbox"
+                ],
+            ],
         ]);
 
         $announcementPage = $project->pages()->updateOrCreate([

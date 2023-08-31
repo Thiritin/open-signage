@@ -11,6 +11,10 @@ const props = defineProps({
     schedule: {
         type: Array,
         required: true
+    },
+    showRoomName: {
+        type: Boolean,
+        default: true
     }
 })
 
@@ -55,22 +59,31 @@ const nextEvent = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-center h-screen z-50 themeFontSecondary leading-normal">
-        <div class="text-[6vw] leading-normal font-bold text-center magicTextColor">
-            {{ nextEvent.title }}
+    <div class="z-50" v-if="nextEvent">
+        <div v-if="nextEvent.title" class="flex flex-col items-center justify-center h-screen z-50 themeFont leading-normal">
+            <div v-if="nextEvent.room.name !== nextEvent.title && showRoomName" class="text-[10vw] leading-normal font-bold text-center magicTextColor">
+                {{ nextEvent.room.name }}
+            </div>
+            <div class="text-[6vw] leading-normal font-bold text-center magicTextColor">
+                {{ nextEvent.title }}
+            </div>
+            <div class="mb-2 whitespace-nowrap text-5xl text-center text-[9vw] leading-normal">
+                <div class="magicTextColor">
+                    <HourTime :time="DateTime.fromISO(nextEvent.starts_at)"/>
+                    -
+                    <HourTime :time="DateTime.fromISO(nextEvent.ends_at)"/>
+                </div>
+                <div v-if="getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay}))"
+                     class="magicTextColor text-[6vw] leading-none">
+                    {{ getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay})) }}
+                </div>
+                <div v-if="nextEvent.delay > 0" class="text-[8vw] leading-none magicTextColor text-center">
+                    Delayed by {{ nextEvent.delay }} minutes
+                </div>
+            </div>
         </div>
-        <div class="mb-2 whitespace-nowrap text-5xl text-center text-[8vw] leading-normal">
-            <div class="magicTextColor">
-                <HourTime :time="DateTime.fromISO(nextEvent.starts_at)"/>
-                -
-                <HourTime :time="DateTime.fromISO(nextEvent.ends_at)"/>
-            </div>
-            <div v-if="getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay}))" class="magicTextColor text-[4vw] leading-none">
-                {{ getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay})) }}
-            </div>
-            <div v-if="nextEvent.delay > 0" class="text-[6vw] leading-none magicTextColor text-center">
-                Delayed by {{ nextEvent.delay }} minutes
-            </div>
+        <div v-else>
+            Test
         </div>
     </div>
 </template>

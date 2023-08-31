@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\PlaylistItem;
 use App\Models\Screen;
+use App\Services\ScreenDataGenerator;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -36,23 +37,8 @@ class UpdateScreenPlaylistEvent implements ShouldBroadcast
     {
         $screen = $this->screen->load('rooms');
         return [
-            'pages' => $screen->playlist->playlistItems
-                ->filter(fn(PlaylistItem $playlistItem) => $playlistItem->is_active === true)
-                ->sortBy('sort')
-                ->map(fn(PlaylistItem $playlistItem) => [
-                    'layout' => [
-                        'component' => $playlistItem->layout->component,
-                        'path' => $playlistItem->layout->project->path,
-                    ],
-                    'path' => $playlistItem->page->project->path,
-                    'component' => $playlistItem->page->component,
-                    'props' => $playlistItem->parsedContent(),
-                    'duration' => $playlistItem->duration,
-                    'title' => $playlistItem->title ?? '',
-                    'starts_at' => $playlistItem->starts_at,
-                    'ends_at' => $playlistItem->ends_at,
-                ])->values(),
-            'screen' => $screen,
+            'pages' => ScreenDataGenerator::pages($screen),
+            'screen' => ScreenDataGenerator::screen($screen),
         ];
     }
 }

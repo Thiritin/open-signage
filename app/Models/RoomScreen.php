@@ -11,4 +11,14 @@ class RoomScreen extends Pivot
         'flags' => 'array',
         'mirror' => 'boolean',
     ];
+
+    public function screen()
+    {
+        return $this->belongsTo(Screen::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 }

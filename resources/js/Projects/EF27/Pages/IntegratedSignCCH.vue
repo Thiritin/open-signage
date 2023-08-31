@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, unref} from "vue";
 
 const props = defineProps({
     title: {
@@ -66,6 +66,13 @@ const nextEvent = function (room) {
 };
 
 
+// const validRooms = computed(() => {
+//     const currentTime = DateTime.now();
+//     return props.screen.rooms.filter(room => {
+//         return (!room.pivot.starts_at || currentTime >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || currentTime <= DateTime.fromSQL(room.pivot.ends_at));
+//     });
+// });
+
 import LogoSVG from '@/Projects/EF27/Assets/images/logoEF27e.svg';
 import straightSVG from '@/Projects/EF27/Assets/images/straight.svg';
 import rightSVG from '@/Projects/EF27/Assets/images/right.svg';
@@ -80,9 +87,10 @@ import HourTime from "@/Components/HourTime.vue";
 <template>
 
     <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
-    <div class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-10 space-y-8 justify-items-center">
 
-        <div v-for="item in screen.rooms" class="flex flex-col magicTextColor magic-text themeFont overflow-hidden">
+    <div class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-10 space-y-8 justify-items-center">
+        <TransitionGroup>
+        <div v-for="item in screen.validRooms" class="flex flex-col magicTextColor magic-text themeFont overflow-hidden">
 
             <div class="flex text-[9vw] text-justify">
                 {{ item.name }}
@@ -112,8 +120,9 @@ import HourTime from "@/Components/HourTime.vue";
             </div>
 
         </div>
-
+        </TransitionGroup>
     </div>
+
 
 </template>
 

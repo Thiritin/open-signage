@@ -1,5 +1,5 @@
 <script setup>
-import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent, onUnmounted} from "vue";
+import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent, onUnmounted, unref} from "vue";
 import None from "@/Projects/System/Layouts/None.vue";
 import Error from "@/Projects/System/Pages/Error.vue";
 import {DateTime} from "luxon";
@@ -28,10 +28,11 @@ const props = defineProps({
     },
 });
 
+const currentTime = ref(DateTime.now());
 const pages = ref(props.initialPages);
 const announcements = ref(props.initialAnnouncements);
 const schedule = ref(props.initialSchedule);
-const screen = ref(props.initialScreen);
+const appScreen = ref(props.initialScreen);
 const artworks = ref(props.initialArtworks);
 const isConnected = ref(true);
 const connectionError = ref("");
@@ -56,8 +57,7 @@ const ping = () => {
 onMounted(() => {
     ping();
     const pingInterval = setInterval(ping, 60000);
-    checkRooms();
-    const checkInterval = setInterval(checkRooms, 1000);
+    const checkInterval = setInterval(() => { currentTime.value = DateTime.now() }, 1000);
     onUnmounted(() => {
         clearInterval(pingInterval);
         clearInterval(checkInterval);
@@ -85,7 +85,7 @@ Echo.channel('Screen.' + props.initialScreen.id)
         activePageIndex.value = 0;
         version.value++;
         pages.value = e.pages;
-        screen.value = e.screen;
+        appScreen.value = e.screen;
         layouts = mapLayouts(mappedPages);
         activePageIndex.value = activePageIndex.value + 1 % pages.value.length;
     });
@@ -154,19 +154,11 @@ const activePageComponent = computed(() => {
     return page?.resolvedComponent ?? Error;
 });
 
-function checkRooms() {
-
-    const currentTime = DateTime.now();
-    screen.value.rooms = screen.value.rooms.filter(room => {
-            return (!room.pivot.starts_at || currentTime >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || currentTime <= DateTime.fromSQL(room.pivot.ends_at));
+unref(appScreen).validRooms = computed( () => {
+    return unref(appScreen).rooms.filter(room => {
+        return (!room.pivot.starts_at || unref(currentTime) >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || unref(currentTime) <= DateTime.fromSQL(room.pivot.ends_at));
     });
-
-    // screen.rooms = computed(() => {
-    //     return screen.value.rooms.filter(room => {
-    //         return (!room.pivot.starts_at || currentTime >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || currentTime <= DateTime.fromSQL(room.pivot.ends_at));
-    //     });
-    // });
-}
+});
 
 function nextPage() {
     activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;
@@ -243,7 +235,7 @@ watch(activePageIndex, (value, oldValue) => {
         <component
             :connected="isConnected"
             v-show="activePageComponent"
-            :screen="screen"
+            :screen="appScreen"
             :schedule="schedule"
             :artworks="artworks"
             :announcements="announcements"

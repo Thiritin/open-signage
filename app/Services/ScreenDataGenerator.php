@@ -39,7 +39,11 @@ class ScreenDataGenerator
 
     public static function screen(Screen $screen): array
     {
-        return $screen->loadMissing('rooms', 'room')->toArray();
+        $data = $screen
+            ->loadMissing('rooms', 'room')
+            ->toArray();
+        $data['rooms'] = collect($data['rooms'])->sortBy(fn($room) => $room['pivot']['sort'])->values();
+        return $data;
     }
 
     public static function artworks(): array

@@ -35,6 +35,20 @@ class EurofurenceSeeder extends Seeder
         ]);
 
         $project->pages()->updateOrCreate([
+            'component' => "IntegratedSignCCH",
+        ],[
+            'name' => "IntegratedSignCCH",
+            'component' => "IntegratedSignCCH",
+            'schema' => [
+                [
+                    "name" => "Page Switch (ms)",
+                    "property" => "pageSwitchingTimer",
+                    "type" => "TextInput"
+                ],
+            ],
+        ]);
+
+        $project->pages()->updateOrCreate([
             'component' => "SingleRoom",
         ],[
             'name' => "SingleRoom",

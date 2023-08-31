@@ -14,41 +14,25 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    page: {
-        type: Object,
-        required: false
-    },
-    announcements: {
-        type: Array,
-        default: []
-    },
-    showAnnouncements: {
-        type: Boolean,
-        default: true
-    },
-    showSchedule: {
-        type: Boolean,
-        default: true
-    },
-    showDate: {
-        type: String,
-        required: false
-    },
-    showToday: {
-        type: Boolean,
-        required: false
+    pageSwitchingTimer: {
+        type: Number,
+        default: 15000
     }
-
 })
 
 const currentTime = ref(DateTime.now());
+const currentPageIndex = ref(0);
 
 onMounted(() => {
     const interval = setInterval(() => {
         currentTime.value = DateTime.now();
     }, 5000)
+    const pageSwitcher = setInterval(() => {
+        currentPageIndex.value = (currentPageIndex.value + 1) % roomPages.value.length;
+    }, props.pageSwitchingTimer)
     onUnmounted(() => {
         clearInterval(interval);
+        clearInterval(pageSwitcher);
     })
 })
 
@@ -70,13 +54,21 @@ const nextEvent = function (room) {
     });
 };
 
+function chunkArray(array, chunkSize) {
+    const result = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        result.push(array.slice(i, i + chunkSize));
+    }
+    return result;
+}
 
-// const validRooms = computed(() => {
-//     const currentTime = DateTime.now();
-//     return props.screen.rooms.filter(room => {
-//         return (!room.pivot.starts_at || currentTime >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || currentTime <= DateTime.fromSQL(room.pivot.ends_at));
-//     });
-// });
+const roomPages = computed(() => {
+    return chunkArray(props.screen.validRooms, 3);
+});
+
+const currentSlide = computed(() => {
+    return roomPages.value[currentPageIndex.value];
+});
 
 import LogoSVG from '@/Projects/EF27/Assets/images/logoEF27e.svg';
 import straightSVG from '@/Projects/EF27/Assets/images/straight.svg';
@@ -92,47 +84,67 @@ import HourTime from "@/Components/HourTime.vue";
 <template>
 
     <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
+    <div
+        class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-10 space-y-8 justify-items-center">
+        <Transition mode="out-in">
+            <div :key="currentPageIndex">
+                <TransitionGroup name="list">
+                    <div v-for="item in currentSlide"
+                         :key="item.id" class="flex flex-col magicTextColor magic-text themeFont overflow-hidden">
+                        <div class="flex text-[9vw] text-justify">
+                            {{ item.name }}
+                        </div>
 
-    <div class="flex flex-col relative z-30 magicTextColor magic-text themeFont h-[100vh] w-[100vw] p-10 space-y-8 justify-items-center">
-        <TransitionGroup>
-        <div v-for="item in screen.validRooms" class="flex flex-col magicTextColor magic-text themeFont overflow-hidden">
+                        <div class="flex flex-row text-[4vw] items-baseline">
 
-            <div class="flex text-[9vw] text-justify">
-                {{ item.name }}
-            </div>
+                            <div class="flex flex-row items-baseline">
+                                <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
+                                     class="flex text-left magicTextColorGreen">
+                                    OPEN
+                                </div>
+                                <div v-else class="flex text-left magicTextColorRed">
+                                    CLOSED
+                                </div>
+                            </div>
 
-            <div class="flex flex-row text-[4vw] items-baseline">
+                            <div
+                                v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local() && nextEvent(item).value.title"
+                                class="flex text-left">
+                                {{ nextEvent(item).value.title }}
+                            </div>
+                            <div v-else-if="nextEvent(item).value.title" class="flex text-left">
+                                Next: {{ nextEvent(item).value.title }}
+                            </div>
 
-                <div class="flex flex-row items-baseline">
-                    <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
-                         class="flex text-left magicTextColorGreen">
-                        OPEN
+                        </div>
                     </div>
-                    <div v-else class="flex text-left magicTextColorRed">
-                        CLOSED
-                    </div>
-                </div>
-
-                <div
-                    v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local() && nextEvent(item).value.title"
-                    class="flex text-left">
-                    {{ nextEvent(item).value.title }}
-                </div>
-                <div v-else-if="nextEvent(item).value.title" class="flex text-left">
-                    Next: {{ nextEvent(item).value.title }}
-                </div>
-
+                </TransitionGroup>
             </div>
-
-        </div>
-        </TransitionGroup>
+        </Transition>
     </div>
 
 
 </template>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 1s ease;
+}
 
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 1s ease;
+}
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+}
 </style>
 
 

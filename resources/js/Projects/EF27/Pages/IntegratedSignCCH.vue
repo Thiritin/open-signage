@@ -57,9 +57,14 @@ const nextEvent = function (room) {
         return props.schedule.filter(event => {
             return event.room_id === room.id;
         }).filter(event => {
-            return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
+            return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay}) && !event.title.toLowerCase().includes("seating")
         }).map((event, index) => {
-            event.title = event.title ? event.title.replace("Dealers' Den & Art Show Party", "").replace(room.name, "").replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "") : event.title;
+            event.title = event.title ? event.title
+                .replace("Dealers' Den & Art Show Party", "")
+                .replace("Fursuit Badge", "")
+                .replace(room.name, "")
+                .replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "") : event.title;
+
             return event;//event.title.replace(room.name);
         }).shift();
     });

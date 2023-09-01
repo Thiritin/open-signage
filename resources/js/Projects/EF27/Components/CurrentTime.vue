@@ -166,9 +166,9 @@ function getTime() {
 
         </div>
 
-        <div v-if="props.hourglass" ref="hourGlass" id="HourGlass" class="flex ml-5">
-            <HourGlassSVG style="height: 0.9em; transform: scaleY(-1);"/>
-        </div>
+<!--        <div v-if="hourglass" id="HourGlass" class="flex ml-5">-->
+<!--            <HourGlassSVG style="height: 0.9em; transform: scaleY(-1);"/>-->
+<!--        </div>-->
 
     </div>
 

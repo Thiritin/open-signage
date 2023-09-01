@@ -30,6 +30,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
 
 class ScreenResource extends Resource
 {
@@ -174,7 +175,7 @@ class ScreenResource extends Resource
             ])
             ->poll(10)
             ->striped()
-            ->bulkActions([
+            ->bulkActions(array(
                 BulkAction::make('Refresh')
                     ->icon('heroicon-o-arrow-path')
                     ->label('Refresh')
@@ -188,11 +189,28 @@ class ScreenResource extends Resource
                     ->tooltip('Only works on kiosk managed screens.')
                     ->action(fn(
                         Collection $records
-                    ) => $records->each(fn(Screen $screen) => $screen->updateQuietly(['should_restart' => true]))),
+                    ) => $records->each(fn(Screen $screen) => $screen->updateQuietly(array('should_restart' => true)))),
+
+                BulkAction::make('Set Playlist')
+                    ->icon('heroicon-o-play')
+                    ->label('Set Playlist')
+                    ->form(array(
+                        Select::make('playlist_id')
+                            ->options(\App\Models\Playlist::whereHas('playlistItems')
+                                ->normal()
+                                ->pluck('name', 'id')->toArray())
+                            ->required()
+                    ))
+                    ->action(function (
+                        Collection $records
+                    ,$data) {
+                        $records->each(fn(Screen $screen) => $screen->update(array('playlist_id' => $data['playlist_id'])));
+                        return Redirect::route('filament.admin.resources.screens.index');
+                    }),
 
                 DeleteBulkAction::make(),
 
-                BulkActionGroup::make([
+                BulkActionGroup::make(array(
                     BulkAction::make('FireEmergencyAlert')
                         ->label('Fire Evacuation')
                         ->requiresConfirmation()
@@ -203,17 +221,17 @@ class ScreenResource extends Resource
                         ->action(fn(
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::FIRE, $records))
-                        ->form([
+                        ->form(array(
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ]),
+                        )),
                     BulkAction::make('GeneralEmergencyAlert')
                         ->label('General Evacuation')
                         ->requiresConfirmation()
                         ->modalHeading('STOP! You are about to send an evacuation alert!')
                         ->modalDescription('You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.')
-                        ->form([
+                        ->form(array(
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ])
+                        ))
                         ->color('danger')
                         ->icon('heroicon-s-arrow-right-on-rectangle')
                         ->action(fn(
@@ -235,7 +253,7 @@ class ScreenResource extends Resource
                             $data['message'],
                             $data['title']
                         ))
-                        ->form([
+                        ->form(array(
                             TextInput::make('title')
                                 ->label('Title')
                                 ->required(),
@@ -243,7 +261,7 @@ class ScreenResource extends Resource
                                 ->label('Message')
                                 ->required(),
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ])
+                        ))
                         ->color('danger')
                         ->icon('heroicon-o-document-text'),
                     BulkAction::make('TestEmergencyAlert')
@@ -255,9 +273,9 @@ class ScreenResource extends Resource
                         ->action(fn(
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::TEST, $records))
-                        ->form([
+                        ->form(array(
                             Checkbox::make('sensecheck')->required()->label('I am about to send an TEST ALERT. ONLY USE THIS FOR TESTING, SCREENS WILL STILL JUMP INTO EMERGENCY MODE!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ])
+                        ))
                         ->color('warning')
                         ->icon('heroicon-o-document-text'),
                     BulkAction::make('LiftEmergencyAlert')
@@ -269,9 +287,9 @@ class ScreenResource extends Resource
                         ->action(fn(
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::LIFTED, $records))
-                        ->form([
+                        ->form(array(
                             Checkbox::make('sensecheck')->required()->label('There is no more danger, shows a lifted message on the screens.')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ])
+                        ))
                         ->color('warning')
                         ->icon('heroicon-o-document-text'),
                     BulkAction::make('ReturnRegularOperation')
@@ -283,17 +301,17 @@ class ScreenResource extends Resource
                         ->action(fn(
                             Collection $records
                         ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::NONE, $records))
-                        ->form([
+                        ->form(array(
                             Checkbox::make('sensecheck')->required()->label('Return screens to normal operation.')->hintColor('success')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
-                        ])
+                        ))
                         ->color('success')
                         ->icon('heroicon-o-document-text'),
-                ])
+                ))
                     ->icon('heroicon-s-arrow-right-on-rectangle')
                     ->tooltip('Public Health and Safety Announcements, these are reserved only for emergencies.')
                     ->color('danger')
                     ->label('Emergency Alerts'),
-            ]);
+            ));
     }
 
     public static function getPages(): array

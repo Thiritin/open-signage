@@ -48,6 +48,7 @@ class Screen extends Model
 
     public function isEmergency()
     {
+        if($this->playlist?->project === null) return false;
         return $this->playlist->project->type === ResourceOwnership::EMERGENCY;
     }
 

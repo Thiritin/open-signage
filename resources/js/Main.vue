@@ -2,7 +2,7 @@
 import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent, onUnmounted, unref} from "vue";
 import None from "@/Projects/System/Layouts/None.vue";
 import Error from "@/Projects/System/Pages/Error.vue";
-import {DateTime} from "luxon";
+import moment from "moment";
 
 const props = defineProps({
     initialPages: {
@@ -28,7 +28,7 @@ const props = defineProps({
     },
 });
 
-const currentTime = ref(DateTime.now());
+const currentTime = ref(moment());
 const pages = ref(props.initialPages);
 const announcements = ref(props.initialAnnouncements);
 const schedule = ref(props.initialSchedule);
@@ -57,7 +57,7 @@ const ping = () => {
 onMounted(() => {
     ping();
     const pingInterval = setInterval(ping, 60000);
-    const checkInterval = setInterval(() => { currentTime.value = DateTime.now() }, 1000);
+    const checkInterval = setInterval(() => { currentTime.value = moment() }, 1000);
     onUnmounted(() => {
         clearInterval(pingInterval);
         clearInterval(checkInterval);
@@ -158,7 +158,13 @@ const activePageComponent = computed(() => {
 function dataMapper(){
     unref(appScreen).validRooms = computed( () => {
         return unref(appScreen).rooms.filter(room => {
-            return (!room.pivot.starts_at || unref(currentTime) >= DateTime.fromSQL(room.pivot.starts_at)) && (!room.pivot.ends_at || unref(currentTime) <= DateTime.fromSQL(room.pivot.ends_at));
+            return (
+                // If room.pivot.starts_at exists, check if the current time is greater than or equal to it
+                (!room.pivot.starts_at || currentTime.value.isSameOrAfter(moment(room.pivot.starts_at))) &&
+
+                // If room.pivot.ends_at exists, check if the current time is less than or equal to it
+                (!room.pivot.ends_at || currentTime.value.isSameOrBefore(moment(room.pivot.ends_at)))
+            );
         });
     });
 }

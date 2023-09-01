@@ -5,7 +5,6 @@ import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
     build: {
-        manifest: true,
         target: 'chrome70',
     },
     plugins: [

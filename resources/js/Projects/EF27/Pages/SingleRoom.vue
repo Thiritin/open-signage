@@ -66,7 +66,7 @@ const nextEvent = computed(() => {
                 {{ nextEvent.room.name }}
             </div>
             <div class="text-[6vw] leading-[1.2] font-bold text-center magicTextColor">
-                {{ nextEvent.title }}
+                {{ nextEvent.title.truncate(90) }}
             </div>
             <div class="mb-2 whitespace-nowrap text-5xl text-center text-[9vw] leading-none">
                 <div v-if="getDayDescription(DateTime.fromISO(nextEvent.starts_at).plus({minutes: nextEvent.delay}))"

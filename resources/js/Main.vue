@@ -246,14 +246,6 @@ watch(activePageIndex, (value, oldValue) => {
             :screen="appScreen"
             :rooms="rooms"
             :schedule="schedule"
-            :waht="[
-                {
-                    name: 'waht1',
-                },
-                {
-                    name: 'waht2',
-                }
-            ]"
             :artworks="artworks"
             :announcements="announcements"
             :page="mappedPages[activePageIndex] ?? {resolvedComponent: Error}"

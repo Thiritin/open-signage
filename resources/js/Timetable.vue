@@ -36,9 +36,6 @@ Echo.channel('ScreenAll')
         schedule.value = e.schedule;
     })
 
-const copyEvent = unref(props.initialSchedule[14]);
-copyEvent.title = "Fursuit WAAAAAAAAAAAAAAH"
-
 const groupedSchedule = computed(() => {
     // Group by date
     return schedule.value

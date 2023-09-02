@@ -82,7 +82,7 @@ import HourTime from "@/Components/HourTime.vue";
 
         <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">
 
-            <IconRouter :path="page.path" class="flex flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
+            <IconRouter v-if="item.pivot.icon" :path="page.path" class="flex flex-0 magicTextColor w-[10vw] svgIconGlow" :icon="item.pivot.icon"
                         :mirror="item.pivot.mirror" :rotation="item.pivot.rotation"></IconRouter>
 
 

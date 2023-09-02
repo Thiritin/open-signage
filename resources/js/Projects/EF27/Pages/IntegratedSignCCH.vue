@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, onUnmounted, ref, unref} from "vue";
+import {computed, defineAsyncComponent, onMounted, onUnmounted, ref, toRaw, unref} from "vue";
 import anime from 'animejs';
 
 const props = defineProps({
@@ -11,8 +11,12 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    screen: {
+    rooms: {
         type: Array,
+        default: []
+    },
+    screen: {
+        type: Object,
         default: []
     },
     pageSwitchingTimer: {
@@ -50,15 +54,15 @@ String.prototype.truncate = String.prototype.truncate ||
             : subString) + " …";
 };
 
-const nextEvent = function (room) {
-    return computed(() => {
-        return props.schedule.filter(event => {
+function getNextEventForRoom(room,timeObject) {
+        return _.cloneDeep(props.schedule).filter(event => {
             return event.room_id === room.id;
         }).filter(event => {
-            return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay}) && !event.title.toLowerCase().includes("seating")
-        }).map((event, index) => {
+            return timeObject <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay}) && !event.title.toLowerCase().includes("seating")
+        }).map((event) => {
+            let eventCopy = toRaw(event);
             // console.log(event.title);
-            event.title = event.title ? event.title
+            eventCopy.title = eventCopy.title ? eventCopy.title
                 .replace("Dealers' Den & Art Show", "")
                 .replace("Dealers' Den", "")
                 .replace("Art Show", "")
@@ -73,12 +77,18 @@ const nextEvent = function (room) {
                 // .replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "")
                 // .replace("room.name", "")
                 .replace(/^[\W]+/g, "")
-        : event.title;
-            event.title = event.title.split(" – ")[0].truncate(30, true);
-            return event;//event.title.replace(room.name);
+        : eventCopy.title;
+            eventCopy.title = eventCopy.title.split(" – ")[0].truncate(30, true);
+            return eventCopy;//event.title.replace(room.name);
         }).shift();
+}
+
+const populatedRooms = computed(() => {
+    return _.cloneDeep(props.rooms).map(room => {
+        room.nextEvent = getNextEventForRoom(room,currentTime.value);
+        return room;
     });
-};
+});
 
 function chunkArray(array, chunkSize) {
     const result = [];
@@ -89,7 +99,7 @@ function chunkArray(array, chunkSize) {
 }
 
 const roomPages = computed(() => {
-    return chunkArray(props.screen.validRooms, 3);
+    return chunkArray(populatedRooms.value, 3);
 });
 
 const currentSlide = computed(() => {
@@ -104,6 +114,7 @@ import MaskSVG from "@/Projects/EF27/Assets/images/logoEF27Mask.svg";
 import IconRouter from "@/Projects/System/Components/IconRouter.vue";
 import {DateTime} from "luxon";
 import HourTime from "@/Components/HourTime.vue";
+import _ from "lodash";
 
 
 
@@ -236,8 +247,8 @@ function onLeave(node, done) {
 
                             <div class="flex flex-row text-[4vw] items-baseline">
 
-                                <div v-if="nextEvent(item).value" class="flex flex-row items-baseline">
-                                    <div v-if="nextEvent(item).value && DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
+                                <div v-if="item.nextEvent" class="flex flex-row items-baseline">
+                                    <div v-if="item.nextEvent && DateTime.fromISO(item.nextEvent.starts_at) < DateTime.local()"
                                          class="flex text-left magicTextColorGreen anim">
                                         OPEN
                                     </div>
@@ -247,12 +258,12 @@ function onLeave(node, done) {
                                 </div>
 
                                 <div
-                                    v-if="nextEvent(item).value && DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local() && nextEvent(item).value.title"
+                                    v-if="item.nextEvent && DateTime.fromISO(item.nextEvent.starts_at) < DateTime.local() && item.nextEvent.title"
                                     class="flex text-left anim">
-                                    {{ nextEvent(item).value.title }}
+                                    {{ item.nextEvent.title }}
                                 </div>
-                                <div v-else-if="nextEvent(item).value && nextEvent(item).value.title" class="flex text-left anim">
-                                    Next: {{ nextEvent(item).value.title }}
+                                <div v-else-if="item.nextEvent && item.nextEvent.title" class="flex text-left anim">
+                                    Next: {{ item.nextEvent.title }}
                                 </div>
 
                             </div>

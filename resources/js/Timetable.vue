@@ -2,7 +2,8 @@
 import 'vue3-carousel/dist/carousel.css'
 import {Carousel, Slide} from 'vue3-carousel'
 import HourTime from "@/Components/HourTime.vue";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, unref} from "vue";
+import {DateTime} from "luxon";
 
 const cleanUpPrevention = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6', 'grid-cols-7', 'grid-cols-8']
 
@@ -24,7 +25,7 @@ const props = defineProps({
     showDate: {
         type: String,
         required: false
-    },
+    }
 })
 
 const schedule = ref(props.initialSchedule)
@@ -34,6 +35,9 @@ Echo.channel('ScreenAll')
     .listen('.schedule.update', (e) => {
         schedule.value = e.schedule;
     })
+
+const copyEvent = unref(props.initialSchedule[14]);
+copyEvent.title = "Fursuit WAAAAAAAAAAAAAAH"
 
 const groupedSchedule = computed(() => {
     // Group by date

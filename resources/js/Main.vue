@@ -3,6 +3,7 @@ import {defineAsyncComponent, ref, watch, computed, onMounted, resolveComponent,
 import None from "@/Projects/System/Layouts/None.vue";
 import Error from "@/Projects/System/Pages/Error.vue";
 import moment from "moment";
+import _ from "lodash";
 
 const props = defineProps({
     initialPages: {
@@ -57,7 +58,9 @@ const ping = () => {
 onMounted(() => {
     ping();
     const pingInterval = setInterval(ping, 60000);
-    const checkInterval = setInterval(() => { currentTime.value = moment() }, 1000);
+    const checkInterval = setInterval(() => {
+        currentTime.value = moment()
+    }, 1000);
     onUnmounted(() => {
         clearInterval(pingInterval);
         clearInterval(checkInterval);
@@ -88,7 +91,6 @@ Echo.channel('Screen.' + props.initialScreen.id)
         appScreen.value = e.screen;
         layouts = mapLayouts(mappedPages);
         activePageIndex.value = activePageIndex.value + 1 % pages.value.length;
-        dataMapper();
     });
 
 window.Echo.connector.pusher.connection.bind('connecting', (payload) => {
@@ -104,7 +106,6 @@ window.Echo.connector.pusher.connection.bind('unavailable', (payload) => {
     isConnected.value = false
     connectionError.value = "Socket failed"
 });
-
 
 const mappedPages = computed(() => {
     return pages.value.map((page, index) => {
@@ -155,21 +156,17 @@ const activePageComponent = computed(() => {
     return page?.resolvedComponent ?? Error;
 });
 
-function dataMapper(){
-    unref(appScreen).validRooms = computed( () => {
-        return unref(appScreen).rooms.filter(room => {
-            return (
-                // If room.pivot.starts_at exists, check if the current time is greater than or equal to it
-                (!room.pivot.starts_at || currentTime.value.isSameOrAfter(moment(room.pivot.starts_at))) &&
+const rooms = computed(() => {
+    return appScreen.value.rooms.filter(room => {
+        return (
+            // If room.pivot.starts_at exists, check if the current time is greater than or equal to it
+            (!room.pivot.starts_at || currentTime.value.isSameOrAfter(moment(room.pivot.starts_at))) &&
 
-                // If room.pivot.ends_at exists, check if the current time is less than or equal to it
-                (!room.pivot.ends_at || currentTime.value.isSameOrBefore(moment(room.pivot.ends_at)))
-            );
-        });
+            // If room.pivot.ends_at exists, check if the current time is less than or equal to it
+            (!room.pivot.ends_at || currentTime.value.isSameOrBefore(moment(room.pivot.ends_at)))
+        );
     });
-}
-dataMapper();
-
+});
 
 function nextPage() {
     activePageIndex.value = (activePageIndex.value + 1) % pages.value.length;
@@ -247,7 +244,16 @@ watch(activePageIndex, (value, oldValue) => {
             :connected="isConnected"
             v-show="activePageComponent"
             :screen="appScreen"
+            :rooms="rooms"
             :schedule="schedule"
+            :waht="[
+                {
+                    name: 'waht1',
+                },
+                {
+                    name: 'waht2',
+                }
+            ]"
             :artworks="artworks"
             :announcements="announcements"
             :page="mappedPages[activePageIndex] ?? {resolvedComponent: Error}"

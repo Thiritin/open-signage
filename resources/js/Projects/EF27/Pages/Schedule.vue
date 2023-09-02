@@ -50,54 +50,55 @@ String.prototype.truncate = String.prototype.truncate ||
             : subString) + " …";
     };
 
-const filteredEvents = props.schedule.filter(event => {
+const filteredEvents = computed(() => {
+    return _.cloneDeep(props.schedule).filter(event => {
         return currentTime.value > DateTime.fromISO(event.starts_at).minus({hours: 12}) && currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay}).plus({minutes: 10}) && !event.title.toLowerCase().includes("seating")
     }).map((event, index) => {
-    // console.log(event.title);
+        // console.log(event.title);
 
-    if((event.room.name.includes(event.title) || event.title.includes(event.room.name) )){
-        if(event.room.name !== event.room.venue_name){
-            event.room.name = event.room.venue_name;
-        }
-    }
-
-    if(event.title.length > 30){
-
-        let parts = event.title.split(" – ");
-        if(parts.length > 1){
-            if(event.room.name.includes(parts[0]) || parts[0].includes(event.room.name)){
-                parts.shift();
-                event.title = parts.join(" – ").replace(/^[\W]+/g, "").replace(/[\W]+$/g, "");
-            } else {
-                parts.pop();
-                event.title = parts.join(" – ").replace(/^[\W]+/g, "").replace(/[\W]+$/g, "");
+        if((event.room.name.includes(event.title) || event.title.includes(event.room.name) )){
+            if(event.room.name !== event.room.venue_name){
+                event.room.name = event.room.venue_name;
             }
         }
-    }
 
-    event.title = event.title.truncate(30, true);
+        if(event.title.length > 30){
+            let parts = event.title.split(" – ");
+            if(parts.length > 1){
+                if(event.room.name.includes(parts[0]) || parts[0].includes(event.room.name)){
+                    parts.shift();
+                    event.title = parts.join(" – ").replace(/^[\W]+/g, "").replace(/[\W]+$/g, "");
+                } else {
+                    parts.pop();
+                    event.title = parts.join(" – ").replace(/^[\W]+/g, "").replace(/[\W]+$/g, "");
+                }
+            }
+        }
+
+        event.title = event.title.truncate(30, true);
 
 
-    // event.title = event.title ? event.title
-            // .replace("Dealers' Den & Art Show", "")
-            // .replace("Dealers' Den", "")
-            // .replace("Art Show", "")
-            // .replace("Fursuit Badge", "")
-            // .replace("Registration", "")
-            // .replace("Constore", "")
-            // .replace("Fursuit Badge", "")
-            // .replace("Fursuit Lounge", "")
-            // .replace("Artists' Lounge", "")
-            // .replace("Locker Service", "")
-            // .replace("The Electric Lounge Sessions", "")
-            // .replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "")
-            // .replace("room.name", "")
-            // .replace(/^[\W]+/g, "")
+        // event.title = event.title ? event.title
+        // .replace("Dealers' Den & Art Show", "")
+        // .replace("Dealers' Den", "")
+        // .replace("Art Show", "")
+        // .replace("Fursuit Badge", "")
+        // .replace("Registration", "")
+        // .replace("Constore", "")
+        // .replace("Fursuit Badge", "")
+        // .replace("Fursuit Lounge", "")
+        // .replace("Artists' Lounge", "")
+        // .replace("Locker Service", "")
+        // .replace("The Electric Lounge Sessions", "")
+        // .replace(/^[ ‑–—‐−‐–—⸺|‖•‣]+/g, "")
+        // .replace("room.name", "")
+        // .replace(/^[\W]+/g, "")
         // : event.title;
-    // event.title = event.title.split(" – ")[0];
+        // event.title = event.title.split(" – ")[0];
 
-    return event;//event.title.replace(room.name);
-});
+        return event;//event.title.replace(room.name);
+    });
+})
 
 
 function chunkArray(array, chunkSize) {
@@ -110,7 +111,7 @@ function chunkArray(array, chunkSize) {
 }
 
 const schedulePages = computed(() => {
-    return chunkArray(filteredEvents, 5);
+    return chunkArray(filteredEvents.value, 5);
 });
 
 const currentSlide = computed(() => {
@@ -125,6 +126,7 @@ import MaskSVG from "@/Projects/EF27/Assets/images/logoEF27Mask.svg";
 import IconRouter from "@/Projects/System/Components/IconRouter.vue";
 import {DateTime} from "luxon";
 import HourTime from "@/Components/HourTime.vue";
+import _ from "lodash";
 
 function spanify(element){
 

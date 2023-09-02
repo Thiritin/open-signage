@@ -32,7 +32,7 @@ class ScreenController extends Controller
             'initialScreen' => ScreenDataGenerator::screen($screen),
             'initialArtworks' => ScreenDataGenerator::artworks(),
             'initialAnnouncements' => ScreenDataGenerator::announcements(),
-            'initialSchedule' => ScreenDataGenerator::schedule(),
+            'initialSchedule' => ScreenDataGenerator::schedule()
         ]);
     }
 }

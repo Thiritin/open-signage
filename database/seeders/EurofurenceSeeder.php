@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -57,6 +58,26 @@ class EurofurenceSeeder extends Seeder
                 [
                     "name" => "Show Room Name",
                     "property" => "showRoomName",
+                    "type" => "Checkbox"
+                ],
+            ],
+        ]);
+
+        // Schedule
+        $project->pages()->updateOrCreate([
+            'component' => "Schedule",
+        ],[
+            'name' => "Schedule",
+            'component' => "Schedule",
+            'schema' => [
+                [
+                    "name" => "Page Switch (ms)",
+                    "property" => "pageSwitchingTimer",
+                    "type" => "TextInput"
+                ],
+                [
+                    "name" => "Use Theme Font",
+                    "property" => "isThemeFont",
                     "type" => "Checkbox"
                 ],
             ],

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\EmergencyTypeEnum;
+use App\Enums\ResourceOwnership;
 use App\Enums\ScreenStatusEnum;
 use App\Events\Broadcast\RefreshScreenEvent;
 use App\Filament\Resources\ScreenResource\Pages;
@@ -26,6 +27,7 @@ use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -130,6 +132,7 @@ class ScreenResource extends Resource
 
                 TextColumn::make('mode')
                     ->badge()
+                    ->visible(fn() => Screen::whereHas('playlist.project', fn(Builder $query) => $query->where('type','=',ResourceOwnership::EMERGENCY))->exists())
                     ->alignStart()
                     ->size(TextColumn\TextColumnSize::Large)
                     ->state(fn(Screen $screen) => $screen->isEmergency() ? $screen->playlist->name : 'Normal')
@@ -138,7 +141,10 @@ class ScreenResource extends Resource
                     ->icon(fn(Screen $screen
                     ) => $screen->isEmergency() ? 'heroicon-o-exclamation-circle' : 'heroicon-o-check-circle'),
 
-                TextColumn::make('room.name')->label('Room'),
+                TextColumn::make('room.name')
+                    ->sortable()
+                    ->searchable()
+                    ->label('Room'),
 
                 SelectColumn::make('playlist_id')
                     ->label('Playlist')
@@ -164,16 +170,18 @@ class ScreenResource extends Resource
 
                 TextColumn::make('last_ping_at')
                     ->label('Last Ping')
+                    ->sortable()
                     ->state(fn(?Screen $record): string => $record?->last_ping_at?->diffForHumans() ?? '-'),
 
             ])->filters([
                 Filter::make('provisioned')->label('Show only provisioned screens')->query(fn(
                     Builder $query
                 ) => $query->where('provisioned', true))->default(true),
+                SelectFilter::make('room')->relationship('room', 'name')->multiple()
             ])->actions([
                 \Filament\Tables\Actions\EditAction::make('Edit'),
             ])
-            ->poll(10)
+            ->poll()
             ->striped()
             ->bulkActions(array(
                 BulkAction::make('Refresh')

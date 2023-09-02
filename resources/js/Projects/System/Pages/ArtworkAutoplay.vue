@@ -6,7 +6,7 @@ const props = defineProps({
         type: Array,
         required: false
     },
-    screen: {
+    appScreen: {
         type: Object,
         required: true
     },
@@ -39,7 +39,7 @@ onMounted(() => {
 });
 
 const setScreenOrientation = () => {
-    if (props.screen.orientation === "normal" || props.screen.orientation === "inverted") {
+    if (props.appScreen.orientation === "normal" || props.appScreen.orientation === "inverted") {
         screenOrientation.value = "horizontal"
     }
 }

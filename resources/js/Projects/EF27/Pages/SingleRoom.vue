@@ -5,7 +5,7 @@ import HourTime from "@/Components/HourTime.vue";
 import _ from "lodash";
 
 const props = defineProps({
-    screen: {
+    appScreen: {
         type: Object,
         required: true
     },
@@ -52,7 +52,7 @@ function getDayDescription(starts_at) {
 
 const nextEvent = computed(() => {
     return _.cloneDeep(props.schedule).filter(event => {
-        return event.room_id === props.screen.room_id;
+        return event.room_id === props.appScreen.room_id;
     }).filter(event => {
         return currentTime.value <= DateTime.fromISO(event.ends_at).plus({minutes: event.delay})
     })[0]

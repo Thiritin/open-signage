@@ -243,7 +243,7 @@ watch(activePageIndex, (value, oldValue) => {
         <component
             :connected="isConnected"
             v-show="activePageComponent"
-            :screen="appScreen"
+            :appScreen="appScreen"
             :rooms="rooms"
             :schedule="schedule"
             :artworks="artworks"

@@ -138,7 +138,7 @@ class ScreenResource extends Resource
                     ->icon(fn(Screen $screen
                     ) => $screen->isEmergency() ? 'heroicon-o-exclamation-circle' : 'heroicon-o-check-circle'),
 
-                TextColumn::make('screenGroup.name')->label('Screen Group'),
+                TextColumn::make('room.name')->label('Room'),
 
                 SelectColumn::make('playlist_id')
                     ->label('Playlist')

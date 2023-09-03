@@ -210,7 +210,7 @@ function onLeave(node, done) {
             // sectionBounderys.height = 0.681*sectionBounderys.height;
             return anime.random(-elementBounderys.y + sectionBounderys.y, sectionBounderys.y + sectionBounderys.height - elementBounderys.y - elementBounderys.height);
         },
-        opacity: 0.25,
+        opacity: 0,
         scaleX: 0,
         duration: function () {
             return anime.random(250, 1725)

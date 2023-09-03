@@ -514,7 +514,7 @@ onMounted(() => {
 
     magicMistLayerController
         .add(new MagicMist(0, mistLayer.value, {
-            particleCount: 60,
+            particleCount: 40,
             maxxVelocity: 0.5,
             maxyVelocity: 0.5,
             particleOptions: {

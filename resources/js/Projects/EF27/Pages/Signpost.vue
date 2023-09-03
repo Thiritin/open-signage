@@ -10,7 +10,11 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    screen: {
+    appScreen: {
+        type: Array,
+        default: []
+    },
+    rooms: {
         type: Array,
         default: []
     },
@@ -78,7 +82,7 @@ import HourTime from "@/Components/HourTime.vue";
 
 <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
 
-    <div v-for="item in screen.rooms" class="flex flex-col relative z-30 magicTextColor magic-text themeFontSecondary w-[100vw]">
+    <div v-for="item in rooms" class="flex flex-col relative z-30 magicTextColor magic-text themeFontSecondary w-[100vw]">
 
         <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">
 

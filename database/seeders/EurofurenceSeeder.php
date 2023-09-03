@@ -32,7 +32,13 @@ class EurofurenceSeeder extends Seeder
         ],[
             'name' => "Signpost",
             'component' => "Signpost",
-            'schema' => [],
+            'schema' => [
+                [
+                    "name" => "Page Switch (ms)",
+                    "property" => "pageSwitchingTimer",
+                    "type" => "TextInput"
+                ],
+            ],
         ]);
 
         $project->pages()->updateOrCreate([

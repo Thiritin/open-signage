@@ -1,14 +1,13 @@
 import './bootstrap.js';
+import {createApp, h} from 'vue';
+import {createInertiaApp} from '@inertiajs/vue3';
+import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
+import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
+import * as Sentry from "@sentry/vue";
 
 import.meta.glob([
     './Projects/**/Assets/**',
 ]);
-
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import * as Sentry from "@sentry/vue";
 
 const appName = 'Open Signage';
 const appPath = import.meta.env.VITE_PROJECT_PATH;

@@ -1,6 +1,7 @@
 <script setup>
 import {computed, onMounted, onUnmounted, ref, unref} from "vue";
 import anime from 'animejs';
+import chunkArray from "@/chunkArray.js";
 
 const props = defineProps({
     title: {
@@ -11,7 +12,7 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    screen: {
+    appScreen: {
         type: Array,
         default: []
     },
@@ -99,16 +100,6 @@ const filteredEvents = computed(() => {
         return event;//event.title.replace(room.name);
     });
 })
-
-
-function chunkArray(array, chunkSize) {
-    const result = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-        result.push(array.slice(i, i + chunkSize));
-    }
-    console.log(result);
-    return result;
-}
 
 const schedulePages = computed(() => {
     return chunkArray(filteredEvents.value, 5);

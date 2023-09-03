@@ -102,13 +102,13 @@ import chunkArray from "@/chunkArray.js";
                                 {{ item.name }}
                             </div>
 
-                            <div v-if="item.name !== item.venue_name" class="flex text-[2.5vw] text-left items-center leading-none">
+                            <div v-if="item.name !== item.venue_name && item.venue_name" class="flex text-[2.5vw] text-left items-center leading-none">
                                 ( {{ item.venue_name }} )
                             </div>
 
                         </div>
 
-                        <div class="flex text-[5vw] leading-none">
+                        <div v-if="nextEvent(item).value" class="flex text-[5vw] leading-none">
                             <div class="mr-3">
                             <div v-if="DateTime.fromISO(nextEvent(item).value.starts_at) < DateTime.local()"
                                  class="text-left leading-none">Now:

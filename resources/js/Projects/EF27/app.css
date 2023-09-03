@@ -27,8 +27,7 @@
     color: rgba(175, 175, 255, 1);
     text-shadow: 0 0 7px rgba(155, 50, 255, 1),
     0 0 10px rgba(155, 50, 255, 1),
-    0 0 21px rgba(150, 20, 200, 0.75),
-    0 0 42px rgba(150, 20, 200, 0.5);
+    0 0 21px rgba(150, 20, 200, 0.75);
     user-select: none;
 }
 

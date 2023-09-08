@@ -58,7 +58,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: _site
+          name: github-pages
           path: ./docs/_site
 
   deploy:

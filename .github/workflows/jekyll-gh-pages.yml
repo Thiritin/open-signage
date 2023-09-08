@@ -51,7 +51,9 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: test step
-        run: ls -la
+        run: |
+          cd docs
+          ls -la
 
       - name: Build Jekyll site
         run: bundle exec jekyll build --source ./docs/ --destination ./docs/_site

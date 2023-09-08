@@ -52,7 +52,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Build Jekyll site
-        run: bundle exec jekyll build --source ./docs/ --destination ./docs/_site
+        run: bundle exec jekyll build --source ./ --destination ./_site
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2

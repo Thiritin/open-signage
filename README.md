@@ -80,16 +80,18 @@ php artisan migrate
 1. Start the Laravel server:
 
 ```
-php artisan serve
+./vendor/bin/sail up
 ```
 
-2. Compile the assets:
+Or use 
+
+2. Start vite dev mode:
 
 ```
-npm run dev
+vite
 ```
 
-Open Signage should now be accessible at `http://localhost:8000`.
+Open Signage should now be accessible at `http://localhost`.
 
 ## Contributing
 

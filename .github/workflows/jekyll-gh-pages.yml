@@ -53,12 +53,12 @@ jobs:
       - name: Build Jekyll site
         run: |
           cd docs
-          bundle exec jekyll build --source ./docs/ --destination ./docs/_site
+          bundle exec jekyll build --source ./ --destination ./_site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: /home/runner/work/open-signage/open-signage/docs/docs/_site
+          path: ./docs/_site
 
   deploy:
     runs-on: ubuntu-latest

@@ -34,7 +34,7 @@ Open Signage is a digital signage solution built on Laravel, Inertia.js, and Vue
 1. Clone the repository:
 
 ```
-git clone https://github.com/your-github-username/open-signage.git
+git clone https://github.com/thiritin/open-signage.git
 ```
 
 2. Navigate into the project directory:

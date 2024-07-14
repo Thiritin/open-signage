@@ -16,6 +16,9 @@
 
 Open Signage is a digital signage solution built on Laravel, Inertia.js, and Vue.js. This platform serves webpages for digital signage screens, running on Chrome in kiosk mode. Utilizing Socketi, Open Signage dynamically updates data on screens. Users can create playlists for their screens, allowing for rotating announcements and various media presentations.
 
+**ATTENTION!!** This is primarily used for Eurofurence (Hamburg, CCH). It is primarily suited at developers having knowledge of Vue.js and possibly a bit Laravel.
+Feel free to drop me a message at me@thiritin.com for commercial support.
+
 ## Features
 
 - Dynamic data update with Socketi

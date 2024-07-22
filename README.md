@@ -102,7 +102,7 @@ We welcome contributions from everyone. Please read our [Contributing Guidelines
 
 ## License
 
-This project is open-source and is licensed under the [GNU General Public License v2.0](LICENSE.md).
+This project is open-source and is licensed under the [GNU General Public License v2.0](LICENSE).
 
 ## Contact
 

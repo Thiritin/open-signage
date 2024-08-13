@@ -14,7 +14,10 @@ class EmergencyNotificationsListener
 
     public function handle(EmergencyEvent $event): void
     {
-        \Illuminate\Support\Facades\Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
-            ->notify(new EmergencyNotification($event->user, $event->type, $event->screens));
+        if (config('services.telegram-bot-api.chat_id'))
+        {
+            \Illuminate\Support\Facades\Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
+                ->notify(new EmergencyNotification($event->user, $event->type, $event->screens));
+        }
     }
 }

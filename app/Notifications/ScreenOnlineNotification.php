@@ -17,7 +17,14 @@ class ScreenOnlineNotification extends Notification
 
     public function via(): array
     {
-        return ['telegram','admin'];
+        $notifications = ['admin'];
+
+        if (config('services.telegram-bot-api.chat_id'))
+        {
+            $notifications[] = 'telegram';
+        }
+
+        return $notifications;
     }
 
     /**

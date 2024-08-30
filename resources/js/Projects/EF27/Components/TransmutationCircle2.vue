@@ -52,11 +52,11 @@ onUnmounted(() => {
 @keyframes moveCircle {
     from {
         opacity: 0;
-    //top: -700px;
+    /* top: -700px; */
     }
     to {
         opacity: 0.3;
-    //top: 10px;
+    /* top: 10px; */
     }
 }
 

@@ -168,7 +168,10 @@ body {
 .magic-text {
     position: relative;
     user-select: none;
-//font-family: 'primaryThemeFont', sans-serif; white-space: pre;
+    /*
+    font-family: 'primaryThemeFont', sans-serif;
+    white-space: pre;
+    */
 }
 
 .magic-text span {
@@ -212,4 +215,3 @@ body {
 }
 
 </style>
-

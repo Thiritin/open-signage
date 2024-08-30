@@ -15,8 +15,8 @@ class EurofurenceSeeder extends Seeder
     public function run(): void
     {
         $project = Project::firstOrCreate([
-            'path' => 'EF27',
-            'name' => 'Eurofurence 27',
+            'path' => 'EF28',
+            'name' => 'Eurofurence 28',
         ]);
 
         // Create Primary Layout

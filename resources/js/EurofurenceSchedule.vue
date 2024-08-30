@@ -1,7 +1,7 @@
 <script setup>
-import Time from "@/Projects/EF27/Components/CurrentTime.vue";
-import TransmutationCircle from "@/Projects/EF27/Components/TransmutationCircle.vue";
-import MagicMist from "@/Projects/EF27/Components/MagicMist.vue";
+import Time from "@/Projects/EF28/Components/CurrentTime.vue";
+import TransmutationCircle from "@/Projects/EF28/Components/TransmutationCircle.vue";
+import MagicMist from "@/Projects/EF28/Components/MagicMist.vue";
 
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import anime from 'animejs';
@@ -62,10 +62,10 @@ let title = ref("Curriculum");
 // Curriculum are Events/Panels located Outside or in the Rooms: Blu XXX, CCH Hall [0-9]
 const lecturesNote = ref();
 
-import LogoSVG from '@/Projects/EF27/Assets/images/logoEF27e.svg';
-import MaskSVG from '@/Projects/EF27/Assets/images/logoEF27Mask.svg';
+import LogoSVG from '@/Projects/EF28/Assets/images/logoEF27e.svg';
+import MaskSVG from '@/Projects/EF28/Assets/images/logoEF27Mask.svg';
 import CurrentTime from "@/Components/CurrentTime.vue";
-import TransmutationSVG from "@/Projects/EF27/Assets/images/transmutation5.svg";
+import TransmutationSVG from "@/Projects/EF28/Assets/images/transmutation5.svg";
 
 const events = ref(props.events).value;   //events should be refreshed only once a while (e.g. 20 min on reload)
 const connews = ref(props.connews).value;  //connews should be reloaded frequently (e.g. 1 per minute)

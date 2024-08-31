@@ -1,17 +1,18 @@
 <script setup>
-import {onMounted, useAttrs} from "vue";
+import { onMounted, useAttrs } from "vue";
 
-const props = defineProps(['page'])
+const props = defineProps(["page"]);
 defineOptions({
-    inheritAttrs: false
-})
+    inheritAttrs: false,
+});
+
 let attrs = useAttrs();
+
 attrs = {
     ...attrs,
     page: props.page,
-    ...props.page.props
-}
-
+    ...props.page.props,
+};
 </script>
 
 <template>

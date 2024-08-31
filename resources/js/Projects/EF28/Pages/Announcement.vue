@@ -13,6 +13,7 @@ const preserveClasses = [
     "text-13xl",
     "text-14xl",
 ]
+
 defineProps({
     title: {
         type: String,
@@ -52,6 +53,7 @@ defineProps({
 figcaption {
     display: none;
 }
+
 .textscreen img {
     padding:60px;
     margin:auto;

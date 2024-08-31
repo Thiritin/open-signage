@@ -2,16 +2,12 @@
 import {computed, onMounted, onUpdated, reactive, useAttrs, watch} from "vue";
 
 const props = defineProps(['page'])
+
 defineOptions({
     inheritAttrs: false
 })
 
-import Time from "@/Projects/EF28/Components/CurrentTime.vue";
-import TransmutationCircle from "@/Projects/EF28/Components/TransmutationCircle.vue";
-import MagicMist from "@/Projects/EF28/Components/MagicMist.vue";
-import MaskSVG from "@/Projects/EF28/Assets/images/logoEF27Mask.svg";
-import LogoSVG from "@/Projects/EF28/Assets/images/logoEF27e.svg";
-
+//import LogoSVG from "@/Projects/EF28/Assets/images/logoEF27e.svg";
 
 let attrs = reactive(useAttrs());
 
@@ -22,18 +18,13 @@ const usableAttributes = computed(() => {
         ...props.page.props
     }
 })
-
 </script>
 
 <template>
     <div>
         <!-- animated background -->
         <div class="absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center">
-            <TransmutationCircle/>
-
-            <MaskSVG style="z-index: 3; width: 700px; height: 700px;" class="absolute bottom-5 flex"/>
-            <MagicMist color="purple"/>
-            <LogoSVG style="z-index: 5; width: 700px; height: 700px; opacity: 0.75" class="absolute flex bottom-5"/>
+            <!-- todo: implement -->
         </div>
 
         <!--    <Time hourglass="true"/>-->

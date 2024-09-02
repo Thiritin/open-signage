@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 module.exports = {
     colors: {
         primary: {
-            DEFAULT: "#1C253C",
+            DEFAULT: "#291429",
             100: "#E6EFEE",
             200: "#CBDEDD",
             300: "#AEC6C4",

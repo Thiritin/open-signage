@@ -8,6 +8,7 @@ defineOptions({
 })
 
 //import LogoSVG from "@/Projects/EF28/Assets/images/logoEF27e.svg";
+import Background from '../Components/Background.vue';
 
 let attrs = reactive(useAttrs());
 
@@ -24,7 +25,7 @@ const usableAttributes = computed(() => {
     <div>
         <!-- animated background -->
         <div class="absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center">
-            <!-- todo: implement -->
+            <Background />
         </div>
 
         <!--    <Time hourglass="true"/>-->

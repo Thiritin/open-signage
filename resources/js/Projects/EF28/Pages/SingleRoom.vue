@@ -72,12 +72,12 @@ const nextEvent = computed(() => {
         >
             <div
                 v-if="nextEvent.room.name !== nextEvent.title && showRoomName"
-                class="text-[10vw] leading-none font-bold text-center magicTextColor"
+                class="text-[10vw] leading-none font-bold text-center neonTubeColor headingFont"
             >
                 {{ nextEvent.room.name }}
             </div>
             <div
-                class="text-[6vw] leading-[1.2] font-bold text-center magicTextColor"
+                class="text-[6vw] leading-[1.2] font-bold text-center neonTextColor"
             >
                 {{ nextEvent.title.truncate(90) }}
             </div>
@@ -92,7 +92,7 @@ const nextEvent = computed(() => {
                             })
                         )
                     "
-                    class="magicTextColor magicTextColor text-[6vw] leading-none"
+                    class="neonTextColor text-[6vw] leading-none"
                 >
                     {{
                         getDayDescription(
@@ -102,14 +102,14 @@ const nextEvent = computed(() => {
                         )
                     }}
                 </div>
-                <div class="magicTextColor">
+                <div class="neonTextColor">
                     <HourTime :time="DateTime.fromISO(nextEvent.starts_at)" />
                     -
                     <HourTime :time="DateTime.fromISO(nextEvent.ends_at)" />
                 </div>
                 <div
                     v-if="nextEvent.delay > 0"
-                    class="text-[6vw] leading-none magicTextColor text-center"
+                    class="text-[6vw] leading-none neonTextColor text-center"
                 >
                     Delayed by
                     <span class="magicTextColorRed">{{ nextEvent.delay }}</span>

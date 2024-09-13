@@ -2,6 +2,8 @@
 import { computed, onMounted, onUnmounted, ref, unref } from "vue";
 import anime from "animejs";
 import chunkArray from "@/chunkArray.js";
+import Progress from '../Components/Progress.vue';
+import Glitches from '../Components/Glitches.vue';
 
 const props = defineProps({
     title: {
@@ -71,8 +73,6 @@ const filteredEvents = computed(() => {
             );
         })
         .map((event, index) => {
-            // console.log(event.title);
-
             if (
                 event.room.name.includes(event.title) ||
                 event.title.includes(event.room.name)
@@ -129,7 +129,7 @@ const filteredEvents = computed(() => {
 });
 
 const schedulePages = computed(() => {
-    return chunkArray(filteredEvents.value, 5);
+    return chunkArray(filteredEvents.value, 3);
 });
 
 const currentSlide = computed(() => {
@@ -139,23 +139,8 @@ const currentSlide = computed(() => {
 import { DateTime } from "luxon";
 import _ from "lodash";
 
-function spanify(element) {
-    const textes = element.querySelectorAll("div.anim");
-
-    for (let i = 0, n = textes.length; i < n; i++) {
-        let letters = textes[i].innerText.split("");
-        textes[i].innerHTML = "";
-
-        for (let j = 0, m = letters.length; j < m; j++) {
-            let span = document.createElement("span");
-            span.innerText = letters[j];
-            textes[i].appendChild(span);
-        }
-    }
-}
-
 function onBeforeEnter(el) {
-    spanify(el);
+    //spanify(el);
 }
 
 function onEnter(node, done) {
@@ -163,100 +148,66 @@ function onEnter(node, done) {
     // optional if used in combination with CSS
 
     anime({
-        targets: node.querySelectorAll(".anim span"),
+        targets: node.querySelectorAll(".anim"),
         loop: 1,
         direction: "reverse",
-        easing: "cubicBezier(.5, .05, .1, .3)",
+        easing: "easeInOutBounce",
         autoplay: false,
         complete: function (anim) {
             done();
         },
         translateX: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.x = (sectionBounderys.x + sectionBounderys.width)/2 - 0.681*sectionBounderys.width/2;
-            // sectionBounderys.width = 0.681*sectionBounderys.width;
-            return anime.random(
-                -elementBounderys.x + sectionBounderys.x,
-                sectionBounderys.x +
-                    sectionBounderys.width -
-                    elementBounderys.x -
-                    elementBounderys.width
-            );
+            const halfWidth = el.getBoundingClientRect().width / 2;
+
+            return anime.random(-halfWidth, halfWidth);
         },
         translateY: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.y = (sectionBounderys.x + sectionBounderys.height)/2 - 0.681*sectionBounderys.height/2;
-            // sectionBounderys.height = 0.681*sectionBounderys.height;
-            return anime.random(
-                -elementBounderys.y + sectionBounderys.y,
-                sectionBounderys.y +
-                    sectionBounderys.height -
-                    elementBounderys.y -
-                    elementBounderys.height
-            );
+            const halfHeight = el.getBoundingClientRect().height / 2;
+
+            return anime.random(-halfHeight, halfHeight);
         },
-        opacity: 0.25,
-        scaleX: 0,
+        opacity: 0,
         duration: function () {
-            return anime.random(250, 1725);
+            return anime.random(250, 750);
         },
         delay: function () {
-            return anime.random(0, 500);
+            return anime.random(0, 750);
         },
     }).play();
 }
 
 function onBeforeLeave(el) {
-    spanify(el);
+    //spanify(el);
 }
 
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
     anime({
-        targets: node.querySelectorAll(".anim span"),
+        targets: node.querySelectorAll(".anim"),
         loop: 1,
         direction: "normal",
-        easing: "cubicBezier(.5, .05, .1, .3)",
+        easing: "easeInOutBounce",
         autoplay: false,
         complete: function (anim) {
             done();
         },
         translateX: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.x = (sectionBounderys.x + sectionBounderys.width)/2 - 0.681*sectionBounderys.width/2;
-            // sectionBounderys.width = 0.681*sectionBounderys.width;
-            return anime.random(
-                -elementBounderys.x + sectionBounderys.x,
-                sectionBounderys.x +
-                    sectionBounderys.width -
-                    elementBounderys.x -
-                    elementBounderys.width
-            );
+            const halfWidth = el.getBoundingClientRect().width / 2;
+
+            return anime.random(-halfWidth, halfWidth);
         },
         translateY: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.y = (sectionBounderys.x + sectionBounderys.height)/2 - 0.681*sectionBounderys.height/2;
-            // sectionBounderys.height = 0.681*sectionBounderys.height;
-            return anime.random(
-                -elementBounderys.y + sectionBounderys.y,
-                sectionBounderys.y +
-                    sectionBounderys.height -
-                    elementBounderys.y -
-                    elementBounderys.height
-            );
+            const halfHeight = el.getBoundingClientRect().height / 2;
+
+            return anime.random(-halfHeight, halfHeight);
         },
-        opacity: 0.25,
-        scaleX: 0,
+        opacity: 0,
         duration: function () {
-            return anime.random(250, 1725);
+            return anime.random(250, 750);
         },
         delay: function () {
-            return anime.random(0, 500);
+            return anime.random(0, 750);
         },
     }).play();
 }
@@ -277,23 +228,23 @@ function onLeave(node, done) {
         >
             <div
                 :key="currentPageIndex"
-                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-8 space-y-8 justify-items-center overflow-hidden"
+                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 gap-12 justify-items-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-row magicTextColor magic-text items-start items-baseline"
+                    class="flex flex-row neonTubeColor magic-text items-start items-baseline anim"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
-                    <div
+                    <!-- <div
                         class="relative flex flex-col text-justify items-start"
                     >
                         <div
-                            class="relative flex flex-row flex-shrink-0 flex-nowrap items-baseline text-justify text-[3.5vw] w-[11ch]"
+                            class="relative flex flex-row flex-shrink-0 flex-nowrap items-baseline text-justify text-[3.5vw] w-[11ch] "
                         >
                             <div
-                                class="relative flex flex-row flex-nowrap text-justify align-top anim"
+                                class="relative flex flex-row flex-nowrap text-justify align-top"
                             >
                                 {{
                                     DateTime.fromISO(item.starts_at).toFormat(
@@ -303,7 +254,7 @@ function onLeave(node, done) {
                                 –
                             </div>
                             <div
-                                class="relative flex flex-row flex-nowrap text-justify align-top anim"
+                                class="relative flex flex-row flex-nowrap text-justify align-top"
                             >
                                 {{
                                     DateTime.fromISO(item.ends_at).toFormat(
@@ -311,47 +262,74 @@ function onLeave(node, done) {
                                     )
                                 }}
                             </div>
-                        </div>
-                        <div
-                            v-if="item.delay"
-                            class="flex flex-row items-baseline text-[3vw]"
-                        >
-                            <div
-                                v-if="item.delay < 15"
-                                class="flex text-left anim"
-                            >
-                                slightly delayed
-                            </div>
-                            <div
-                                v-else
-                                class="flex text-left magicTextColorRed anim"
-                            >
-                                {{ item.delay }}min. delayed
-                            </div>
-                        </div>
-                    </div>
+                        </div> -->
 
                     <div
-                        class="relative flex flex-col flex-auto text-justify items-start"
+                        class="relative flex flex-col flex-auto text-center items-center"
                     >
                         <div
-                            class="relative flex flex-row flex-nowrap text-justify align-top text-[4.5vw] anim"
+                            class="relative flex flex-row flex-nowrap grow text-center align-top text-[5.25vw] headingFont"
                         >
                             {{ item.title }}
                         </div>
                         <div
-                            class="relative flex flex-row flex-nowrap text-justify align-top text-[3vw] anim"
+                            class="relative flex flex-row text-justify items-start"
                         >
-                            {{
-                                item.room.name !== item.room.venue_name
-                                    ? item.room.name +
-                                      " ( " +
-                                      item.room.venue_name +
-                                      " )"
-                                    : item.room.name
-                            }}
+                            <div
+                                class="relative flex flex-row flex-shrink-0 flex-nowrap items-baseline text-justify text-[3.5vw] w-[11ch]"
+                            >
+                                <div
+                                    class="flex flex-row flex-nowrap text-justify align-top"
+                                >
+                                    {{
+                                        DateTime.fromISO(
+                                            item.starts_at
+                                        ).toFormat("HH:mm")
+                                    }}
+                                    –
+                                </div>
+                                <div
+                                    class="flex flex-row flex-nowrap text-justify align-top"
+                                >
+                                    {{
+                                        DateTime.fromISO(item.ends_at).toFormat(
+                                            "HH:mm"
+                                        )
+                                    }}
+                                </div>
+                            </div>
+                            <div
+                                class="relative flex flex-row flex-nowrap text-justify align-top text-[3vw]"
+                            >
+                                {{
+                                    item.room.name
+                                }}
+                            </div>
+                        </div>
+                        <div class="relative flex flex-row flex-nowrap">
+                            <div class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw] margin">Scheduled</div>
+                            <Progress />
+                            <div
+                                v-if="item.delay"
+                                class="flex flex-row items-baseline text-[2vw]"
+                            >
+                                <div
+                                    v-if="item.delay < 15"
+                                    class="flex text-left"
+                                >
+                                    Slightly Delayed
+                                </div>
+                                <div
+                                    v-else
+                                    class="flex text-left magicTextColorRed"
+                                >
+                                    Delayed: {{ item.delay }}min
+                                </div>
+                            </div>
+                            <div v-else class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw]">On Time</div>
                         </div>
                     </div>
+                    <Glitches class="absolute" />
                 </div>
                 <!--                </TransitionGroup>-->
             </div>

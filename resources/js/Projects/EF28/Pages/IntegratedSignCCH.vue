@@ -135,125 +135,70 @@ const currentSlide = computed(() => {
 import { DateTime } from "luxon";
 import _ from "lodash";
 
-function spanify(element) {
-    const textes = element.querySelectorAll("div.anim");
-
-    for (let i = 0, n = textes.length; i < n; i++) {
-        let letters = textes[i].innerText.split("");
-        textes[i].innerHTML = "";
-        for (let j = 0, m = letters.length; j < m; j++) {
-            let span = document.createElement("span");
-            span.innerText = letters[j];
-            textes[i].appendChild(span);
-        }
-    }
-}
-
-function onBeforeEnter(el) {
-    spanify(el);
-}
-
 function onEnter(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
 
     anime({
-        targets: node.querySelectorAll(".anim span"),
+        targets: node.querySelectorAll(".anim"),
         loop: 1,
         direction: "reverse",
-        easing: "cubicBezier(.5, .05, .1, .3)",
+        easing: "easeInOutBounce",
         autoplay: false,
         complete: function (anim) {
             done();
         },
         translateX: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.x = (sectionBounderys.x + sectionBounderys.width)/2 - 0.681*sectionBounderys.width/2;
-            // sectionBounderys.width = 0.681*sectionBounderys.width;
-            return anime.random(
-                -elementBounderys.x + sectionBounderys.x,
-                sectionBounderys.x +
-                    sectionBounderys.width -
-                    elementBounderys.x -
-                    elementBounderys.width
-            );
+            const halfWidth = el.getBoundingClientRect().width / 2;
+
+            return anime.random(-halfWidth, halfWidth);
         },
         translateY: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.y = (sectionBounderys.x + sectionBounderys.height)/2 - 0.681*sectionBounderys.height/2;
-            // sectionBounderys.height = 0.681*sectionBounderys.height;
-            return anime.random(
-                -elementBounderys.y + sectionBounderys.y,
-                sectionBounderys.y +
-                    sectionBounderys.height -
-                    elementBounderys.y -
-                    elementBounderys.height
-            );
+            const halfHeight = el.getBoundingClientRect().height / 2;
+
+            return anime.random(-halfHeight, halfHeight);
         },
-        opacity: 0.25,
-        scaleX: 0,
+        opacity: 0,
         duration: function () {
-            return anime.random(250, 1725);
+            return anime.random(250, 750);
         },
         delay: function () {
-            return anime.random(0, 500);
+            return anime.random(0, 750);
         },
     }).play();
 }
 
-function onBeforeLeave(el) {
-    spanify(el);
-}
-
-// called when the leave transition starts.
-// use this to start the leaving animation.
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
     anime({
-        targets: node.querySelectorAll(".anim span"),
+        targets: node.querySelectorAll(".anim"),
         loop: 1,
         direction: "normal",
-        easing: "cubicBezier(.5, .05, .1, .3)",
+        easing: "easeInOutBounce",
         autoplay: false,
         complete: function (anim) {
             done();
         },
         translateX: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.x = (sectionBounderys.x + sectionBounderys.width)/2 - 0.681*sectionBounderys.width/2;
-            // sectionBounderys.width = 0.681*sectionBounderys.width;
+            const halfWidth = el.getBoundingClientRect().width / 2;
+
             return anime.random(
-                -elementBounderys.x + sectionBounderys.x,
-                sectionBounderys.x +
-                    sectionBounderys.width -
-                    elementBounderys.x -
-                    elementBounderys.width
+                -halfWidth,
+                halfWidth
             );
         },
         translateY: function (el) {
-            let elementBounderys = el.getBoundingClientRect();
-            let sectionBounderys = node.getBoundingClientRect();
-            // sectionBounderys.y = (sectionBounderys.x + sectionBounderys.height)/2 - 0.681*sectionBounderys.height/2;
-            // sectionBounderys.height = 0.681*sectionBounderys.height;
-            return anime.random(
-                -elementBounderys.y + sectionBounderys.y,
-                sectionBounderys.y +
-                    sectionBounderys.height -
-                    elementBounderys.y -
-                    elementBounderys.height
-            );
+            const halfHeight = el.getBoundingClientRect().height / 2;
+
+            return anime.random(-halfHeight, halfHeight);
         },
         opacity: 0,
-        scaleX: 0,
         duration: function () {
-            return anime.random(250, 1725);
+            return anime.random(250, 750);
         },
         delay: function () {
-            return anime.random(0, 500);
+            return anime.random(0, 750);
         },
     }).play();
 }
@@ -266,24 +211,22 @@ function onLeave(node, done) {
         <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
         <Transition
             appear
-            @before-enter="onBeforeEnter"
             @enter="onEnter"
-            @before-leave="onBeforeLeave"
             @leave="onLeave"
             :css="false"
         >
             <div
                 :key="currentPageIndex"
-                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-8 space-y-8 justify-items-center overflow-hidden"
+                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 justify-items-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-col magicTextColor magic-text"
+                    class="flex flex-col magicTextColor magic-text anim"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
-                    <div class="flex text-[9vw] text-justify anim">
+                    <div class="flex text-[9vw] text-justify">
                         {{ item.name }}
                     </div>
 
@@ -298,13 +241,13 @@ function onLeave(node, done) {
                                     DateTime.fromISO(item.nextEvent.starts_at) <
                                         DateTime.local()
                                 "
-                                class="flex text-left magicTextColorGreen anim"
+                                class="flex text-left magicTextColorGreen"
                             >
                                 OPEN
                             </div>
                             <div
                                 v-else
-                                class="flex text-left magicTextColorRed anim"
+                                class="flex text-left magicTextColorRed"
                             >
                                 CLOSED
                             </div>
@@ -317,13 +260,13 @@ function onLeave(node, done) {
                                     DateTime.local() &&
                                 item.nextEvent.title
                             "
-                            class="flex text-left anim"
+                            class="flex text-left"
                         >
                             {{ item.nextEvent.title }}
                         </div>
                         <div
                             v-else-if="item.nextEvent && item.nextEvent.title"
-                            class="flex text-left anim"
+                            class="flex text-left"
                         >
                             Next: {{ item.nextEvent.title }}
                         </div>

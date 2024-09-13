@@ -88,10 +88,14 @@ function Background(options = {}) {
     }
 
     this.render = () => {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
         this.lines.forEach((line) => {
             line.update(50);
             line.render();
         })
+
+        //requestAnimationFrame(this.render);
     }
 
     this.resize = () => {
@@ -100,6 +104,7 @@ function Background(options = {}) {
             this.canvas.height = window.innerHeight;
 
             this.setup();
+            this.render();
         }
     }
 }
@@ -112,7 +117,8 @@ onMounted(() => {
     window.addEventListener("resize", background.resize);
     background.setup();
     background.resize();
-    background.render();
+
+    //requestAnimationFrame(background.render);
 });
 
 onUnmounted(() => {

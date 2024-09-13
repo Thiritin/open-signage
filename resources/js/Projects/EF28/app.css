@@ -5,8 +5,15 @@
 @font-face {
     font-family: "primaryThemeFont";
     font-style: normal;
-    src: local("PermanentMarker"),
+    src: local("Hemi Head 426"),
         url(./Assets/fonts/hemihead.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "headingThemeFont";
+    font-style: normal;
+    src: local("Neoneon"),
+        url(./Assets/fonts/neon_tube_wide.ttf) format("truetype");
 }
 
 .themeFont {
@@ -22,6 +29,12 @@
     line-height: 1.5;
 }
 
+.headingFont {
+    font-family: "headingThemeFont", sans-serif;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
 .fill {
     fill: #9614c8;
     stroke: none;
@@ -29,6 +42,30 @@
 .stroke {
     fill: none;
     stroke: #9614c8;
+}
+
+.neonTubeColor {
+    color: #ffffff;
+    text-shadow:
+        0 0 1.5rem #ff00ff,
+        0 0 0.5rem #ff00ff,
+        -1px -1px 0 #ff00ff,
+        1px -1px 0 #ff00ff,
+        -1px 1px 0 #ff00ff,
+        1px 1px 0 #ff00ff;
+    user-select: none;
+}
+
+.neonTextColor {
+    color: #ffffff;
+    text-shadow:
+        0 0 0.75rem #ff00ff,
+        0 0 0.25rem #ff00ff7f,
+        -1px -1px 0 #ff00ff7f,
+        1px -1px 0 #ff00ff7f,
+        -1px 1px 0 #ff00ff7f,
+        1px 1px 0 #ff00ff7f;
+    user-select: none;
 }
 
 .magicTextColor {

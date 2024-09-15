@@ -17,6 +17,7 @@
         "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^11.10",
         "laravel/octane": "^2.5",
+        "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "pusher/pusher-php-server": "^7.2",

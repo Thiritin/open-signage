@@ -18,13 +18,11 @@
         "dotenv": "^16.4.5",
         "flv.js": "^1.6.2",
         "hooper-vue3": "^0.4.5",
-        "laravel-echo": "^1.16.1",
         "laravel-vite-plugin": "^1.0.5",
         "lodash": "^4.17.21",
         "luxon": "^3.5.0",
         "moment": "^2.30.1",
         "postcss": "^8.4.41",
-        "pusher-js": "^8.3.0",
         "tailwindcss": "^3.4.10",
         "vite": "^5.4.2",
         "vue": "^3.4.38",
@@ -32,6 +30,8 @@
         "xregexp": "^5.1.1"
     },
     "devDependencies": {
+        "laravel-echo": "^1.16.1",
+        "pusher-js": "^8.4.0-rc2",
         "terser": "^5.31.6",
         "vite-svg-loader": "^5.1.0"
     }

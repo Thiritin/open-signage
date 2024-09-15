@@ -11,7 +11,7 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 
 RUN apk update \
     && apk add --no-cache curl git unzip openssl tar ca-certificates \
-    && install-php-extensions gd bcmath pdo_mysql zip intl opcache pcntl redis swoole @composer \
+    && install-php-extensions gd bcmath pdo_mysql zip intl opcache pcntl redis swoole uv @composer \
     && rm -rf /var/cache/apk/*
 
 RUN chown -R www-data:www-data /app

@@ -41,6 +41,7 @@ COPY package.json package-lock.json tailwind.config.js vite.config.js postcss.co
 RUN npm install --force
 COPY ./resources /app/resources
 COPY --from=vite-vendor-build /app/vendor/tightenco/ziggy /app/vendor/tightenco/ziggy
+COPY .env.build .env
 RUN npm run build
 ######################################################
 # Production Stage

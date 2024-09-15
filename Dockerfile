@@ -22,14 +22,8 @@ USER www-data
 ######################################################
 COPY .github/docker/php/opcache.ini $PHP_INI_DIR/conf.d/opcache.ini
 COPY .github/docker/php/php.ini $PHP_INI_DIR/conf.d/php.ini
-
 ######################################################
-# Step 6 | Configure Credentials & Hosts for external Git (optional)
-######################################################
-COPY composer.json composer.lock /app/
-RUN composer install --no-dev --no-scripts --no-autoloader
-######################################################
-# Local Stage - Unused for this Project only there as a placeholder
+# Local Stage
 ######################################################
 FROM base as local
 ######################################################
@@ -44,7 +38,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 | composer require tightenco/ziggy:^2 --ignore-pl
 FROM node:20-alpine as vite
 WORKDIR /app
 COPY package.json package-lock.json tailwind.config.js vite.config.js postcss.config.js ./
-RUN npm ci
+RUN npm install --force
 COPY ./resources /app/resources
 COPY --from=vite-vendor-build /app/vendor/tightenco/ziggy /app/vendor/tightenco/ziggy
 RUN npm run build

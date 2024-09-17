@@ -6,6 +6,14 @@ import svgLoader from 'vite-svg-loader';
 export default defineConfig({
     build: {
         target: 'es2017',
+        // rollup options, no asset versioning
+        rollupOptions: {
+            output: {
+                entryFileNames: 'js/[name].js',
+                chunkFileNames: 'js/[name].js',
+                assetFileNames: 'js/[name].[ext]',
+            },
+        },
     },
     plugins: [
         laravel({
@@ -20,6 +28,6 @@ export default defineConfig({
                 },
             },
         }),
-        svgLoader()
+        svgLoader(),
     ],
 });

@@ -228,7 +228,7 @@ function onLeave(node, done) {
         >
             <div
                 :key="currentPageIndex"
-                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 gap-12 justify-items-center overflow-hidden"
+                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 gap-16 justify-items-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div

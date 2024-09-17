@@ -234,7 +234,7 @@ function onLeave(node, done) {
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-row neonTubeColor magic-text items-start items-baseline anim pt-64"
+                    class="flex flex-row neonTubeColor magic-text items-start items-baseline anim pt-10"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
                     <!-- <div

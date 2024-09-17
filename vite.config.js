@@ -5,7 +5,7 @@ import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
     build: {
-        target: 'chrome70',
+        target: 'es2017',
     },
     plugins: [
         laravel({

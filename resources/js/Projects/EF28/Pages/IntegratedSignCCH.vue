@@ -260,7 +260,7 @@ function onLeave(node, done) {
                                     DateTime.local() &&
                                 item.nextEvent.title
                             "
-                            class="flex text-left"
+                            class="flex text-left pl-16"
                         >
                             {{ item.nextEvent.title }}
                         </div>

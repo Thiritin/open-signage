@@ -67,6 +67,11 @@ defineProps(['entry'])
                         <HourTime :time="new Date(entry.ends_at).getTime() + (entry.delay * 60 * 1000)"/>
                     </div>
                 </div>
+                <div v-else-if="entry.flags.find((e) => e === 'cancelled')" class="rounded">
+                    <div class="font-mono p-2 text-2xl font-bold text-center w-full bg-black">
+                        CANCELLED
+                    </div>
+                </div>
                 <div v-if="isCurrentTimeBetween(entry.starts_at,entry.ends_at,(entry.delay ?? 0))">
                     <div
                         class="flex font-bold w-fit mt-2 text-2xl justify-between items-center align-middle gap-2 rounded-full ml-auto themeFontSecondary">
@@ -75,11 +80,6 @@ defineProps(['entry'])
                     </div>
                     <div class="border-[3px] bg-opacity-60 h-4 p-[3px]">
                         <div class="bg-white h-full" :style="'width:'+returnStyleWidthInPercent(entry)+'%;'"></div>
-                    </div>
-                </div>
-                <div v-else-if="entry.flags.find((e) => e === 'cancelled')" class="rounded">
-                    <div class="font-mono p-2 text-2xl font-bold text-center w-full bg-black">
-                        CANCELLED
                     </div>
                 </div>
                 <div v-else-if="entry.flags.find((e) => e === 'moved')" class="rounded">

@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        <img class="w-[50vh]" src="../Assets/images/logo.png">
+        <img class="w-[100vh]" src="../Assets/images/logo.png">
     </div>
 </template>
 

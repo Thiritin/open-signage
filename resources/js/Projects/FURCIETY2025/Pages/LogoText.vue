@@ -7,15 +7,13 @@ const props = defineProps({
         default: "true"
     },
 })
-import Logo from "@/Projects/WT23/Pages/Logo.vue";
+import Logo from "@/Projects/FURCIETY2025/Pages/Logo.vue";
 </script>
 
 <template>
     <div class="flex justify-center items-center flex-col">
         <Logo></Logo>
-        <h1 class="text-white themeFont text-9xl uppercase text-center mt-16">Wild Times 2023</h1>
-        <h2 class="text-accent text-7xl themeFont uppercase text-center">Heroes and Villains</h2>
-        <CurrentTime class="text-white themeFont text-9xl uppercase text-center mt-16"></CurrentTime>
+        <CurrentTime class="text-white themeFont text-9xl uppercase text-center"></CurrentTime>
     </div>
 </template>
 

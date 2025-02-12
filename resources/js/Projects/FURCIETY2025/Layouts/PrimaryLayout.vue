@@ -5,7 +5,7 @@ const props = defineProps(['page'])
 defineOptions({
     inheritAttrs: false
 })
-import HeaderLogo from "@/Projects/WT23/Components/HeaderLogo.vue";
+import HeaderLogo from "@/Projects/FURCIETY2025/Components/HeaderLogo.vue";
 
 let attrs = reactive(useAttrs());
 

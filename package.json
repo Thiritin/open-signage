@@ -8,7 +8,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
         "@fortawesome/vue-fontawesome": "^3.0.8",
-        "@inertiajs/vue3": "^1.2.0",
+        "@inertiajs/vue3": "^2.0.3",
         "@sentry/vue": "^8.27.0",
         "@tailwindcss/forms": "^0.5.8",
         "@vitejs/plugin-vue": "^5.1.3",

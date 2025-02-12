@@ -136,7 +136,6 @@ const hasFilteredSchedule = computed(() => {
 
 <template>
     <div
-        v-if="false"
         class="gap-8 overflow-hidden flex flex-col mx-4"
         :class="{'xl:flex-row': hasFilteredAnnouncements && hasFilteredSchedule}">
         <div ref="scrollLeft" class="overflow-auto flex-grow pt-6 pb-6" :class="{'xl:w-1/2': hasFilteredAnnouncements}"

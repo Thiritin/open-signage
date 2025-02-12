@@ -15,6 +15,12 @@
         }
     </style>
 
+    <script>
+        if (globalThis === undefined) {
+            var globalThis = window;
+        }
+    </script>
+
     @filamentStyles
     @vite('resources/css/app.css')
 </head>

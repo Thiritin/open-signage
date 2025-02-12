@@ -228,13 +228,13 @@ function onLeave(node, done) {
         >
             <div
                 :key="currentPageIndex"
-                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 gap-12 justify-items-center overflow-hidden"
+                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 gap-16 justify-items-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-row neonTubeColor magic-text items-start items-baseline anim"
+                    class="flex flex-row neonTubeColor magic-text items-start items-baseline anim pt-10"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
                     <!-- <div

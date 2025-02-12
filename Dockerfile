@@ -35,7 +35,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 | composer require tightenco/ziggy:^2 --ignore-pl
 ######################################################
 # NodeJS Stage
 ######################################################
-FROM node:20-alpine as vite
+FROM node:18-buster as vite
 WORKDIR /app
 COPY package.json package-lock.json tailwind.config.js vite.config.js postcss.config.js ./
 RUN npm install --force

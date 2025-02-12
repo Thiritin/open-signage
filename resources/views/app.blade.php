@@ -6,6 +6,26 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <script>
+            if (globalThis === undefined) {
+                var globalThis = window;
+            }
+            const allSettled = (promises) => {
+                // map the promises to return custom response.
+                const mappedPromises = promises.map(
+                    p => Promise.resolve(p)
+                        .then(
+                            val => ({ status: 'fulfilled', value: val }),
+                            err => ({ status: 'rejected', reason: err })
+                        )
+                );
+
+                // run all the promises once with .all
+                return Promise.all(mappedPromises);
+            }
+            Promise.allSettled = allSettled;
+        </script>
+
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/{$page['component']}.vue"])

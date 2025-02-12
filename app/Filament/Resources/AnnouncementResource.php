@@ -39,9 +39,11 @@ class AnnouncementResource extends Resource
                     ->required(),
 
                 DateTimePicker::make('starts_at')
+                    ->required()
                     ->label('Starts Date'),
 
                 DateTimePicker::make('ends_at')
+                    ->required()
                     ->label('Ends Date'),
             ]);
     }

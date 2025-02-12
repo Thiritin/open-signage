@@ -17,7 +17,7 @@ add('writable_dirs', []);
 // Hosts
 
 host('10.0.1.110')
-    ->set('remote_user', 'signage')
+    ->set('remote_user', 'deployer')
     ->set('deploy_path', '~/opensignage');
 
 // Hooks

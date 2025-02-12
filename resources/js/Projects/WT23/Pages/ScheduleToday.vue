@@ -135,9 +135,6 @@ const hasFilteredSchedule = computed(() => {
 </script>
 
 <template>
-    <div>
-        <IconRouter :path="page.path" class="h-24 w-24" icon="Arrow" :mirror="true" :rotation="90"></IconRouter>
-    </div>
     <div
         v-if="false"
         class="gap-8 overflow-hidden flex flex-col mx-4"

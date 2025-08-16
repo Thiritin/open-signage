@@ -2,9 +2,16 @@
 
 namespace App\Filament\Resources\ScreenResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\KeyValue;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
 use Filament\Actions\ViewAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,21 +23,21 @@ class ActivitiesRelationManager extends RelationManager
 {
     protected static string $relationship = 'activities';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('causer')
+        return $schema
+            ->components([
+                Select::make('causer')
                     ->relationship('causer', 'name')
                     ->searchable()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('description')->columnSpanFull(),
-                Forms\Components\KeyValue::make('properties.attributes')
+                TextInput::make('description')->columnSpanFull(),
+                KeyValue::make('properties.attributes')
                     ->columnSpan([
                         'default' => 2,
                         'sm' => 1,
                     ]),
-                Forms\Components\KeyValue::make('properties.old')
+                KeyValue::make('properties.old')
                     ->columnSpan([
                         'default' => 2,
                         'sm' => 1,
@@ -43,30 +50,30 @@ class ActivitiesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('description')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('causer.name')
+                TextColumn::make('causer.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('log_name'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('log_name'),
+                TextColumn::make('created_at')
                     ->dateTime(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('event')
+                SelectFilter::make('event')
                     ->multiple()
                     ->options([
                         'created' => 'Created',
                         'updated' => 'Updated',
                         'deleted' => 'Deleted',
                     ]),
-                Tables\Filters\Filter::make('created_at')
-                    ->form([
-                        Forms\Components\DatePicker::make('logged_from')
+                Filter::make('created_at')
+                    ->schema([
+                        DatePicker::make('logged_from')
                             ->label('Logged from'),
-                        Forms\Components\DatePicker::make('logged_until')
+                        DatePicker::make('logged_until')
                             ->label('Logged until'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -95,8 +102,8 @@ class ActivitiesRelationManager extends RelationManager
                     }),
             ])
             ->poll(15)
-            ->actions([
-                Tables\Actions\ViewAction::make()
+            ->recordActions([
+                ViewAction::make()
             ])->emptyStateHeading('There have been no activities logged.');
     }
 }

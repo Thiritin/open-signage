@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\ScreenResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\ScreenResource;
-use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditScreen extends EditRecord

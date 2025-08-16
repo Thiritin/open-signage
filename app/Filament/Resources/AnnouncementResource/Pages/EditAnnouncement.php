@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\AnnouncementResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\AnnouncementResource;
-use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditAnnouncement extends EditRecord

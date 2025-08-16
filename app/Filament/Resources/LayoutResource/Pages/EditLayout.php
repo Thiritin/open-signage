@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\LayoutResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\LayoutResource;
-use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditLayout extends EditRecord

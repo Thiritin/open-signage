@@ -2,21 +2,25 @@
 
 namespace App\Filament\Resources\PlaylistResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use App\Models\Page;
+use App\Models\Layout;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ReplicateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use App\Models\PlaylistItem;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextInputColumn;
@@ -29,7 +33,7 @@ class PlaylistItemsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'id';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
         $formSchema = [
             Group::make([
@@ -92,8 +96,8 @@ class PlaylistItemsRelationManager extends RelationManager
             }
         }
 
-        return $form
-            ->schema($formSchema);
+        return $schema
+            ->components($formSchema);
     }
 
     /**
@@ -108,13 +112,13 @@ class PlaylistItemsRelationManager extends RelationManager
                 TextInputColumn::make('duration')->type('number'),
 
                 SelectColumn::make('page_id')
-                    ->options(\App\Models\Page::normal()
+                    ->options(Page::normal()
                         ->orderBy('name')
                         ->pluck('name', 'id')
                         ->toArray())->selectablePlaceholder(false),
 
                 SelectColumn::make('layout_id')->options(
-                    \App\Models\Layout::normal()
+                    Layout::normal()
                         ->orderBy('name')
                         ->pluck('name', 'id')
                         ->toArray()
@@ -126,16 +130,16 @@ class PlaylistItemsRelationManager extends RelationManager
             ->defaultSort('sort')
             ->paginated(false)
             ->headerActions([
-                \Filament\Tables\Actions\CreateAction::make()->modalWidth('7xl'),
+                CreateAction::make()->modalWidth('7xl'),
             ])
-            ->actions([
-                \Filament\Tables\Actions\Action::make('Move')->form([
+            ->recordActions([
+                Action::make('Move')->schema([
                     Select::make('playlist_id')
                         ->relationship('playlist', 'name', fn (Builder $query) => $query->normal())
                 ])->action(fn (PlaylistItem $record, array $data) => $record->update([
                     'playlist_id' => $data['playlist_id'],
                 ])),
-                \Filament\Tables\Actions\Action::make('Copy to..')->form([
+                Action::make('Copy to..')->schema([
                     Select::make('playlist_id')
                         ->relationship('playlist', 'name', fn (Builder $query) => $query->normal())
                 ])->action(fn (PlaylistItem $record, array $data) => PlaylistItem::create(array_merge($record->only([
@@ -151,11 +155,11 @@ class PlaylistItemsRelationManager extends RelationManager
                 ]), [
                     'playlist_id' => $data['playlist_id'],
                 ]))),
-                \Filament\Tables\Actions\EditAction::make()->modalWidth('7xl'),
+                EditAction::make()->modalWidth('7xl'),
                 ReplicateAction::make(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
     }

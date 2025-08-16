@@ -2,10 +2,20 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\ArtworkResource\Pages\ListArtworks;
+use App\Filament\Resources\ArtworkResource\Pages\CreateArtwork;
+use App\Filament\Resources\ArtworkResource\Pages\EditArtwork;
 use App\Filament\Resources\ArtworkResource\Pages;
 use App\Models\Artwork;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,27 +24,27 @@ class ArtworkResource extends Resource
 {
     protected static ?string $model = Artwork::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document';
 
-    protected static ?string $navigationGroup = 'Content';
+    protected static string | \UnitEnum | null $navigationGroup = 'Content';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\TextInput::make('artist'),
-                Forms\Components\FileUpload::make('file_horizontal')
+        return $schema
+            ->components([
+                TextInput::make('name')->required(),
+                TextInput::make('artist'),
+                FileUpload::make('file_horizontal')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios(['16:9', null])
                     ->imageEditorMode(2),
-                Forms\Components\FileUpload::make('file_vertical')
+                FileUpload::make('file_vertical')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios(['9:16', null])
                     ->imageEditorMode(2),
-                Forms\Components\FileUpload::make('file_banner')
+                FileUpload::make('file_banner')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios(['5:2', null])
@@ -47,22 +57,22 @@ class ArtworkResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('artist'),
+                TextColumn::make('name'),
+                TextColumn::make('artist'),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ]);
     }
 
@@ -76,9 +86,9 @@ class ArtworkResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListArtworks::route('/'),
-            'create' => Pages\CreateArtwork::route('/create'),
-            'edit' => Pages\EditArtwork::route('/{record}/edit'),
+            'index' => ListArtworks::route('/'),
+            'create' => CreateArtwork::route('/create'),
+            'edit' => EditArtwork::route('/{record}/edit'),
         ];
     }
 }

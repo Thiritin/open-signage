@@ -2,6 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Actions\EditAction;
+use Filament\Actions\ReplicateAction;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\ScheduleEntryResource\Pages\ListScheduleEntries;
+use App\Filament\Resources\ScheduleEntryResource\Pages\CreateScheduleEntry;
+use App\Filament\Resources\ScheduleEntryResource\Pages\EditScheduleEntry;
 use App\Filament\Resources\ScheduleEntryResource\Pages;
 use App\Models\Playlist;
 use App\Models\PlaylistItem;
@@ -13,18 +23,12 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -33,18 +37,18 @@ class ScheduleEntryResource extends Resource
 {
     protected static ?string $model = ScheduleEntry::class;
 
-    protected static ?string $navigationGroup = 'Content';
+    protected static string | \UnitEnum | null $navigationGroup = 'Content';
 
-    protected static ?string $navigationIcon = 'heroicon-m-table-cells';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-m-table-cells';
 
     protected static ?string $slug = 'schedule-entries';
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Group::make()->columnSpan(2)->columns()->schema([
                     Section::make('Meta')->schema([
                         TextInput::make('title')
@@ -54,35 +58,35 @@ class ScheduleEntryResource extends Resource
                         Select::make('room_id')
                             ->relationship('room', 'name')
                             ->required()
-                            ->createOptionForm(fn(Form $form) => $form->schema([
+                            ->createOptionForm(fn(Schema $schema) => $schema->components([
                                 TextInput::make('name')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn(Form $form) => $form->schema([
+                            ->editOptionForm(fn(Schema $schema) => $schema->components([
                                 TextInput::make('name')
                                     ->required(),
                             ])),
 
                         Select::make('schedule_organizer_id')
                             ->relationship('scheduleOrganizer', 'name')
-                            ->createOptionForm(fn(Form $form) => $form->schema([
+                            ->createOptionForm(fn(Schema $schema) => $schema->components([
                                 TextInput::make('name')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn(Form $form) => $form->schema([
+                            ->editOptionForm(fn(Schema $schema) => $schema->components([
                                 TextInput::make('name')
                                     ->required(),
                             ])),
 
                         Select::make('schedule_type_id')
                             ->relationship('scheduleType', 'name')
-                            ->createOptionForm(fn(Form $form) => $form->schema([
+                            ->createOptionForm(fn(Schema $schema) => $schema->components([
                                 TextInput::make('name')
                                     ->required(),
                                 ColorPicker::make('color')
                                     ->required(),
                             ]))
-                            ->editOptionForm(fn(Form $form) => $form->schema([
+                            ->editOptionForm(fn(Schema $schema) => $schema->components([
                                 TextInput::make('name')
                                     ->required(),
                                 ColorPicker::make('color')
@@ -212,19 +216,19 @@ class ScheduleEntryResource extends Resource
                 SelectFilter::make('room_id')->multiple()->preload()->label('Rooms')->relationship('room', 'name'),
                 SelectFilter::make('schedule_type_id')->multiple()->preload()->label('Schedule Types')->relationship('scheduleType',
                     'name'),
-            ])->actions([
+            ])->recordActions([
                 EditAction::make(),
                 ReplicateAction::make(),
-                \Filament\Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListScheduleEntries::route('/'),
-            'create' => Pages\CreateScheduleEntry::route('/create'),
-            'edit' => Pages\EditScheduleEntry::route('/{record}/edit'),
+            'index' => ListScheduleEntries::route('/'),
+            'create' => CreateScheduleEntry::route('/create'),
+            'edit' => EditScheduleEntry::route('/{record}/edit'),
         ];
     }
 

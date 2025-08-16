@@ -29,6 +29,6 @@ class Announcement extends Model
 
     public function room()
     {
-        return $this->belongsTo(\App\Models\Room::class);
+        return $this->belongsTo(Room::class);
     }
 }

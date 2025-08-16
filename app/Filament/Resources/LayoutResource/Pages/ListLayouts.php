@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\LayoutResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\LayoutResource;
-use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListLayouts extends ListRecords

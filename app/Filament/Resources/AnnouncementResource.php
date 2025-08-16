@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\AnnouncementResource\Pages\ListAnnouncements;
+use App\Filament\Resources\AnnouncementResource\Pages\CreateAnnouncement;
+use App\Filament\Resources\AnnouncementResource\Pages\EditAnnouncement;
 use App\Filament\Resources\AnnouncementResource\Pages;
 use App\Models\Announcement;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -18,18 +21,18 @@ class AnnouncementResource extends Resource
 {
     protected static ?string $model = Announcement::class;
 
-    protected static ?string $navigationGroup = 'Content';
+    protected static string | \UnitEnum | null $navigationGroup = 'Content';
 
     protected static ?string $slug = 'announcements';
 
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('title')
                     ->columnSpanFull()
                     ->required(),
@@ -65,7 +68,7 @@ class AnnouncementResource extends Resource
                     ->label('Ends Date')
                     ->sortable()
                     ->date(),
-            ])->actions([
+            ])->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ]);
@@ -74,9 +77,9 @@ class AnnouncementResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAnnouncements::route('/'),
-            'create' => Pages\CreateAnnouncement::route('/create'),
-            'edit' => Pages\EditAnnouncement::route('/{record}/edit'),
+            'index' => ListAnnouncements::route('/'),
+            'create' => CreateAnnouncement::route('/create'),
+            'edit' => EditAnnouncement::route('/{record}/edit'),
         ];
     }
 

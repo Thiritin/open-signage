@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\ScheduleEntryResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\ScheduleEntryResource;
-use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListScheduleEntries extends ListRecords

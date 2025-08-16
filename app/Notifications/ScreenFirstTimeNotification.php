@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use Filament\Actions\Action;
+use JsonException;
 use App\Events\Broadcast\RefreshScreenEvent;
 use App\Models\Screen;
 use App\Models\User;
@@ -28,7 +30,7 @@ class ScreenFirstTimeNotification extends Notification
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function toTelegram(): TelegramMessage
     {
@@ -53,7 +55,7 @@ class ScreenFirstTimeNotification extends Notification
             ->success()
             ->icon('heroicon-o-computer-desktop')
             ->actions([
-                \Filament\Notifications\Actions\Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$this->screen))->link(),
+                Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$this->screen))->link(),
             ])
             ->sendToDatabase($recipients);
     }

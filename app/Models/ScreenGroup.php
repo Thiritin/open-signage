@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
 class ScreenGroup extends Model
@@ -12,7 +13,7 @@ class ScreenGroup extends Model
         'settings' => 'array',
     ];
 
-    public function screens(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function screens(): HasMany
     {
         return $this->hasMany(Screen::class);
     }

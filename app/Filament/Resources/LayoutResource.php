@@ -2,19 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\LayoutResource\Pages\ListLayouts;
+use App\Filament\Resources\LayoutResource\Pages\CreateLayout;
+use App\Filament\Resources\LayoutResource\Pages\EditLayout;
 use App\Enums\ResourceOwnership;
 use App\Filament\Resources\LayoutResource\Pages;
 use App\Models\Layout;
 use App\Models\Project;
 use Exception;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -23,18 +26,18 @@ class LayoutResource extends Resource
 {
     protected static ?string $model = Layout::class;
 
-    protected static ?string $navigationGroup = 'Development';
+    protected static string | \UnitEnum | null $navigationGroup = 'Development';
 
     protected static ?string $slug = 'layouts';
 
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document';
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('project_id')
                     ->relationship('project', 'name', fn ($query) => $query->where('type', ResourceOwnership::USER))
                     ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id)
@@ -96,7 +99,7 @@ class LayoutResource extends Resource
                     ->relationship('project', 'name',
                         fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
                     ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id),
-            ])->actions([
+            ])->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ]);
@@ -105,9 +108,9 @@ class LayoutResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListLayouts::route('/'),
-            'create' => Pages\CreateLayout::route('/create'),
-            'edit' => Pages\EditLayout::route('/{record}/edit'),
+            'index' => ListLayouts::route('/'),
+            'create' => CreateLayout::route('/create'),
+            'edit' => EditLayout::route('/{record}/edit'),
         ];
     }
 

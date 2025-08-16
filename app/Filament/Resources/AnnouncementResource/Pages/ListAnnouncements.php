@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\AnnouncementResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\AnnouncementResource;
-use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAnnouncements extends ListRecords

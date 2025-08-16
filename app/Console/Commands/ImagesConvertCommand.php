@@ -6,7 +6,7 @@ use App\Models\Artwork;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ImagesConvertCommand extends Command
 {

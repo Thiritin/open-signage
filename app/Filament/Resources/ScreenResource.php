@@ -2,6 +2,18 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Support\Enums\TextSize;
+use App\Models\Playlist;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkActionGroup;
+use Auth;
+use App\Filament\Resources\ScreenResource\Pages\ListScreens;
+use App\Filament\Resources\ScreenResource\Pages\CreateScreen;
+use App\Filament\Resources\ScreenResource\Pages\EditScreen;
 use App\Enums\EmergencyTypeEnum;
 use App\Enums\ResourceOwnership;
 use App\Enums\ScreenStatusEnum;
@@ -13,15 +25,10 @@ use App\Jobs\SetEmergencyPlaylistJob;
 use App\Models\Screen;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -38,18 +45,18 @@ class ScreenResource extends Resource
 {
     protected static ?string $model = Screen::class;
 
-    protected static ?string $navigationGroup = 'Programming';
+    protected static string | \UnitEnum | null $navigationGroup = 'Programming';
 
-    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-computer-desktop';
 
     protected static ?string $slug = 'screens';
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('playlist_id')
                     ->relationship('playlist', 'name', fn ($query) => $query->normal())
                     ->preload()
@@ -134,7 +141,7 @@ class ScreenResource extends Resource
                     ->badge()
                     ->visible(fn() => Screen::whereHas('playlist.project', fn(Builder $query) => $query->where('type','=',ResourceOwnership::EMERGENCY))->exists())
                     ->alignStart()
-                    ->size(TextColumn\TextColumnSize::Large)
+                    ->size(TextSize::Large)
                     ->state(fn(Screen $screen) => $screen->isEmergency() ? $screen->playlist->name : 'Normal')
                     ->label('Mode')
                     ->color(fn(Screen $screen) => $screen->isEmergency() ? 'danger' : 'success')
@@ -150,7 +157,7 @@ class ScreenResource extends Resource
                     ->label('Playlist')
                     ->selectablePlaceholder(false)
                     ->disabled(fn(Screen $screen) => $screen->isEmergency())
-                    ->options(\App\Models\Playlist::whereHas('playlistItems')
+                    ->options(Playlist::whereHas('playlistItems')
                         ->normal()
                         ->pluck('name', 'id')->toArray()),
 
@@ -178,12 +185,12 @@ class ScreenResource extends Resource
                     Builder $query
                 ) => $query->where('provisioned', true))->default(true),
                 SelectFilter::make('room')->relationship('room', 'name')->multiple()
-            ])->actions([
-                \Filament\Tables\Actions\EditAction::make('Edit'),
+            ])->recordActions([
+                EditAction::make('Edit'),
             ])
             ->poll()
             ->striped()
-            ->bulkActions(array(
+            ->toolbarActions(array(
                 BulkAction::make('Refresh')
                     ->icon('heroicon-o-arrow-path')
                     ->label('Refresh')
@@ -202,9 +209,9 @@ class ScreenResource extends Resource
                 BulkAction::make('Set Playlist')
                     ->icon('heroicon-o-play')
                     ->label('Set Playlist')
-                    ->form(array(
+                    ->schema(array(
                         Select::make('playlist_id')
-                            ->options(\App\Models\Playlist::whereHas('playlistItems')
+                            ->options(Playlist::whereHas('playlistItems')
                                 ->normal()
                                 ->pluck('name', 'id')->toArray())
                             ->required()
@@ -228,8 +235,8 @@ class ScreenResource extends Resource
                         ->icon('heroicon-m-fire')
                         ->action(fn(
                             Collection $records
-                        ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::FIRE, $records))
-                        ->form(array(
+                        ) => SetEmergencyPlaylistJob::dispatchSync(Auth::user(), EmergencyTypeEnum::FIRE, $records))
+                        ->schema(array(
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
                         )),
                     BulkAction::make('GeneralEmergencyAlert')
@@ -237,14 +244,14 @@ class ScreenResource extends Resource
                         ->requiresConfirmation()
                         ->modalHeading('STOP! You are about to send an evacuation alert!')
                         ->modalDescription('You are about to send an emergency alert! This will put the SELECTED screens in emergency mode and stop any currently playing content. This is reserved for emergencies only. Please confirm you want to send this alert.')
-                        ->form(array(
+                        ->schema(array(
                             Checkbox::make('sensecheck')->required()->label('I am about to send an EMERGENCY ALERT!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
                         ))
                         ->color('danger')
                         ->icon('heroicon-s-arrow-right-on-rectangle')
                         ->action(fn(
                             Collection $records
-                        ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::EVACUATION,
+                        ) => SetEmergencyPlaylistJob::dispatchSync(Auth::user(), EmergencyTypeEnum::EVACUATION,
                             $records)),
                     BulkAction::make('CustomEmergencyAlert')
                         ->label('Custom Emergency Alert')
@@ -255,13 +262,13 @@ class ScreenResource extends Resource
                         ->action(fn(
                             Collection $records,
                             array $data
-                        ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(),
+                        ) => SetEmergencyPlaylistJob::dispatchSync(Auth::user(),
                             EmergencyTypeEnum::CUSTOM,
                             $records,
                             $data['message'],
                             $data['title']
                         ))
-                        ->form(array(
+                        ->schema(array(
                             TextInput::make('title')
                                 ->label('Title')
                                 ->required(),
@@ -280,8 +287,8 @@ class ScreenResource extends Resource
                         ->modalSubmitActionLabel('Confirm Send Alert')
                         ->action(fn(
                             Collection $records
-                        ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::TEST, $records))
-                        ->form(array(
+                        ) => SetEmergencyPlaylistJob::dispatchSync(Auth::user(), EmergencyTypeEnum::TEST, $records))
+                        ->schema(array(
                             Checkbox::make('sensecheck')->required()->label('I am about to send an TEST ALERT. ONLY USE THIS FOR TESTING, SCREENS WILL STILL JUMP INTO EMERGENCY MODE!')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
                         ))
                         ->color('warning')
@@ -294,8 +301,8 @@ class ScreenResource extends Resource
                         ->modalSubmitActionLabel('Danger is over, lift alert')
                         ->action(fn(
                             Collection $records
-                        ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::LIFTED, $records))
-                        ->form(array(
+                        ) => SetEmergencyPlaylistJob::dispatchSync(Auth::user(), EmergencyTypeEnum::LIFTED, $records))
+                        ->schema(array(
                             Checkbox::make('sensecheck')->required()->label('There is no more danger, shows a lifted message on the screens.')->hintColor('danger')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
                         ))
                         ->color('warning')
@@ -308,8 +315,8 @@ class ScreenResource extends Resource
                         ->modalSubmitActionLabel('Confirm')
                         ->action(fn(
                             Collection $records
-                        ) => SetEmergencyPlaylistJob::dispatchSync(\Auth::user(), EmergencyTypeEnum::NONE, $records))
-                        ->form(array(
+                        ) => SetEmergencyPlaylistJob::dispatchSync(Auth::user(), EmergencyTypeEnum::NONE, $records))
+                        ->schema(array(
                             Checkbox::make('sensecheck')->required()->label('Return screens to normal operation.')->hintColor('success')->hint('DANGER')->helperText('This is a serious action and should only be used in emergencies.'),
                         ))
                         ->color('success')
@@ -325,9 +332,9 @@ class ScreenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListScreens::route('/'),
-            'create' => Pages\CreateScreen::route('/create'),
-            'edit' => Pages\EditScreen::route('/{record}/edit'),
+            'index' => ListScreens::route('/'),
+            'create' => CreateScreen::route('/create'),
+            'edit' => EditScreen::route('/{record}/edit'),
         ];
     }
 

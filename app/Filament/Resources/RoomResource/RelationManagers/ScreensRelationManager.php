@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\RoomResource\RelationManagers;
 
+use Filament\Schemas\Schema;
 use App\Models\Screen;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -20,10 +20,10 @@ class ScreensRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('playlist_id')
                     ->relationship('playlist', 'name')
                     ->searchable(),

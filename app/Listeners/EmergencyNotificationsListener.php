@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use Illuminate\Support\Facades\Notification;
 use App\Events\EmergencyEvent;
 use App\Notifications\EmergencyNotification;
 use App\Notifications\ScreenFirstTimeNotification;
@@ -16,7 +17,7 @@ class EmergencyNotificationsListener
     {
         if (config('services.telegram-bot-api.chat_id'))
         {
-            \Illuminate\Support\Facades\Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
+            Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
                 ->notify(new EmergencyNotification($event->user, $event->type, $event->screens));
         }
     }

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\PlaylistResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\PlaylistResource;
-use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPlaylists extends ListRecords

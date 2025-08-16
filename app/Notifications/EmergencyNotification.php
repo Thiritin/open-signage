@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use JsonException;
 use App\Enums\EmergencyTypeEnum;
 use App\Events\Broadcast\RefreshScreenEvent;
 use App\Models\Screen;
@@ -34,7 +35,7 @@ class EmergencyNotification extends Notification
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function toTelegram(): TelegramMessage
     {

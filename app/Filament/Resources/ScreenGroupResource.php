@@ -2,11 +2,20 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\CreateAction;
+use App\Filament\Resources\ScreenGroupResource\Pages\ListScreenGroups;
+use App\Filament\Resources\ScreenGroupResource\Pages\CreateScreenGroup;
+use App\Filament\Resources\ScreenGroupResource\Pages\EditScreenGroup;
 use App\Filament\Resources\ScreenGroupResource\Pages;
 use App\Models\ScreenGroup;
 use App\Services\ScreenTabResource;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,17 +24,17 @@ class ScreenGroupResource extends Resource
 {
     protected static ?string $model = ScreenGroup::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationGroup = 'Programming';
+    protected static string | \UnitEnum | null $navigationGroup = 'Programming';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxValue(255)
                     ->columnSpanFull(),
@@ -37,23 +46,23 @@ class ScreenGroupResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ]);
     }
 
@@ -67,9 +76,9 @@ class ScreenGroupResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListScreenGroups::route('/'),
-            'create' => Pages\CreateScreenGroup::route('/create'),
-            'edit' => Pages\EditScreenGroup::route('/{record}/edit'),
+            'index' => ListScreenGroups::route('/'),
+            'create' => CreateScreenGroup::route('/create'),
+            'edit' => EditScreenGroup::route('/{record}/edit'),
         ];
     }
 }

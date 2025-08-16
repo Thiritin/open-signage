@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\ScreenResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\ScreenResource;
-use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListScreens extends ListRecords

@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Listeners\Screens\ScreenStatusOffline;
+use App\Listeners\Screens\NotifyAdminScreenOffline;
+use App\Events\Screens\OnlineEvent;
+use App\Events\UpdateScheduleEvent;
+use App\Events\UpdateScreenPlaylistEvent;
 use App\Events\EmergencyEvent;
 use App\Events\Screens\FirstPingEvent;
 use App\Events\Screens\OfflineEvent;
@@ -29,12 +34,12 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         OfflineEvent::class => [
-            \App\Listeners\Screens\ScreenStatusOffline::class,
-            \App\Listeners\Screens\NotifyAdminScreenOffline::class,
+            ScreenStatusOffline::class,
+            NotifyAdminScreenOffline::class,
             RebootScreenListener::class,
         ],
-        \App\Events\Screens\OnlineEvent::class => [
-            \App\Listeners\Screens\ScreenStatusOnline::class,
+        OnlineEvent::class => [
+            ScreenStatusOnline::class,
             NotifyAdminScreenOnline::class,
         ],
         FirstPingEvent::class => [
@@ -48,10 +53,10 @@ class EventServiceProvider extends ServiceProvider
         UpdateAnnouncementEvent::class => [
             IncreaseVersionListener::class,
         ],
-        \App\Events\UpdateScheduleEvent::class => [
+        UpdateScheduleEvent::class => [
             IncreaseVersionListener::class,
         ],
-        \App\Events\UpdateScreenPlaylistEvent::class => [
+        UpdateScreenPlaylistEvent::class => [
             IncreaseVersionListener::class,
         ],
     ];

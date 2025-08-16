@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use Filament\Actions\Action;
+use JsonException;
 use App\Events\Broadcast\RefreshScreenEvent;
 use App\Models\Screen;
 use App\Models\User;
@@ -28,7 +30,7 @@ class ScreenOfflineNotification extends Notification
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function toTelegram(): TelegramMessage
     {
@@ -55,14 +57,14 @@ class ScreenOfflineNotification extends Notification
             ->warning()
             ->icon('heroicon-o-power')
             ->actions([
-                \Filament\Notifications\Actions\Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$this->screen))->link(),
-                \Filament\Notifications\Actions\Action::make('Refresh')
+                Action::make('View Screen')->url(route('filament.admin.resources.screens.edit',$this->screen))->link(),
+                Action::make('Refresh')
                     ->icon('heroicon-o-arrow-path')
                     ->label('Refresh')
                     ->color('warning')
                     ->action(fn () => broadcast(new RefreshScreenEvent($this->screen))),
 
-                \Filament\Notifications\Actions\Action::make('Restart')
+                Action::make('Restart')
                     ->icon('heroicon-o-power')
                     ->label('Restart')
                     ->color('danger')

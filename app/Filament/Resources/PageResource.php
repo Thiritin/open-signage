@@ -2,18 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\PageResource\Pages\ListPages;
+use App\Filament\Resources\PageResource\Pages\CreatePage;
+use App\Filament\Resources\PageResource\Pages\EditPage;
 use App\Enums\ResourceOwnership;
 use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
 use App\Models\Project;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -22,18 +26,18 @@ class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
-    protected static ?string $navigationGroup = 'Development';
+    protected static string | \UnitEnum | null $navigationGroup = 'Development';
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $slug = 'pages';
 
     protected static ?string $recordTitleAttribute = 'id';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('project_id')
                     ->relationship('project', 'name', fn ($query) => $query->where('type', ResourceOwnership::USER))
                     ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id)
@@ -101,18 +105,18 @@ class PageResource extends Resource
                     ->relationship('project', 'name', fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
                     ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
-                \Filament\Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
-            'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            'index' => ListPages::route('/'),
+            'create' => CreatePage::route('/create'),
+            'edit' => EditPage::route('/{record}/edit'),
         ];
     }
 

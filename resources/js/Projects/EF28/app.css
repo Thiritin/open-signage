@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./theme.css";
+@import "tailwindcss";
 
 @font-face {
     font-family: "primaryThemeFont";

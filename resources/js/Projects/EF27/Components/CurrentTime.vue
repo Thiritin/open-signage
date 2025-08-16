@@ -1,7 +1,6 @@
 <script setup>
 
 import {onMounted, onUnmounted, ref} from "vue";
-import anime from 'animejs';
 import HourGlassSVG from "@/Projects/EF27/Assets/images/Hourglass4.svg";
 
 let h00 = ref();

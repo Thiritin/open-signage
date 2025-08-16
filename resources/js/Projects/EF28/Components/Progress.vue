@@ -1,10 +1,10 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import anime from "animejs";
+import { animate } from "animejs";
 import Chevron from '../Assets/images/chevron_right.svg';
 
 onMounted(() => {
-    anime.timeline({
+    animate.timeline({
         targets: document.querySelectorAll(".progressbar > .progress"),
         loop: true,
         easing: 'linear',

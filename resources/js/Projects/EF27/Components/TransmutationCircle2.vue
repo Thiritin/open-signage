@@ -1,7 +1,7 @@
 <script setup>
 
 import {computed, onMounted, onUnmounted, ref} from "vue";
-import anime from 'animejs';
+import { animate, utils }  from 'animejs';
 
 import TransmutationSVG from '@/Projects/EF27/Assets/images/transmutation.svg';
 
@@ -11,13 +11,13 @@ onMounted(() => {
     let pathEls = document.querySelectorAll('.transmutation path');
     for (let i = 0; i < pathEls.length; i++) {
         let pathEl = pathEls[i];
-        let offset = anime.setDashoffset(pathEl);
+        // let offset = anime.setDashoffset(pathEl);
         pathEl.setAttribute('stroke-dashoffset', offset);
-        animation = anime({
+        animation = animate({
             targets: pathEl,
-            strokeDashoffset: [offset, 0],
-            duration: anime.random(10000, 17000),
-            delay: anime.random(0, 3000),
+            // strokeDashoffset: [offset, 0],
+            duration: utils.random(10000, 17000),
+            delay: utils.random(0, 3000),
             loop: true,
             direction: 'alternate',
             easing: 'easeInOutSine',

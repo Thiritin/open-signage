@@ -233,6 +233,8 @@ import chunkArray from "@/chunkArray.js";
 </style>
 
 <style>
+@reference "../theme.css";
+
 body {
     overflow: hidden;
     @apply bg-primary;

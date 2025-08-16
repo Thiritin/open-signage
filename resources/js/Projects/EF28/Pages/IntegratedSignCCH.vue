@@ -8,7 +8,7 @@ import {
     toRaw,
     unref,
 } from "vue";
-import anime from "animejs";
+import { animate, utils } from "animejs";
 
 const props = defineProps({
     title: {
@@ -139,7 +139,7 @@ function onEnter(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
 
-    anime({
+    animate({
         targets: node.querySelectorAll(".anim"),
         loop: 1,
         direction: "reverse",
@@ -151,19 +151,19 @@ function onEnter(node, done) {
         translateX: function (el) {
             const halfWidth = el.getBoundingClientRect().width / 2;
 
-            return anime.random(-halfWidth, halfWidth);
+            return utils.random(-halfWidth, halfWidth);
         },
         translateY: function (el) {
             const halfHeight = el.getBoundingClientRect().height / 2;
 
-            return anime.random(-halfHeight, halfHeight);
+            return utils.random(-halfHeight, halfHeight);
         },
         opacity: 0,
         duration: function () {
-            return anime.random(250, 750);
+            return utils.random(250, 750);
         },
         delay: function () {
-            return anime.random(0, 750);
+            return utils.random(0, 750);
         },
     }).play();
 }
@@ -171,7 +171,7 @@ function onEnter(node, done) {
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
-    anime({
+    animate({
         targets: node.querySelectorAll(".anim"),
         loop: 1,
         direction: "normal",
@@ -183,7 +183,7 @@ function onLeave(node, done) {
         translateX: function (el) {
             const halfWidth = el.getBoundingClientRect().width / 2;
 
-            return anime.random(
+            return utils.random(
                 -halfWidth,
                 halfWidth
             );
@@ -191,14 +191,14 @@ function onLeave(node, done) {
         translateY: function (el) {
             const halfHeight = el.getBoundingClientRect().height / 2;
 
-            return anime.random(-halfHeight, halfHeight);
+            return utils.random(-halfHeight, halfHeight);
         },
         opacity: 0,
         duration: function () {
-            return anime.random(250, 750);
+            return utils.random(250, 750);
         },
         delay: function () {
-            return anime.random(0, 750);
+            return utils.random(0, 750);
         },
     }).play();
 }
@@ -300,6 +300,8 @@ function onLeave(node, done) {
 </style>
 
 <style>
+@reference "../theme.css";
+
 body {
     overflow: hidden;
     @apply bg-primary;

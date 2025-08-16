@@ -1,6 +1,6 @@
 <script setup>
-import {computed, defineAsyncComponent, onMounted, onUnmounted, ref, toRaw, unref} from "vue";
-import anime from 'animejs';
+import {computed, onMounted, onUnmounted, ref, toRaw, unref} from "vue";
+import { animate, utils } from 'animejs';
 
 const props = defineProps({
     title: {
@@ -143,7 +143,7 @@ function onEnter(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
 
-    anime({
+    animate({
         targets: node.querySelectorAll(".anim span"),
         loop: 1,
         direction: 'reverse',
@@ -157,22 +157,22 @@ function onEnter(node, done) {
             let sectionBounderys = node.getBoundingClientRect();
             // sectionBounderys.x = (sectionBounderys.x + sectionBounderys.width)/2 - 0.681*sectionBounderys.width/2;
             // sectionBounderys.width = 0.681*sectionBounderys.width;
-            return anime.random(-elementBounderys.x + sectionBounderys.x, sectionBounderys.x + sectionBounderys.width - elementBounderys.x - elementBounderys.width);
+            return utils.random(-elementBounderys.x + sectionBounderys.x, sectionBounderys.x + sectionBounderys.width - elementBounderys.x - elementBounderys.width);
         },
         translateY: function (el) {
             let elementBounderys = el.getBoundingClientRect();
             let sectionBounderys = node.getBoundingClientRect();
             // sectionBounderys.y = (sectionBounderys.x + sectionBounderys.height)/2 - 0.681*sectionBounderys.height/2;
             // sectionBounderys.height = 0.681*sectionBounderys.height;
-            return anime.random(-elementBounderys.y + sectionBounderys.y, sectionBounderys.y + sectionBounderys.height - elementBounderys.y - elementBounderys.height);
+            return utils.random(-elementBounderys.y + sectionBounderys.y, sectionBounderys.y + sectionBounderys.height - elementBounderys.y - elementBounderys.height);
         },
         opacity: 0.25,
         scaleX: 0,
         duration: function () {
-            return anime.random(250, 1725)
+            return utils.random(250, 1725)
         },
         delay: function () {
-            return anime.random(0, 500)
+            return utils.random(0, 500)
         }
     }).play();
 
@@ -187,7 +187,7 @@ function onEnter(node, done) {
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
-    anime({
+    animate({
         targets: node.querySelectorAll(".anim span"),
         loop: 1,
         direction: 'normal',
@@ -201,22 +201,22 @@ function onLeave(node, done) {
             let sectionBounderys = node.getBoundingClientRect();
             // sectionBounderys.x = (sectionBounderys.x + sectionBounderys.width)/2 - 0.681*sectionBounderys.width/2;
             // sectionBounderys.width = 0.681*sectionBounderys.width;
-            return anime.random(-elementBounderys.x + sectionBounderys.x, sectionBounderys.x + sectionBounderys.width - elementBounderys.x - elementBounderys.width);
+            return utils.random(-elementBounderys.x + sectionBounderys.x, sectionBounderys.x + sectionBounderys.width - elementBounderys.x - elementBounderys.width);
         },
         translateY: function (el) {
             let elementBounderys = el.getBoundingClientRect();
             let sectionBounderys = node.getBoundingClientRect();
             // sectionBounderys.y = (sectionBounderys.x + sectionBounderys.height)/2 - 0.681*sectionBounderys.height/2;
             // sectionBounderys.height = 0.681*sectionBounderys.height;
-            return anime.random(-elementBounderys.y + sectionBounderys.y, sectionBounderys.y + sectionBounderys.height - elementBounderys.y - elementBounderys.height);
+            return utils.random(-elementBounderys.y + sectionBounderys.y, sectionBounderys.y + sectionBounderys.height - elementBounderys.y - elementBounderys.height);
         },
         opacity: 0,
         scaleX: 0,
         duration: function () {
-            return anime.random(250, 1725)
+            return utils.random(250, 1725)
         },
         delay: function () {
-            return anime.random(0, 500)
+            return utils.random(0, 500)
         }
     }).play();
 }
@@ -301,6 +301,7 @@ function onLeave(node, done) {
 
 
 <style>
+@reference "../theme.css";
 
 body {
     overflow: hidden;

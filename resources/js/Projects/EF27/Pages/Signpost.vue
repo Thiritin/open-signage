@@ -159,6 +159,7 @@ import chunkArray from "@/chunkArray.js";
 
 
 <style>
+@reference "../theme.css";
 
 body {
     overflow: hidden;

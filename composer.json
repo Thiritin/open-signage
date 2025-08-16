@@ -28,7 +28,6 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
-        "filament/upgrade": "^4.0",
         "laravel-shift/blueprint": "^2.12",
         "laravel/breeze": "^2.3",
         "laravel/pint": "^1.24",

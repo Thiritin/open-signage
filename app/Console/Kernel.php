@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new \App\Jobs\ScreenStatusCheckJob())->everyMinute();
         $schedule->job(new ScheduleEntryDispatcherJob())->everyMinute();
 
-        if (config('app.default_project') === "EF28") {
+        if (config('app.default_project') === "EF29") {
             $schedule->job(new \App\Jobs\SyncEurofurenceScheduleJob())->everyMinute();
         }
     }

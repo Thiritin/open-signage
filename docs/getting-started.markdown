@@ -26,8 +26,8 @@ git clone https://github.com/Thiritin/open-signage
 ```
 ### Copy .env.example to .env
 
-You don't need to edit anything; EF28 is set by default.
-    
+You don't need to edit anything; EF29 is set by default.
+
 ```bash
 cp .env.example .env
 ```
@@ -39,7 +39,7 @@ composer install
 ```
 
 ### Install NPM Dependencies
-    
+
 ```bash
 npm install
 ```

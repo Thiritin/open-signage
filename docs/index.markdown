@@ -26,7 +26,7 @@ Open Signage is built on Laravel and Vue.js, utilizing Inertia.js for seamless i
 
 ### Example Project
 
-For practical examples, please refer to the `EF28 Project` within the `resources/js` folder.
+For practical examples, please refer to the `EF29 Project` within the `resources/js` folder.
 
 ## Getting Started
 

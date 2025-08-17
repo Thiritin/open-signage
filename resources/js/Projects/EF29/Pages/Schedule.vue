@@ -97,7 +97,7 @@ const filteredEvents = computed(() => {
                 }
             }
 
-            event.title = event.title.truncate(30, true);
+            event.title = event.title.truncate(24, true);
 
             // event.title = event.title ? event.title
             // .replace("Dealers' Den & Art Show", "")
@@ -155,7 +155,6 @@ function onLeave(node, done) {
     <div
         class="flex absolute z-30 h-[100vh] w-[100vw] justify-items-center overflow-hidden"
     >
-        <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
         <Transition
             appear
             @before-enter="onBeforeEnter"
@@ -166,23 +165,32 @@ function onLeave(node, done) {
         >
             <div
                 :key="currentPageIndex"
-                class="flex flex-col absolute z-30 h-[100vh] w-[100vw] p-16 space-y-8 gap-16 justify-items-center overflow-hidden"
+                class="flex flex-col absolute z-30 mt-28 h-[100vh] w-[100vw] p-16 px-38 space-y-8 gap-12 justify-items-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-row neonTubeColor items-start items-baseline pt-10 magic-text"
+                    class="flex flex-row space_text items-start items-baseline"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
                     <div
-                        class="relative flex flex-col flex-auto text-center items-center"
+                        class="relative flex flex-col flex-auto schedule_entry pl-48 pt-8"
                     >
                         <div
-                            class="relative flex flex-row flex-nowrap grow text-center align-top text-[5.25vw] headingFont"
+                            class="relative flex flex-row flex-nowrap text-center align-top headingFont schedule_title"
                         >
                             {{ item.title }}
                         </div>
+                        <div
+                            class="relative flex flex-row flex-nowrap text-justify align-top text-[64px] subtext"
+                        >
+                            {{ item.room.name }}
+                        </div>
+                    </div>
+                    <div
+                        class="relative flex flex-col flex-auto text-center items-center schedule_entry_back p-16"
+                    >
                         <div
                             class="relative flex flex-row text-justify items-start"
                         >
@@ -209,18 +217,8 @@ function onLeave(node, done) {
                                     }}
                                 </div>
                             </div>
-                            <div
-                                class="relative flex flex-row flex-nowrap text-justify align-top text-[3vw]"
-                            >
-                                {{ item.room.name }}
-                            </div>
                         </div>
                         <div class="relative flex flex-row flex-nowrap">
-                            <div
-                                class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw] margin"
-                            >
-                                Scheduled
-                            </div>
                             <div
                                 v-if="item.delay"
                                 class="flex flex-row items-baseline text-[2vw]"
@@ -231,25 +229,30 @@ function onLeave(node, done) {
                                 >
                                     Slightly Delayed
                                 </div>
-                                <div
-                                    v-else
-                                    class="flex text-left magicTextColorRed"
-                                >
+                                <div v-else class="flex text-left">
                                     Delayed: {{ item.delay }}min
                                 </div>
                             </div>
                             <div
                                 v-else
-                                class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw]"
+                                class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw] subtext"
                             >
                                 On Time
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--                </TransitionGroup>-->
             </div>
         </Transition>
+        <!-- foreground -->
+        <div
+            class="z-100 absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center"
+        >
+            <img
+                src="../Assets/images/foreground.png"
+                class="background_foreground"
+            />
+        </div>
     </div>
 </template>
 
@@ -280,23 +283,6 @@ function onLeave(node, done) {
 body {
     overflow: hidden;
     @apply bg-primary;
-}
-
-.magic-text {
-    position: relative;
-    user-select: none;
-    /*
-    font-family: 'primaryThemeFont', sans-serif;
-    white-space: pre;
-    */
-}
-
-.magic-text span {
-    position: relative;
-    white-space: pre;
-    display: inline-block;
-    cursor: pointer;
-    opacity: 1;
 }
 
 .w-digit-15 {

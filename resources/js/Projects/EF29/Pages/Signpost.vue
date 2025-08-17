@@ -93,7 +93,7 @@ import chunkArray from "@/chunkArray.js";
             class="h-screen overflow-hidden flex flex-col justify-between w-screen"
         >
             <div
-                v-for="(item, index) in currentSignPostPage"
+                v-for="(item, _index) in currentSignPostPage"
                 class="flex flex-col relative z-30 magicTextColor magic-text themeFont w-[100vw]"
             >
                 <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">

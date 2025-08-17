@@ -1,9 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, unref } from "vue";
-import { animate, utils } from "animejs";
 import chunkArray from "@/chunkArray.js";
-import Progress from '../Components/Progress.vue';
-import Glitches from '../Components/Glitches.vue';
 
 const props = defineProps({
     title: {
@@ -11,10 +8,6 @@ const props = defineProps({
         default: "Event Rooms",
     },
     schedule: {
-        type: Array,
-        default: [],
-    },
-    appScreen: {
         type: Array,
         default: [],
     },
@@ -146,34 +139,6 @@ function onBeforeEnter(el) {
 function onEnter(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
-
-    animate({
-        targets: node.querySelectorAll(".anim"),
-        loop: 1,
-        direction: "reverse",
-        easing: "easeInOutBounce",
-        autoplay: false,
-        complete: function (anim) {
-            done();
-        },
-        translateX: function (el) {
-            const halfWidth = el.getBoundingClientRect().width / 2;
-
-            return utils.random(-halfWidth, halfWidth);
-        },
-        translateY: function (el) {
-            const halfHeight = el.getBoundingClientRect().height / 2;
-
-            return utils.random(-halfHeight, halfHeight);
-        },
-        opacity: 0,
-        duration: function () {
-            return utils.random(250, 750);
-        },
-        delay: function () {
-            return utils.random(0, 750);
-        },
-    }).play();
 }
 
 function onBeforeLeave(el) {
@@ -183,33 +148,6 @@ function onBeforeLeave(el) {
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
-    animate({
-        targets: node.querySelectorAll(".anim"),
-        loop: 1,
-        direction: "normal",
-        easing: "easeInOutBounce",
-        autoplay: false,
-        complete: function (anim) {
-            done();
-        },
-        translateX: function (el) {
-            const halfWidth = el.getBoundingClientRect().width / 2;
-
-            return utils.random(-halfWidth, halfWidth);
-        },
-        translateY: function (el) {
-            const halfHeight = el.getBoundingClientRect().height / 2;
-
-            return utils.random(-halfHeight, halfHeight);
-        },
-        opacity: 0,
-        duration: function () {
-            return utils.random(250, 750);
-        },
-        delay: function () {
-            return utils.random(0, 750);
-        },
-    }).play();
 }
 </script>
 
@@ -234,36 +172,9 @@ function onLeave(node, done) {
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-row neonTubeColor magic-text items-start items-baseline anim pt-10"
+                    class="flex flex-row neonTubeColor items-start items-baseline pt-10 magic-text"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
-                    <!-- <div
-                        class="relative flex flex-col text-justify items-start"
-                    >
-                        <div
-                            class="relative flex flex-row flex-shrink-0 flex-nowrap items-baseline text-justify text-[3.5vw] w-[11ch] "
-                        >
-                            <div
-                                class="relative flex flex-row flex-nowrap text-justify align-top"
-                            >
-                                {{
-                                    DateTime.fromISO(item.starts_at).toFormat(
-                                        "HH:mm"
-                                    )
-                                }}
-                                –
-                            </div>
-                            <div
-                                class="relative flex flex-row flex-nowrap text-justify align-top"
-                            >
-                                {{
-                                    DateTime.fromISO(item.ends_at).toFormat(
-                                        "HH:mm"
-                                    )
-                                }}
-                            </div>
-                        </div> -->
-
                     <div
                         class="relative flex flex-col flex-auto text-center items-center"
                     >
@@ -301,14 +212,15 @@ function onLeave(node, done) {
                             <div
                                 class="relative flex flex-row flex-nowrap text-justify align-top text-[3vw]"
                             >
-                                {{
-                                    item.room.name
-                                }}
+                                {{ item.room.name }}
                             </div>
                         </div>
                         <div class="relative flex flex-row flex-nowrap">
-                            <div class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw] margin">Scheduled</div>
-                            <Progress />
+                            <div
+                                class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw] margin"
+                            >
+                                Scheduled
+                            </div>
                             <div
                                 v-if="item.delay"
                                 class="flex flex-row items-baseline text-[2vw]"
@@ -326,10 +238,14 @@ function onLeave(node, done) {
                                     Delayed: {{ item.delay }}min
                                 </div>
                             </div>
-                            <div v-else class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw]">On Time</div>
+                            <div
+                                v-else
+                                class="relative flex flex-row flex-nowrap text-justify align-top text-[2vw]"
+                            >
+                                On Time
+                            </div>
                         </div>
                     </div>
-                    <Glitches class="absolute" />
                 </div>
                 <!--                </TransitionGroup>-->
             </div>

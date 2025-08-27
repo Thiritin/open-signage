@@ -64,37 +64,38 @@ class PlaylistItemsRelationManager extends RelationManager
             ])->columns(12)->columnSpanFull(),
             TextInput::make('title')->columnSpanFull(),
         ];
-        // if ($this->mountedTableActionRecord) {
-        //     $id = $this->mountedTableActionRecord;
-        //     $page = PlaylistItem::find($id)->page;
-        //     if ($page->schema) {
-        //         $array = [];
-        //         foreach ($page->schema as $field) {
-        //             if($field['type'] === "ImageInput") {
-        //                 $item = FileUpload::make('content.' . $field['property'])->image();
-        //             } else {
-        //                 $class = 'Filament\\Forms\\Components\\' . $field['type'];
-        //                 $item = $class::make('content.' . $field['property']);
-        //             }
 
-        //             if($field['type'] === "Select") {
-        //                 $item = $item->options($field['options']);
-        //             }
+        if ($this->ownerRecord) {
+            $id = $this->ownerRecord["id"];
+            $page = PlaylistItem::find($id)->page;
+            if ($page->schema) {
+                $array = [];
+                foreach ($page->schema as $field) {
+                    if($field['type'] === "ImageInput") {
+                        $item = FileUpload::make('content.' . $field['property'])->image();
+                    } else {
+                        $class = 'Filament\\Forms\\Components\\' . $field['type'];
+                        $item = $class::make('content.' . $field['property']);
+                    }
 
-        //             if(isset($field['required']) && $field['required']) {
-        //                 $item = $item->required();
-        //             }
+                    if($field['type'] === "Select") {
+                        $item = $item->options($field['options']);
+                    }
 
-        //             $item = $item->label($field['name'])
-        //                 ->columnSpanFull();
-        //             $array[] = $item;
-        //         }
-        //         $formSchema[] = Section::make('Page Content')
-        //             ->schema($array)
-        //             ->columns(12)
-        //             ->columnSpanFull();
-        //     }
-        // }
+                    if(isset($field['required']) && $field['required']) {
+                        $item = $item->required();
+                    }
+
+                    $item = $item->label($field['name'])
+                        ->columnSpanFull();
+                    $array[] = $item;
+                }
+                $formSchema[] = Section::make('Page Content')
+                    ->schema($array)
+                    ->columns(12)
+                    ->columnSpanFull();
+            }
+        }
 
         return $schema
             ->components($formSchema);

@@ -112,7 +112,7 @@ const nextEvent = computed(() => {
                     class="text-[6vw] leading-none neonTextColor text-center"
                 >
                     Delayed by
-                    <span class="magicTextColorRed">{{ nextEvent.delay }}</span>
+                    <span class="text-red-200">{{ nextEvent.delay }}</span>
                     minutes
                 </div>
             </div>

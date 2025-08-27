@@ -139,6 +139,16 @@ function onBeforeEnter(el) {
 function onEnter(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
+    setTimeout(() => {
+        for (let i = 0; i < 3; i++) {
+            if (node.children[i])
+                node.children[i].classList.add('animation-done');
+        }
+    }, 1000);
+
+    setTimeout(() => {
+        done();
+    }, 4000);
 }
 
 function onBeforeLeave(el) {
@@ -148,6 +158,14 @@ function onBeforeLeave(el) {
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
+    for (let i = 0; i < 3; i++) {
+        if (node.children[i])
+            node.children[i].classList.remove('animation-done');
+    }
+
+    setTimeout(() => {
+        done();
+    }, 2000);
 }
 </script>
 
@@ -165,7 +183,7 @@ function onLeave(node, done) {
         >
             <div
                 :key="currentPageIndex"
-                class="flex flex-col absolute z-30 mt-28 h-[100vh] w-[100vw] p-16 px-38 space-y-8 gap-12 justify-items-center overflow-hidden"
+                class="animation flex flex-col absolute z-30 mt-28 h-[100vh] w-[100vw] p-16 px-38 space-y-8 gap-12 justify-items-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div
@@ -175,7 +193,7 @@ function onLeave(node, done) {
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
                     <div
-                        class="relative flex flex-col flex-auto schedule_entry pl-48 pt-8"
+                        class="relative flex flex-col flex-auto schedule_entry pl-32 pr-16 pt-8"
                     >
                         <div
                             class="relative flex flex-row flex-nowrap text-center align-top headingFont schedule_title"

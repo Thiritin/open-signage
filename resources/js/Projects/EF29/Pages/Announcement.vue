@@ -39,10 +39,10 @@ defineProps({
 </script>
 
 <template>
-    <div class="h-full flex flex-col justify-center items-center z-50 bgImage bg-no-repeat bg-cover bg-center magicTextColor" :class="{'text-center': centerContent}">
+    <div class="h-full flex flex-col justify-center items-center z-50 bgImage bg-no-repeat bg-cover bg-center text-primary-200" :class="{'text-center': centerContent}">
         <div class="p-16" :class="{'bg-white bg-opacity-80 max-w-7xl mx-auto min-h-full': useContainer}">
-            <h1 class="themeFont mb-12" :class="headerSize">{{ title }}</h1>
-            <p class="font-semibold themeFontSecondary leading-normal mx-auto whitespace-pre-wrap" :class="textSize">
+            <h1 class="themeFont text-[128pt] mb-12 text-center" :class="headerSize">{{ title }}</h1>
+            <p class="font-semibold themeFontSecondary leading-normal mx-auto whitespace-pre-wrap text-[88pt] text-center" :class="textSize">
                 <div class="textscreen" v-html="text"></div>
             </p>
         </div>

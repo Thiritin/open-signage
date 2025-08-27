@@ -149,7 +149,7 @@ function getTime() {
 
 <template>
     <div
-        class="absolute z-10 top-4 right-5 text-7xl flex flex-row items-end magicTextColor themeFont"
+        class="absolute z-10 top-4 right-5 text-7xl flex flex-row items-end text-white themeFont"
     >
         <div
             class="flex flex-col text-right justify-end items-end clockContainer"

@@ -8,7 +8,6 @@ import {
     toRaw,
     unref,
 } from "vue";
-import { animate, utils } from "animejs";
 
 const props = defineProps({
     title: {
@@ -139,68 +138,14 @@ function onEnter(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
 
-    animate({
-        targets: node.querySelectorAll(".anim"),
-        loop: 1,
-        direction: "reverse",
-        easing: "easeInOutBounce",
-        autoplay: false,
-        complete: function (anim) {
-            done();
-        },
-        translateX: function (el) {
-            const halfWidth = el.getBoundingClientRect().width / 2;
-
-            return utils.random(-halfWidth, halfWidth);
-        },
-        translateY: function (el) {
-            const halfHeight = el.getBoundingClientRect().height / 2;
-
-            return utils.random(-halfHeight, halfHeight);
-        },
-        opacity: 0,
-        duration: function () {
-            return utils.random(250, 750);
-        },
-        delay: function () {
-            return utils.random(0, 750);
-        },
-    }).play();
+    done();
 }
 
 function onLeave(node, done) {
     // call the done callback to indicate transition end
     // optional if used in combination with CSS
-    animate({
-        targets: node.querySelectorAll(".anim"),
-        loop: 1,
-        direction: "normal",
-        easing: "easeInOutBounce",
-        autoplay: false,
-        complete: function (anim) {
-            done();
-        },
-        translateX: function (el) {
-            const halfWidth = el.getBoundingClientRect().width / 2;
 
-            return utils.random(
-                -halfWidth,
-                halfWidth
-            );
-        },
-        translateY: function (el) {
-            const halfHeight = el.getBoundingClientRect().height / 2;
-
-            return utils.random(-halfHeight, halfHeight);
-        },
-        opacity: 0,
-        duration: function () {
-            return utils.random(250, 750);
-        },
-        delay: function () {
-            return utils.random(0, 750);
-        },
-    }).play();
+    done();
 }
 </script>
 
@@ -208,7 +153,6 @@ function onLeave(node, done) {
     <div
         class="flex absolute z-30 h-[100vh] w-[100vw] justify-items-center overflow-hidden"
     >
-        <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
         <Transition
             appear
             @enter="onEnter"
@@ -223,7 +167,7 @@ function onLeave(node, done) {
                 <div
                     v-for="item in currentSlide"
                     :key="item.id"
-                    class="flex flex-col magicTextColor magic-text anim"
+                    class="flex flex-col text-white magic-text anim"
                     :class="[isThemeFont ? 'themeFont' : 'themeFontSecondary']"
                 >
                     <div class="flex text-[9vw] text-justify">
@@ -241,13 +185,13 @@ function onLeave(node, done) {
                                     DateTime.fromISO(item.nextEvent.starts_at) <
                                         DateTime.local()
                                 "
-                                class="flex text-left magicTextColorGreen"
+                                class="flex text-left text-green-200"
                             >
                                 OPEN
                             </div>
                             <div
                                 v-else
-                                class="flex text-left magicTextColorRed"
+                                class="flex text-left text-red-200"
                             >
                                 CLOSED
                             </div>

@@ -86,7 +86,6 @@ import chunkArray from "@/chunkArray.js";
 </script>
 
 <template>
-    <!--    <h1 class="relative z-30 text-center text-8xl top-1 mt-4 magicTextColor themeFont">{{ title }}</h1>-->
     <Transition mode="out-in">
         <div
             :key="currentPageIndex"
@@ -94,13 +93,13 @@ import chunkArray from "@/chunkArray.js";
         >
             <div
                 v-for="(item, _index) in currentSignPostPage"
-                class="flex flex-col relative z-30 magicTextColor magic-text themeFont w-[100vw]"
+                class="flex flex-col relative z-30 text-white magic-text themeFont w-[100vw]"
             >
                 <div class="mx-12 my-8 flex flex-row flex-nowrap items-center">
                     <div v-if="item.pivot.icon" class="min-w-[200px] mr-6">
                         <IconRouter
                             :path="page.path"
-                            class="magicTextColor w-[200px] svgIconGlow"
+                            class="text-white w-[200px] svgIconGlow"
                             :icon="item.pivot.icon"
                             :mirror="item.pivot.mirror"
                             :rotation="item.pivot.rotation"
@@ -165,7 +164,7 @@ import chunkArray from "@/chunkArray.js";
                                     </div>
                                     <div
                                         :class="{
-                                            'magicTextColorGreen ':
+                                            'text-green-200 ':
                                                 containsOnly(
                                                     nextEvent(item).value.title
                                                 ),
@@ -189,7 +188,7 @@ import chunkArray from "@/chunkArray.js";
                     </div>
 
                     <div
-                        class="flex flex-0 flex-row magicTextColor w-[20vw] space-x-8"
+                        class="flex flex-0 flex-row text-white w-[20vw] space-x-8"
                     >
                         <IconRouter
                             v-if="

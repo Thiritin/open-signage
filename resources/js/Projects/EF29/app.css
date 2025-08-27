@@ -14,13 +14,13 @@
 }
 
 .themeFont {
-    font-family: "primaryThemeFont", sans-serif;
+    font-family: "headingThemeFont", sans-serif;
     font-weight: 500;
     line-height: 1.2;
 }
 
 .themeFontSecondary {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    font-family: "primaryThemeFont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     font-weight: 600;
     line-height: 1.5;
@@ -42,7 +42,7 @@
 
 .schedule_entry {
     background: var(--color-primary-400);
-    clip-path: polygon(15% 0%, 100% 0, 100% 100%, 0% 100%);
+    clip-path: polygon(75px 0%, 100% 0, 100% 100%, 0% 100%);
     height: 256px;
 }
 
@@ -57,4 +57,29 @@
 
 .schedule_title {
     font-size: 4vw;
+}
+
+.animation > div {
+    position: absolute;
+    width: 1850px;
+    left: 2500px;
+}
+
+.animation > div:first-child {
+    transition: 1.5s;
+    top: 60px !important;
+}
+
+.animation > div:nth-child(2) {
+    transition: 1.75s;
+    top: 400px;
+}
+
+.animation > div:last-child {
+    transition: 2s;
+    top: 740px;
+}
+
+.animation-done {
+    left: 190px !important;
 }

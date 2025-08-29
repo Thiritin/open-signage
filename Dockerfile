@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.3-alpine as base
+FROM php:8.4-alpine as base
 WORKDIR /app
 
 ENV COMPOSER_MEMORY_LIMIT=-1
@@ -35,7 +35,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 | composer require tightenco/ziggy:^2 --ignore-pl
 ######################################################
 # NodeJS Stage
 ######################################################
-FROM node:18-buster as vite
+FROM node:24-alpine3.21 as vite
 WORKDIR /app
 COPY package.json package-lock.json tailwind.config.js vite.config.js postcss.config.js ./
 RUN npm install --force

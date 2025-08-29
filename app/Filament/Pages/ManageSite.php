@@ -2,12 +2,12 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use App\Models\Playlist;
-use Filament\Forms\Components\Placeholder;
 use App\Services\ScreenTabResource;
 use App\Settings\GeneralSettings;
 use Filament\Forms;
@@ -44,7 +44,10 @@ class ManageSite extends SettingsPage
                     ->options(
                         Playlist::all()->pluck('name', 'id')->toArray()
                     ),
-                Placeholder::make('notice')->columnSpanFull()->label('These are defaults that can be overriden per case basis.'),
+                TextEntry::make('notice')
+                    ->hiddenLabel()
+                    ->state(fn () => 'These are defaults that can be overridden per case basis.')
+                    ->columnSpanFull(),
                 ScreenTabResource::getForm(),
             ]);
     }

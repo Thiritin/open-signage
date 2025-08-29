@@ -21,6 +21,7 @@
         "laravel/reverb": "^1.5",
         "laravel/sanctum": "^4.2",
         "laravel/tinker": "^2.10",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "sentry/sentry-laravel": "^4.15",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-settings": "^3.4",

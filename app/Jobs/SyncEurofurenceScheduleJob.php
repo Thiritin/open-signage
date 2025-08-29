@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Events\UpdateAnnouncementEvent;
+use App\Events\UpdateScheduleEvent;
 use App\Models\Announcement;
 use App\Models\Room;
 use App\Models\ScheduleEntry;
@@ -78,8 +80,8 @@ class SyncEurofurenceScheduleJob implements ShouldQueue
         ])->toArray(), "id", ["title", "content", "starts_at", "ends_at"]);
 
         if ($newAnnouncements->count() > 0) {
-            broadcast(new \App\Events\UpdateAnnouncementEvent());
-            broadcast(new \App\Events\UpdateScheduleEvent());
+            broadcast(new UpdateAnnouncementEvent());
+            broadcast(new UpdateScheduleEvent());
         }
     }
 

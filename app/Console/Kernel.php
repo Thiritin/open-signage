@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\ScreenStatusCheckJob;
+use App\Jobs\SyncEurofurenceScheduleJob;
 use App\Jobs\ScheduleEntryDispatcherJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,11 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new \App\Jobs\ScreenStatusCheckJob())->everyMinute();
+        $schedule->job(new ScreenStatusCheckJob())->everyMinute();
         $schedule->job(new ScheduleEntryDispatcherJob())->everyMinute();
 
-        if (config('app.default_project') === "EF28") {
-            $schedule->job(new \App\Jobs\SyncEurofurenceScheduleJob())->everyMinute();
+        if (config('app.default_project') === "EF29") {
+            $schedule->job(new SyncEurofurenceScheduleJob())->everyMinute();
         }
     }
 

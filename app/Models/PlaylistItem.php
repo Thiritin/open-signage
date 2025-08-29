@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,9 +66,9 @@ class PlaylistItem extends Model
             }
             if($property['type'] === "ImageInput" || $property['type'] === "FileInput") {
                 if(Str::endsWith($value, ['jpg', 'jpeg', 'png'])) {
-                    return \Storage::drive('public')->url($value.".webp");
+                    return Storage::drive('public')->url($value.".webp");
                 }
-                return \Storage::drive('public')->url($value);
+                return Storage::drive('public')->url($value);
             }
             return $value;
         });

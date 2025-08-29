@@ -307,9 +307,11 @@ watch(
 </template>
 
 <style>
+@reference "tailwindcss";
+
 body {
     overflow: hidden;
-    @apply bg-primary-800;
+    @apply bg-stone-800;
 }
 
 .v-enter-active {

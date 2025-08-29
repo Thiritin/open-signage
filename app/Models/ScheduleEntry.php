@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,18 +30,18 @@ class ScheduleEntry extends Model
         'automation' => 'array',
     ];
 
-    public function room(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function room(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Room::class);
+        return $this->belongsTo(Room::class);
     }
 
-    public function scheduleType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function scheduleType(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\ScheduleType::class);
+        return $this->belongsTo(ScheduleType::class);
     }
 
-    public function scheduleOrganizer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function scheduleOrganizer(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\ScheduleOrganizer::class);
+        return $this->belongsTo(ScheduleOrganizer::class);
     }
 }

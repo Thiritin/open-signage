@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ class EnsureSharedSecretIsSetMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if(\App::isLocal() || empty(config('app.shared_secret'))) return $next($request);
+        if(App::isLocal() || empty(config('app.shared_secret'))) return $next($request);
 
         $sharedSecret = $request->get('shared_secret');
         if (empty($sharedSecret) || $sharedSecret !== config('app.shared_secret')) {

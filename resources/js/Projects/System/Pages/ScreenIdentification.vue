@@ -1,6 +1,4 @@
 <script setup>
-import {defineProps} from 'vue'
-
 defineProps(['appScreen'])
 </script>
 
@@ -12,7 +10,3 @@ defineProps(['appScreen'])
         </div>
     </div>
 </template>
-
-<style scoped>
-
-</style>

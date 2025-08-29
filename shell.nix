@@ -1,10 +1,10 @@
 with import <nixpkgs> {};
 pkgs.mkShell {
   buildInputs = with pkgs; [
-    nodejs_20
+    nodejs_24
     nodePackages.npm
-    php83
-    php83Packages.composer
+    php84
+    php84Packages.composer
   ];
 
   shellHook = ''

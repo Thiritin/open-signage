@@ -1,6 +1,5 @@
 <script setup>
 import {computed, onMounted, onUpdated, reactive, useAttrs, watch} from "vue";
-import Logo from "@/Projects/WT23/Pages/Logo.vue";
 
 const props = defineProps(['page'])
 defineOptions({

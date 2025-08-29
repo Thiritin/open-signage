@@ -5,7 +5,7 @@ import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
     build: {
-        target: 'es2017',
+        target: ['chrome68', 'safari12', 'es2017'],
         // rollup options, no asset versioning
         rollupOptions: {
             output: {
@@ -18,8 +18,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/js/app.js',
-                'resources/js/Main.vue'
+                'resources/js/app.js'
             ],
             refresh: true,
         }),

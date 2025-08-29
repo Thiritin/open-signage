@@ -4,6 +4,7 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import * as Sentry from "@sentry/vue";
+import Main from "./Main.vue";
 
 import.meta.glob(["./Projects/**/Assets/**"]);
 
@@ -13,8 +14,9 @@ import(`./Projects/${appPath}/app.css`);
 
 createInertiaApp({
     title: (title) => `${appName}`,
-    resolve: (name) =>
-        resolvePageComponent(`./${name}.vue`, import.meta.glob("./*.vue")),
+    resolve: (name) => {
+        return Main;
+    },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
             .use(plugin)

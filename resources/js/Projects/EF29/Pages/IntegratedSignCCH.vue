@@ -8,6 +8,8 @@ import {
     toRaw,
     unref,
 } from "vue";
+import { DateTime } from "luxon";
+import _ from "lodash";
 
 const props = defineProps({
     title: {
@@ -68,6 +70,8 @@ String.prototype.truncate =
     };
 
 function getNextEventForRoom(room, timeObject) {
+    console.log(props.schedule);
+
     return _.cloneDeep(props.schedule)
         .filter((event) => {
             return event.room_id === room.id;
@@ -109,6 +113,8 @@ function getNextEventForRoom(room, timeObject) {
 }
 
 const populatedRooms = computed(() => {
+    console.log(props.rooms);
+
     return _.cloneDeep(props.rooms).map((room) => {
         room.nextEvent = getNextEventForRoom(room, currentTime.value);
         return room;
@@ -130,9 +136,6 @@ const roomPages = computed(() => {
 const currentSlide = computed(() => {
     return roomPages.value[currentPageIndex.value];
 });
-
-import { DateTime } from "luxon";
-import _ from "lodash";
 
 function onEnter(node, done) {
     // call the done callback to indicate transition end

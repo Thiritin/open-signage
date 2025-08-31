@@ -108,6 +108,10 @@ class PlaylistItemsRelationManager extends RelationManager
                 $item = FileUpload::make('content.' . $field['property'])
                     ->visibility('public')
                     ->image();
+            } elseif ($field['type'] === 'FileInput') {
+                $item = FileUpload::make('content.' . $field['property'])
+                    ->visibility('public')
+                    ->acceptedFileTypes(['video/mp4']);
             } else {
                 $class = 'Filament\\Forms\\Components\\' . $field['type'];
 

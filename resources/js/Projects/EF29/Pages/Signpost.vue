@@ -164,7 +164,7 @@ import chunkArray from "@/chunkArray.js";
                                     </div>
                                     <div
                                         :class="{
-                                            'text-green-200 ':
+                                            'text-green-300':
                                                 containsOnly(
                                                     nextEvent(item).value.title
                                                 ),

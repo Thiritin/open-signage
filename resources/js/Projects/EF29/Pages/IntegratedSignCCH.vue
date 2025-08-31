@@ -188,13 +188,13 @@ function onLeave(node, done) {
                                     DateTime.fromISO(item.nextEvent.starts_at) <
                                         DateTime.local()
                                 "
-                                class="flex text-left text-green-200"
+                                class="flex text-left text-green-300"
                             >
                                 OPEN
                             </div>
                             <div
                                 v-else
-                                class="flex text-left text-red-200"
+                                class="flex text-left text-red-300"
                             >
                                 CLOSED
                             </div>
@@ -213,7 +213,7 @@ function onLeave(node, done) {
                         </div>
                         <div
                             v-else-if="item.nextEvent && item.nextEvent.title"
-                            class="flex text-left"
+                            class="flex text-left pl-16"
                         >
                             Next: {{ item.nextEvent.title }}
                         </div>

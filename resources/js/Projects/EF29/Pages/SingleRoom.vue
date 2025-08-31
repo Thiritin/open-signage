@@ -65,10 +65,10 @@ const nextEvent = computed(() => {
 </script>
 
 <template>
-    <div class="z-50 overflow-hidden h-full" v-if="nextEvent">
+    <div class="text-white z-50 overflow-hidden h-full" v-if="nextEvent">
         <div
             v-if="nextEvent.title"
-            class="flex flex-col items-center justify-between p-4 overflow-hidden h-screen z-50 themeFont leading-none"
+            class="flex flex-col items-center justify-around p-4 overflow-hidden h-screen z-50 themeFont leading-none"
         >
             <div
                 v-if="nextEvent.room.name !== nextEvent.title && showRoomName"
@@ -112,7 +112,7 @@ const nextEvent = computed(() => {
                     class="text-[6vw] leading-none neonTextColor text-center"
                 >
                     Delayed by
-                    <span class="text-red-200">{{ nextEvent.delay }}</span>
+                    <span class="text-red-300">{{ nextEvent.delay }}</span>
                     minutes
                 </div>
             </div>

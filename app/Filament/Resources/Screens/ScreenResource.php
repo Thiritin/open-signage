@@ -157,10 +157,13 @@ class ScreenResource extends Resource
                 SelectColumn::make('playlist_id')
                     ->label('Playlist')
                     ->selectablePlaceholder(false)
-                    ->disabled(fn(Screen $screen) => $screen->isEmergency())
-                    ->options(Playlist::whereHas('playlistItems')
+                    ->disabled(fn (Screen $screen) => $screen->isEmergency())
+                    ->options(fn (Screen $screen) => Playlist::query()
+                        ->whereHas('playlistItems')
                         ->normal()
-                        ->pluck('name', 'id')->toArray()),
+                        ->when($screen?->playlist_id, fn ($query) => $query->orWhere('id', $screen->playlist_id))
+                        ->pluck('name', 'id')
+                        ->toArray()),
 
                 TextInputColumn::make('name')
                     ->searchable()

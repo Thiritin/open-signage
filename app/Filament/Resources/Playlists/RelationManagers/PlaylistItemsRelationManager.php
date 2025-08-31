@@ -105,7 +105,9 @@ class PlaylistItemsRelationManager extends RelationManager
 
         foreach ($page->schema as $field) {
             if ($field['type'] === 'ImageInput') {
-                $item = FileUpload::make('content.' . $field['property'])->image();
+                $item = FileUpload::make('content.' . $field['property'])
+                    ->visibility('public')
+                    ->image();
             } else {
                 $class = 'Filament\\Forms\\Components\\' . $field['type'];
 

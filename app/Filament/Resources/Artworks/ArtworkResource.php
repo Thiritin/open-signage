@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Artworks;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
@@ -62,6 +63,11 @@ class ArtworkResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('artist'),
+                ImageColumn::make('file_horizontal')
+                    ->visibility('public')
+                    ->imageHeight(100)
+                    ->grow(false)
+                    ->disabled(),
             ])
             ->filters([
                 //

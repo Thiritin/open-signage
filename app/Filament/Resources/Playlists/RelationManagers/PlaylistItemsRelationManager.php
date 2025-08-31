@@ -2,30 +2,31 @@
 
 namespace App\Filament\Resources\Playlists\RelationManagers;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Section;
-use App\Models\Page;
 use App\Models\Layout;
-use Filament\Actions\CreateAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\ReplicateAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
+use App\Models\Page;
 use App\Models\PlaylistItem;
 use Exception;
 use Filament\Actions\Action;
-use Filament\Forms\Components\DatePicker;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class PlaylistItemsRelationManager extends RelationManager
 {
@@ -35,70 +36,103 @@ class PlaylistItemsRelationManager extends RelationManager
 
     public function form(Schema $schema): Schema
     {
-        $formSchema = [
-            Group::make([
-                TextInput::make('duration')
-                    ->numeric()
-                    ->minValue(1)
-                    ->suffix('seconds')
-                    ->columnSpan(2)
-                    ->required(),
+        return $schema
+            ->components([
+                Group::make([
+                    TextInput::make('duration')
+                        ->numeric()
+                        ->minValue(1)
+                        ->suffix('seconds')
+                        ->columnSpan(2)
+                        ->required(),
 
-                Select::make('page_id')
-                    ->relationship('page', 'name', fn (Builder $query) => $query->normal())
-                    ->label('Page')
-                    ->columnSpan(5)
-                    ->required(),
+                    Select::make('page_id')
+                        ->relationship('page', 'name', fn (Builder $query) => $query->normal())
+                        ->label('Page')
+                        ->columnSpan(5)
+                        ->required()
+                        ->reactive(),
 
-                Select::make('layout_id')
-                    ->relationship('layout', 'name', fn (Builder $query) => $query->normal())
-                    ->label('Layout')
-                    ->columnSpan(5)
-                    ->required(),
+                    Select::make('layout_id')
+                        ->relationship('layout', 'name', fn (Builder $query) => $query->normal())
+                        ->label('Layout')
+                        ->columnSpan(5)
+                        ->required(),
 
-                DateTimePicker::make('starts_at')
-                    ->columnSpan(6),
+                    DateTimePicker::make('starts_at')
+                        ->columnSpan(6),
 
-                DateTimePicker::make('ends_at')
-                    ->columnSpan(6),
-            ])->columns(12)->columnSpanFull(),
-            TextInput::make('title')->columnSpanFull(),
-        ];
+                    DateTimePicker::make('ends_at')
+                        ->columnSpan(6),
+                ])->columns(12)->columnSpanFull(),
 
-        if ($this->ownerRecord) {
-            $id = $this->ownerRecord["id"];
-            $page = PlaylistItem::find($id)->page;
-            if ($page->schema) {
-                $array = [];
-                foreach ($page->schema as $field) {
-                    if($field['type'] === "ImageInput") {
-                        $item = FileUpload::make('content.' . $field['property'])->image();
-                    } else {
-                        $class = 'Filament\\Forms\\Components\\' . $field['type'];
-                        $item = $class::make('content.' . $field['property']);
-                    }
+                TextInput::make('title')->columnSpanFull(),
 
-                    if($field['type'] === "Select") {
-                        $item = $item->options($field['options']);
-                    }
+                Section::make('Page Content')
+                    ->columnSpanFull()
+                    ->hidden(fn (Get $get) => ! $this->shouldDisplayPageContent($get('page_id')))
+                    ->schema(fn (Get $get) => $this->buildPageContentSchema($get('page_id'))),
+            ]);
+    }
 
-                    if(isset($field['required']) && $field['required']) {
-                        $item = $item->required();
-                    }
-
-                    $item = $item->label($field['name'])
-                        ->columnSpanFull();
-                    $array[] = $item;
-                }
-                $formSchema[] = Section::make('Page Content')
-                    ->schema($array)
-                    ->columns(12)
-                    ->columnSpanFull();
-            }
+    private function shouldDisplayPageContent(?int $pageId): bool
+    {
+        if (! $pageId) {
+            return false;
         }
 
-        return $schema
-            ->components($formSchema);
+        $page = Page::find($pageId);
+
+        return $page && $page->schema;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function buildPageContentSchema(?int $pageId): array
+    {
+        if (! $pageId) {
+            return [];
+        }
+
+        $page = Page::find($pageId);
+
+        if (! $page || ! $page->schema) {
+            return [];
+        }
+
+        $contentSchema = [];
+
+        foreach ($page->schema as $field) {
+            if ($field['type'] === 'ImageInput') {
+                $item = FileUpload::make('content.' . $field['property'])->image();
+            } else {
+                $class = 'Filament\\Forms\\Components\\' . $field['type'];
+
+                if (! class_exists($class)) {
+                    Log::error("Class {$class} does not exist. Load attempted by page: {$page->name} ({$pageId})");
+
+                    continue;
+                }
+
+                $item = $class::make('content.' . $field['property']);
+            }
+
+            if ($field['type'] === 'Select') {
+                $item = $item->options($field['options']);
+            }
+
+            if (isset($field['required']) && $field['required']) {
+                $item = $item->required();
+            }
+
+            $item = $item->label($field['name'])
+                ->columnSpanFull();
+
+            $contentSchema[] = $item;
+        }
+
+        return $contentSchema;
     }
 
     /**

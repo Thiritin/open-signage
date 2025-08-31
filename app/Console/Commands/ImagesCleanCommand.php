@@ -20,7 +20,7 @@ class ImagesCleanCommand extends Command
         $this->info('Cleaning images...');
         $GlobalWallpaper = app(GeneralSettings::class)->wallpaper;
 
-        $files = collect(Storage::drive('public')->allFiles())
+        $files = collect(Storage::allFiles())
             ->filter(fn($file) => Str::endsWith($file, '.png') || Str::endsWith($file, '.jpg'))
             ->unique()
             ->each(function ($file) use ($GlobalWallpaper) {
@@ -31,8 +31,8 @@ class ImagesCleanCommand extends Command
                 $existsInSettings = $GlobalWallpaper === $file;
                 if (!$existsAsArtwork && !$existsInProject && !$existsInSettings) {
                     $this->info("Removing {$file}...");
-                    Storage::drive('public')->delete($file);
-                    Storage::drive('public')->delete($file.'.webp');
+                    Storage::delete($file);
+                    Storage::delete($file.'.webp');
                 }
 
             });

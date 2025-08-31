@@ -35,16 +35,19 @@ class ArtworkResource extends Resource
                 TextInput::make('name')->required(),
                 TextInput::make('artist'),
                 FileUpload::make('file_horizontal')
+                    ->visibility('public')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios(['16:9', null])
                     ->imageEditorMode(2),
                 FileUpload::make('file_vertical')
+                    ->visibility('public')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios(['9:16', null])
                     ->imageEditorMode(2),
                 FileUpload::make('file_banner')
+                    ->visibility('public')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios(['5:2', null])

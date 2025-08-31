@@ -99,7 +99,7 @@ import chunkArray from "@/chunkArray.js";
                     <div v-if="item.pivot.icon" class="min-w-[200px] mr-6">
                         <IconRouter
                             :path="page.path"
-                            class="text-white w-[200px] svgIconGlow"
+                            class="fill-white w-[200px] svgIconGlow"
                             :icon="item.pivot.icon"
                             :mirror="item.pivot.mirror"
                             :rotation="item.pivot.rotation"
@@ -197,7 +197,7 @@ import chunkArray from "@/chunkArray.js";
                                     : false
                             "
                             :path="page.path"
-                            class="flex w-[5vw] svgIconGlow"
+                            class="flex fill-white w-[5vw] svgIconGlow"
                             icon="Wheelchair"
                         ></IconRouter>
 

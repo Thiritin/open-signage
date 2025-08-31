@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ScheduleEntries;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
@@ -23,7 +24,6 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -169,15 +169,15 @@ class ScheduleEntryResource extends Resource
 
                     ])->columnSpan(1),
 
-                    Placeholder::make('created_at')
+                    TextEntry::make('created_at')
                         ->label('Created Date')
-                        ->content(fn(
+                        ->state(fn(
                             ?ScheduleEntry $record
                         ): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                    Placeholder::make('updated_at')
+                    TextEntry::make('updated_at')
                         ->label('Last Modified Date')
-                        ->content(fn(
+                        ->state(fn(
                             ?ScheduleEntry $record
                         ): string => $record?->updated_at?->diffForHumans() ?? '-'),
                 ]),

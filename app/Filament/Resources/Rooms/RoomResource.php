@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Rooms;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
@@ -12,7 +13,6 @@ use App\Filament\Resources\Rooms\Pages\EditRoom;
 use App\Filament\Resources\RoomResource\Pages;
 use App\Filament\Resources\Rooms\RelationManagers\ScreensRelationManager;
 use App\Models\Room;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
@@ -42,13 +42,13 @@ class RoomResource extends Resource
                     ->helperText('Name from any external system.')
                     ->hint('Do not modify if you don\'t know what you are doing.'),
 
-                Placeholder::make('created_at')
+                TextEntry::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Room $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Room $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
+                TextEntry::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Room $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Room $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

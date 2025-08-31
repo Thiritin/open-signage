@@ -52,9 +52,9 @@ class ScreenDataGenerator
             'id' => $artwork->id,
             'name' => $artwork->name,
             'artist' => $artwork->artist,
-            'horizontal' => (empty($artwork->file_horizontal)) ? null : Storage::disk('public')->url($artwork->file_horizontal),
-            'vertical' => (empty($artwork->file_vertical)) ? null : Storage::disk('public')->url($artwork->file_vertical),
-            'banner' => (empty($artwork->file_banner)) ? null : Storage::disk('public')->url($artwork->file_banner),
+            'horizontal' => (empty($artwork->file_horizontal)) ? null : Storage::url($artwork->file_horizontal),
+            'vertical' => (empty($artwork->file_vertical)) ? null : Storage::url($artwork->file_vertical),
+            'banner' => (empty($artwork->file_banner)) ? null : Storage::url($artwork->file_banner),
         ])->toArray();
     }
 

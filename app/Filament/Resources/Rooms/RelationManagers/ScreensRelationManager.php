@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\Rooms\RelationManagers;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use App\Models\Screen;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -36,13 +36,13 @@ class ScreensRelationManager extends RelationManager
                 DatePicker::make('last_ping_at')
                     ->label('Last Ping Date'),
 
-                Placeholder::make('created_at')
+                TextEntry::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
+                TextEntry::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('slug')
                     ->disabled()

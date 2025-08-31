@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Playlists;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Grid;
 use Filament\Actions\EditAction;
@@ -14,7 +15,6 @@ use App\Filament\Resources\PlaylistResource\Pages;
 use App\Filament\Resources\Playlists\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
 use App\Models\Project;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -60,13 +60,13 @@ class PlaylistResource extends Resource
                 TextInput::make('name')
                     ->required(),
 
-                Placeholder::make('created_at')
+                TextEntry::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Playlist $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Playlist $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
+                TextEntry::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Playlist $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Playlist $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Layouts;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Grid;
 use Filament\Actions\EditAction;
@@ -14,7 +15,6 @@ use App\Filament\Resources\LayoutResource\Pages;
 use App\Models\Layout;
 use App\Models\Project;
 use Exception;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -63,13 +63,13 @@ class LayoutResource extends Resource
                 TextInput::make('component')
                     ->required(),
 
-                Placeholder::make('created_at')
+                TextEntry::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Layout $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Layout $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
+                TextEntry::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Layout $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?Layout $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

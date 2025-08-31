@@ -70,7 +70,7 @@ class ConfigController extends Controller
             return implode(' ', $value);
         }
         if ($key === 'wallpaper') {
-            return Storage::drive('public')->url($value);
+            return Storage::url($value);
         }
 
         if ($key === 'screen_rotate') {

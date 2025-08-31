@@ -66,9 +66,9 @@ class PlaylistItem extends Model
             }
             if($property['type'] === "ImageInput" || $property['type'] === "FileInput") {
                 if(Str::endsWith($value, ['jpg', 'jpeg', 'png'])) {
-                    return Storage::drive('public')->url($value.".webp");
+                    return Storage::url($value.".webp");
                 }
-                return Storage::drive('public')->url($value);
+                return Storage::url($value);
             }
             return $value;
         });

@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\Users;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
@@ -42,13 +42,13 @@ class UserResource extends Resource
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
 
-                Placeholder::make('created_at')
+                TextEntry::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?User $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?User $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
+                TextEntry::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?User $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->state(fn (?User $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

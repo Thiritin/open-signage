@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Screens;
 
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\TextSize;
@@ -24,7 +25,6 @@ use App\Filament\Resources\Screens\RelationManagers\RoomsRelationManager;
 use App\Jobs\SetEmergencyPlaylistJob;
 use App\Models\Screen;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -60,7 +60,8 @@ class ScreenResource extends Resource
                 Select::make('playlist_id')
                     ->relationship('playlist', 'name', fn ($query) => $query->normal())
                     ->preload()
-                    ->searchable(),
+                    ->searchable()
+                    ->required(),
 
                 TextInput::make('name')
                     ->hint('Only visible to admins and during screen identification.')
@@ -100,13 +101,13 @@ class ScreenResource extends Resource
                         ->label('MAC Address'),
                 ]),
 
-                Placeholder::make('created_at')
+                TextEntry::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->state(fn(?Screen $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Placeholder::make('updated_at')
+                TextEntry::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->state(fn(?Screen $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

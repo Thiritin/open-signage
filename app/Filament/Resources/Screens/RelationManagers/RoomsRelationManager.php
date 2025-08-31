@@ -42,7 +42,6 @@ class RoomsRelationManager extends RelationManager
                 DateTimePicker::make('ends_at'),
 
                 CheckboxList::make('flags')
-                    ->formatStateUsing(fn($state) => json_decode($state ?? "[]", true, 512, JSON_THROW_ON_ERROR))
                     ->options([
                         'first_aid' => 'First Aid',
                         'wheelchair' => 'Wheelchair Friendly',

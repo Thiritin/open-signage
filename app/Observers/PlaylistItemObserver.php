@@ -13,7 +13,10 @@ class PlaylistItemObserver
 {
     public function created(PlaylistItem $playlistItem): void
     {
-        $playlistItem->playlist->screens->each(fn (Screen $screen) => broadcast(new UpdateScreenPlaylistEvent($screen)));
+        Bus::chain([
+            fn () => ConvertAnyFileJob::dispatch(),
+            fn () => $playlistItem->playlist->screens->each(fn (Screen $screen) => broadcast(new UpdateScreenPlaylistEvent($screen))),
+        ])->dispatch();
     }
 
     public function updated(PlaylistItem $playlistItem): void

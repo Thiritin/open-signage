@@ -22,7 +22,7 @@ const usableAttributes = computed(() => {
 <template>
     <div>
         <!-- background -->
-        <div style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh;">
+        <div style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; z-index: -1;">
             <img src="../Assets/images/background.png" class="background_foreground" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; z-index: -1;" />
         </div>
 

@@ -183,7 +183,7 @@ function onLeave(node, done) {
         >
             <div
                 :key="currentPageIndex"
-                class="animation flex flex-col absolute z-30 mt-28 h-[100vh] w-[100vw] p-16 px-38 space-y-8 gap-12 justify-items-center overflow-hidden"
+                class="animation flex absolute z-30 mt-28 h-[100vh] w-[100vw] p-12 px-38 space-y-8 justify-center overflow-hidden"
             >
                 <!--                <TransitionGroup name="list">-->
                 <div
@@ -196,24 +196,25 @@ function onLeave(node, done) {
                         class="relative flex flex-col flex-auto schedule_entry pl-32 pr-16 pt-8"
                     >
                         <div
-                            class="relative flex flex-row flex-nowrap text-center align-top headingFont schedule_title"
+                            class="relative flex flex-row flex-nowrap text-center align-top headingFont text-6xl schedule_title"
                         >
                             {{ item.title }}
                         </div>
                         <div
-                            class="relative flex flex-row flex-nowrap text-justify align-top text-[64px] subtext"
+                            class="relative flex flex-row flex-nowrap text-justify align-top text-4xl subtext"
                         >
                             {{ item.room.name }}
                         </div>
                     </div>
                     <div
-                        class="relative flex flex-col flex-auto text-center items-center schedule_entry_back p-16"
+                        class="relative flex flex-col flex-auto text-center items-center schedule_entry_back p-10"
+                        style="top: 10px;"
                     >
                         <div
                             class="relative flex flex-row text-justify items-start"
                         >
                             <div
-                                class="relative flex flex-row flex-shrink-0 flex-nowrap items-baseline text-justify text-[3.5vw] w-[11ch]"
+                                class="relative flex flex-row flex-shrink-0 flex-nowrap items-baseline text-justify text-6xl"
                             >
                                 <div
                                     class="flex flex-row flex-nowrap text-justify align-top"
@@ -239,15 +240,16 @@ function onLeave(node, done) {
                         <div class="relative flex flex-row flex-nowrap">
                             <div
                                 v-if="item.delay"
-                                class="flex flex-row items-baseline text-[2vw]"
+                                class="flex flex-row items-baseline text-4xl"
                             >
                                 <div
                                     v-if="item.delay < 15"
                                     class="flex text-left"
+                                    style="color: #ffa500 !important;"
                                 >
                                     Slightly Delayed
                                 </div>
-                                <div v-else class="flex text-left">
+                                <div v-else class="flex text-left" style="color: #f05d65 !important;">
                                     Delayed: {{ item.delay }}min
                                 </div>
                             </div>
@@ -264,7 +266,8 @@ function onLeave(node, done) {
         </Transition>
         <!-- foreground -->
         <div
-            class="z-100 absolute left-0 top-0 z-0 w-screen h-screen flex items-center justify-center text-center"
+            class="absolute left-0 top-0 w-screen h-screen flex items-center justify-center text-center"
+            style="z-index:9999;"
         >
             <img
                 src="../Assets/images/foreground.png"

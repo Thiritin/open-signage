@@ -5,7 +5,7 @@ import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
     build: {
-        target: ['chrome68', 'safari12', 'es2017'],
+        target: ['chrome67', 'safari12', 'es2015'],
         // rollup options, no asset versioning
         rollupOptions: {
             output: {

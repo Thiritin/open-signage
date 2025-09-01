@@ -1,7 +1,8 @@
 import colors from 'tailwindcss/colors';
 import 'dotenv/config';
 
-const projectPath = process.env.VITE_PROJECT_PATH ?? "WT23";
+const projectPath = process.env.VITE_PROJECT_PATH ?? "EF29";
+const theme = require('./resources/js/Projects/' + projectPath + '/theme.js');
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -14,6 +15,7 @@ export default {
     ],
     theme: {
         extend: {
+            ...theme,
             fontSize: {
                 '10xl' : '10rem',
                 '11xl' : '11rem',

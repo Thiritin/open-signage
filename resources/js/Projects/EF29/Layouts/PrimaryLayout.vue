@@ -28,7 +28,7 @@ const usableAttributes = computed(() => {
 
         <!--    <Time hourglass="true"/>-->
 
-        <div class="h-screen overflow-auto bg-primary flex flex-col flex-grow">
+        <div class="h-screen overflow-auto bg-transparent flex flex-col flex-grow">
             <!-- Main Content -->
             <Transition mode="out-in">
                 <component :is="page.resolvedComponent" v-bind="usableAttributes"></component>

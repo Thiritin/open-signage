@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(\App\Http\Middleware\EnsureSharedSecretIsSetMiddleware::class)->group(function () {
     Route::get('screens/{slug}', ScreenController::class)->name('screen');
     Route::get('screens', ScreenController::class)->name('kiosk');
-    Route::get('cch/{slug}', ScreenController::class)->name('cch');
     Route::get('config', \App\Http\Controllers\ConfigController::class)->name('config');
     Route::get('browser/{browser}/preferences', \App\Http\Controllers\BrowserPreferencesController::class)->name('browser.preferences');
     Route::get('screens/{screen:hostname}/restart', \App\Http\Controllers\Screens\RestartController::class)->name('screens.restart');
@@ -28,9 +27,6 @@ Route::middleware(\App\Http\Middleware\EnsureSharedSecretIsSetMiddleware::class)
 Route::get('/', function () {
     return redirect('/admin');
 })->name('login');
-
-Route::get('timetable', \App\Http\Controllers\TimetableController::class)->name('timetable');
-Route::get('efsched', \App\Http\Controllers\EurofurenceScheduleController::class)->name('efsched');
 
 // Dev-only design preview. Outside the shared-secret group on purpose: previewing
 // a design must not require a shared secret. The controller itself gates access

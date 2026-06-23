@@ -2,21 +2,18 @@
 
 namespace App\Providers;
 
-use App\Listeners\Screens\ScreenStatusOffline;
-use App\Listeners\Screens\NotifyAdminScreenOffline;
-use App\Events\Screens\OnlineEvent;
-use App\Events\UpdateScheduleEvent;
-use App\Events\UpdateScreenPlaylistEvent;
-use App\Events\EmergencyEvent;
 use App\Events\Screens\FirstPingEvent;
 use App\Events\Screens\OfflineEvent;
+use App\Events\Screens\OnlineEvent;
 use App\Events\UpdateAnnouncementEvent;
-use App\Listeners\EmergencyNotificationsListener;
+use App\Events\UpdateScheduleEvent;
+use App\Events\UpdateScreenPlaylistEvent;
 use App\Listeners\IncreaseVersionListener;
-use App\Listeners\LogEmergencyListener;
 use App\Listeners\Screens\NotifyAdminScreenAvailable;
+use App\Listeners\Screens\NotifyAdminScreenOffline;
 use App\Listeners\Screens\NotifyAdminScreenOnline;
 use App\Listeners\Screens\RebootScreenListener;
+use App\Listeners\Screens\ScreenStatusOffline;
 use App\Listeners\Screens\ScreenStatusOnline;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -44,11 +41,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         FirstPingEvent::class => [
             NotifyAdminScreenAvailable::class,
-            ScreenStatusOnline::class
-        ],
-        EmergencyEvent::class => [
-            EmergencyNotificationsListener::class,
-            LogEmergencyListener::class,
+            ScreenStatusOnline::class,
         ],
         UpdateAnnouncementEvent::class => [
             IncreaseVersionListener::class,

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ResourceOwnership;
 use App\Enums\ScreenStatusEnum;
 use App\Events\UpdateScreenPlaylistEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,7 +32,7 @@ class Screen extends Model
         'id' => 'integer',
         'playlist_id' => 'integer',
         'last_ping_at' => 'datetime',
-        'status' => ScreenStatusEnum::class
+        'status' => ScreenStatusEnum::class,
     ];
 
     public function screenGroup()
@@ -44,12 +43,6 @@ class Screen extends Model
     public function playlist(): BelongsTo
     {
         return $this->belongsTo(Playlist::class);
-    }
-
-    public function isEmergency()
-    {
-        if($this->playlist?->project === null) return false;
-        return $this->playlist->project->type === ResourceOwnership::EMERGENCY;
     }
 
     public function room()
@@ -69,7 +62,7 @@ class Screen extends Model
         return LogOptions::defaults()
             ->logOnly([
                 'name', 'playlist_id', 'screen_group_id', 'orientation', 'slug', 'hostname', 'ip_address',
-                'mac_address', 'provisioned', 'status'
+                'mac_address', 'provisioned', 'status',
             ])
             ->dontSubmitEmptyLogs()
             ->logOnlyDirty();

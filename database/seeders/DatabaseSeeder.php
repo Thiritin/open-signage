@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(EmergencySeeder::class);
         $this->call(SystemSeeder::class);
 
         // Generic "Starter" demo (screen at /screens/demo).

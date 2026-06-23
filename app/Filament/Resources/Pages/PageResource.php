@@ -2,33 +2,33 @@
 
 namespace App\Filament\Resources\Pages;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use App\Filament\Resources\Pages\Pages\ListPages;
+use App\Enums\ResourceOwnership;
 use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Filament\Resources\Pages\Pages\EditPage;
-use App\Enums\ResourceOwnership;
-use App\Filament\Resources\PageResource\Pages;
+use App\Filament\Resources\Pages\Pages\ListPages;
 use App\Models\Page;
 use App\Models\Project;
-use Filament\Forms\Components\DatePicker;
+use BackedEnum;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Development';
+    protected static string|UnitEnum|null $navigationGroup = 'Development';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $slug = 'pages';
 
@@ -96,13 +96,12 @@ class PageResource extends Resource
                 TextColumn::make('project.type')->badge()
                     ->formatStateUsing(fn ($record) => $record->project->name)
                     ->color(fn ($state) => match ($state->value) {
-                        'emergency' => 'danger',
                         'system' => 'gray',
                         'user' => 'success',
                     }),
             ])->filters([
                 SelectFilter::make('project')
-                    ->relationship('project', 'name', fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
+                    ->relationship('project', 'name')
                     ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id),
             ])
             ->recordActions([

@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Enums\ResourceOwnership;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
@@ -35,9 +35,8 @@ class Page extends Model
     protected static function scopeNormal(Builder $query): void
     {
         $query->whereHas('project', function (Builder $query) {
-            $query->where('type', '!=', ResourceOwnership::EMERGENCY->value)
-                ->where(fn($q) => $q->where('type', '=', ResourceOwnership::USER)
-                    ->where('id', Project::firstWhere('path', config('app.default_project'))->id))
+            $query->where(fn ($q) => $q->where('type', '=', ResourceOwnership::USER)
+                ->where('id', Project::firstWhere('path', config('app.default_project'))->id))
                 ->orWhere('type', '=', ResourceOwnership::SYSTEM->value);
         });
     }

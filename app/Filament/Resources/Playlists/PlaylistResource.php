@@ -2,35 +2,36 @@
 
 namespace App\Filament\Resources\Playlists;
 
-use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use App\Filament\Resources\Playlists\Pages\ListPlaylists;
+use App\Enums\ResourceOwnership;
 use App\Filament\Resources\Playlists\Pages\CreatePlaylist;
 use App\Filament\Resources\Playlists\Pages\EditPlaylist;
-use App\Enums\ResourceOwnership;
-use App\Filament\Resources\PlaylistResource\Pages;
+use App\Filament\Resources\Playlists\Pages\ListPlaylists;
 use App\Filament\Resources\Playlists\RelationManagers\PlaylistItemsRelationManager;
 use App\Models\Playlist;
 use App\Models\Project;
+use BackedEnum;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PlaylistResource extends Resource
 {
     protected static ?string $model = Playlist::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Programming';
+    protected static string|UnitEnum|null $navigationGroup = 'Programming';
 
     protected static ?string $slug = 'playlists';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-play';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-play';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -81,15 +82,13 @@ class PlaylistResource extends Resource
                 TextColumn::make('project.type')->badge()
                     ->formatStateUsing(fn ($record) => $record->project->name)
                     ->color(fn ($state) => match ($state->value) {
-                        'emergency' => 'danger',
                         'system' => 'gray',
                         'user' => 'success',
                     }),
 
             ])->filters([
                 SelectFilter::make('project')
-                    ->relationship('project', 'name',
-                        fn ($query) => $query->where('type', '!=', ResourceOwnership::EMERGENCY))
+                    ->relationship('project', 'name')
                     ->default(Project::where('path', config('app.default_project'))->firstOrFail()->id),
             ])->recordActions([
                 EditAction::make(),

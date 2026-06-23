@@ -14,87 +14,67 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/thiritin/open-signage/total)
 # Open Signage
 
-Open Signage is a digital signage solution built on Laravel, Inertia.js, and Vue.js. This platform serves webpages for digital signage screens, running on Chrome in kiosk mode. Utilizing Socketi, Open Signage dynamically updates data on screens. Users can create playlists for their screens, allowing for rotating announcements and various media presentations.
+Open Signage is a **framework for building digital‑signage designs**, built on
+Laravel, Inertia.js and Vue.js. You write your screens as Vue components, preview
+them instantly in the browser with mock data, and the platform handles
+playlists, scheduling, live updates (via Laravel Reverb) and kiosk delivery to
+Chrome.
 
-**ATTENTION!!** This is primarily used for Eurofurence (Hamburg, CCH). It is primarily suited at developers having knowledge of Vue.js and possibly a bit Laravel.
-Feel free to drop me a message at me@thiritin.com for commercial support.
+It ships with:
+
+- A generic **Starter** project you can copy to bootstrap your own designs.
+- An **auto‑fit + scale‑to‑fit grid system** so designs fit any screen
+  resolution — never larger than the screen — without hand‑tuning.
+- A **`/preview` workflow** to render any design standalone with mock data — no
+  database, playlist or websocket server required.
+- **Seeders** that produce a working demo screen on a fresh clone.
+
+> Building a real deployment? Keep your event-/customer‑specific designs in their
+> own repo and drop the project folder into `resources/js/Projects/`. The
+> framework stays generic. For commercial support, contact me@thiritin.com.
 
 ## Features
 
-- Dynamic data update with Socketi
-- Playlist creation for rotating announcements
-- Operates with Chrome in kiosk mode
+- Auto‑fit / scale‑to‑fit grid + block layout system
+- Standalone design preview with mock data (`/preview`)
+- Live data updates over websockets (Laravel Reverb)
+- Playlists, scheduling and rooms managed from a Filament admin
+- Runs full‑screen in Chrome kiosk mode
 
 ## Prerequisites
 
-- PHP 8.1 or higher
-- Node.js & npm/yarn
+- PHP 8.2 or higher
+- Node.js & npm
 - Composer
-- Laravel
 
-## Installation
+## Quick start
 
-1. Clone the repository:
-
-```
+```bash
 git clone https://github.com/thiritin/open-signage.git
-```
-
-2. Navigate into the project directory:
-
-```
 cd open-signage
-```
 
-3. Install PHP dependencies:
-
-```
 composer install
-```
-
-4. Install JavaScript dependencies:
-
-```
 npm install
-```
 
-5. Copy the `.env.example` file to create your own `.env` file:
-
-```
 cp .env.example .env
-```
-
-6. Set your application key:
-
-```
 php artisan key:generate
+
+# Schema + a working demo (a "demo" screen, Starter playlist, rooms, schedule):
+php artisan migrate --seed
+
+php artisan serve     # http://localhost:8000  (or ./vendor/bin/sail up)
+npm run dev           # Vite dev server with hot reload
 ```
 
-7. Set up your database credentials in the `.env` file.
+Then open:
 
-8. Run database migrations:
+- `http://localhost:8000/preview` — preview designs with mock data
+- `http://localhost:8000/screens/demo` — the seeded demo screen
+- `http://localhost:8000/admin` — admin (`me@thiritin.com` / `password`)
 
-```
-php artisan migrate
-```
-
-## Usage
-
-1. Start the Laravel server:
-
-```
-./vendor/bin/sail up
-```
-
-Or use 
-
-2. Start vite dev mode:
-
-```
-vite
-```
-
-Open Signage should now be accessible at `http://localhost`.
+**👉 Full developer guide: [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)** —
+how the grid system works, the preview workflow, and how to create your own
+project.
 
 ## Contributing
 

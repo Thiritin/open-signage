@@ -31,3 +31,8 @@ Route::get('/', function () {
 
 Route::get('timetable', \App\Http\Controllers\TimetableController::class)->name('timetable');
 Route::get('efsched', \App\Http\Controllers\EurofurenceScheduleController::class)->name('efsched');
+
+// Dev-only design preview. Outside the shared-secret group on purpose: previewing
+// a design must not require a shared secret. The controller itself gates access
+// to debug/local environments only.
+Route::get('preview/{component?}', \App\Http\Controllers\PreviewController::class)->name('preview');

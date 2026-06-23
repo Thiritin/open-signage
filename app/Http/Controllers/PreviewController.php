@@ -23,7 +23,8 @@ class PreviewController extends Controller
             abort(404);
         }
 
-        $project = config('app.default_project') ?: (env('VITE_PROJECT_PATH') ?: 'Starter');
+        // config('app.default_project') is bound to the VITE_PROJECT_PATH env.
+        $project = config('app.default_project') ?: 'Starter';
 
         $pages = $this->componentNames("resources/js/Projects/{$project}/Pages/*.vue");
         $layouts = $this->componentNames("resources/js/Projects/{$project}/Layouts/*.vue");

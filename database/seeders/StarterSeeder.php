@@ -4,10 +4,10 @@ namespace Database\Seeders;
 
 use App\Enums\ResourceOwnership;
 use App\Models\Announcement;
+use App\Models\Project;
 use App\Models\Room;
 use App\Models\ScheduleEntry;
 use App\Models\Screen;
-use App\Models\Project;
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;

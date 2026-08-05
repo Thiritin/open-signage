@@ -1,29 +1,13 @@
-name: Docker Build and Publish
 on:
   push:
-    branches:
-      - 'main'
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
-      - 'v[0-9]+.[0-9]+.[0-9]+-**'
-
+    branches: [ main ]
   release:
     types:
-      - published
-
+      - created
 jobs:
-  build-and-push-image:
-    uses: eurofurence/workflows/.github/workflows/docker-buildx-push.yml@main
-
-    permissions:
-      contents: read
-      packages: write
-
-    with:
-      image-name: ${{ github.repository }}
-      dockerfile: ./Dockerfile
-      # build-context: .
-      # build-args: '--build-arg FOO=bar'
-
+  build-docker:
+    uses: Thiritin/workflows/.github/workflows/docker-semver.yml@main
     secrets:
-      ghcr-token: ${{ secrets.GITHUB_TOKEN }}
+      DockerHubUser: ${{ secrets.DOCKERHUB_USERNAME }}
+      DockerHubPass: ${{ secrets.DOCKERHUB_PASSWORD }}
+      DockerHubPrefix: eurofurence

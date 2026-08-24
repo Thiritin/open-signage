@@ -18,10 +18,16 @@ class DatabaseSeeder extends Seeder
         $this->call(EmergencySeeder::class);
         $this->call(SystemSeeder::class);
 
-        // Wild Times Seeder
-        $this->call(WildTimesSeeder::class);
-        $this->call(EurofurenceSeeder::class);
-        $this->call(FurcietySeeder::class);
+        // Generic "Starter" demo (screen at /screens/demo).
+        $this->call(StarterSeeder::class);
+
+        // Legacy / event-specific seeders. These are no longer auto-run now
+        // that the app is a generic framework, but the seeder files are kept
+        // and can still be run manually, e.g.:
+        //   php artisan db:seed --class=WildTimesSeeder
+        // $this->call(WildTimesSeeder::class);
+        // $this->call(EurofurenceSeeder::class);
+        // $this->call(FurcietySeeder::class);
 
         if (App::isLocal()) {
             User::firstOrCreate([

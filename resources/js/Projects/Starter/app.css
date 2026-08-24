@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Starter project global styles.
+ *
+ * Designs are authored against a fixed 1920x1080 "virtual canvas" (see the
+ * AutoScale component in the layouts) and then uniformly scaled to fit any
+ * screen, so font sizes / paddings here are absolute and resolution-independent.
+ */
+
+:root {
+    --starter-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    overflow: hidden;
+    font-family: var(--starter-font);
+    background: #0f172a;
+    color: #fff;
+}
+
+/* A soft, modern surface for grid tiles. Override per-block with classes. */
+.surface {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(2px);
+}
+
+.surface-accent {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
